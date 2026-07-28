@@ -1,0 +1,162 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "kitty",
+    "source": "~/.config/fastfetch/a.png",
+    "width": 65,
+    "padding": {
+      "top": 1,
+      "left": 1,
+      "right": 1
+    },
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+      "title": "#e0def4",
+      "output": "#e0def4"
+    },
+  },
+  "modules": [
+    "break",
+    {
+      "type": "os",
+      "key": "OS",
+      "keyColor": "#c4a7e7",
+    },
+    {
+      "type": "kernel",
+      "key": " ├   KER ",
+      "keyColor": "#c4a7e7",
+    },
+    {
+      "type": "packages",
+      "key": " ├   PAK ",
+      "format": "{all}",
+      "keyColor": "#c4a7e7",
+    },
+    {
+      "type": "uptime",
+      "key": " ├   UPT ",
+      "keyColor": "#c4a7e7",
+    },
+    {
+      "type": "locale",
+      "key": " ├   LOC ",
+      "keyColor": "#c4a7e7",
+    },
+    {
+      "type": "title",
+      "key": " └   USR ",
+      "keyColor": "#c4a7e7",
+    },
+    "break",
+    "break",
+    {
+      "type": "wm",
+      "key": "WM",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "de",
+      "key": " ├ 󱈹  DES ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "wmtheme",
+      "key": " ├ 󰧨  WMT ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "theme",
+      "key": " ├   THE ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "icons",
+      "key": " ├ 󰸳  ICO ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "font",
+      "key": " ├ 󰎠  FNT ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "cursor",
+      "key": " ├ 󰞞  CUR ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "shell",
+      "key": " ├   SHE ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "terminal",
+      "key": " ├   TER ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "terminalfont",
+      "key": " └   TFO ",
+      "keyColor": "#f6c177",
+    },
+    "break",
+    "break",
+    {
+      "type": "host",
+      "key": "PC ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "cpu",
+      "key": " ├   CPU ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "memory",
+      "key": " ├   MEM ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "swap",
+      "key": " ├ 󰋊  SWP ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "gpu",
+      "key": " ├ 󰢮  GPU ",
+      "format": "{1} {2}",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "display",
+      "key": " ├   MON ",
+      "format": "{name} {width}x{height}@{refresh-rate} ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "disk",
+      "key": " ├ 󰋊  DIS ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "localip",
+      "key": " ├ 󰩠  LAN ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "battery",
+      "key": " ├ 󰂄  BAT ",
+      "keyColor": "#f6c177",
+    },
+    {
+      "type": "poweradapter",
+      "key": " └ 󰈀  PWR ",
+      "keyColor": "#f6c177",
+    },
+    "break",
+    "break",
+  ]
+}

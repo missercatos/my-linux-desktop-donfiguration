@@ -1,0 +1,3 @@
+#!/bin/bash
+export QT_PLUGIN_PATH="$HOME/.local/share/wps/fcitx5-plugins:$QT_PLUGIN_PATH"
+exec /usr/bin/wps "$@"

@@ -1,0 +1,162 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "kitty",
+    "source": "~/.config/fastfetch/a.png",
+    "width": 65,
+    "padding": {
+      "top": 1,
+      "left": 1,
+      "right": 1
+    },
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+      "title": "{{colors.on_surface_variant.default.hex}}",
+      "output": "{{colors.on_surface_variant.default.hex}}"
+    },
+  },
+  "modules": [
+    "break",
+    {
+      "type": "os",
+      "key": "OS",
+      "keyColor": "{{colors.primary.default.hex}}",
+    },
+    {
+      "type": "kernel",
+      "key": " ├   KER ",
+      "keyColor": "{{colors.primary.default.hex}}",
+    },
+    {
+      "type": "packages",
+      "key": " ├   PAK ",
+      "format": "{all}",
+      "keyColor": "{{colors.primary.default.hex}}",
+    },
+    {
+      "type": "uptime",
+      "key": " ├   UPT ",
+      "keyColor": "{{colors.primary.default.hex}}",
+    },
+    {
+      "type": "locale",
+      "key": " ├   LOC ",
+      "keyColor": "{{colors.primary.default.hex}}",
+    },
+    {
+      "type": "title",
+      "key": " └   USR ",
+      "keyColor": "{{colors.primary.default.hex}}",
+    },
+    "break",
+    "break",
+    {
+      "type": "wm",
+      "key": "WM",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "de",
+      "key": " ├ 󱈹  DES ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "wmtheme",
+      "key": " ├ 󰧨  WMT ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "theme",
+      "key": " ├   THE ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "icons",
+      "key": " ├ 󰸳  ICO ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "font",
+      "key": " ├ 󰎠  FNT ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "cursor",
+      "key": " ├ 󰞞  CUR ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "shell",
+      "key": " ├   SHE ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "terminal",
+      "key": " ├   TER ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    {
+      "type": "terminalfont",
+      "key": " └   TFO ",
+      "keyColor": "{{colors.tertiary.default.hex}}",
+    },
+    "break",
+    "break",
+    {
+      "type": "host",
+      "key": "PC ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "cpu",
+      "key": " ├   CPU ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "memory",
+      "key": " ├   MEM ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "swap",
+      "key": " ├ 󰋊  SWP ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "gpu",
+      "key": " ├ 󰢮  GPU ",
+      "format": "{1} {2}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "display",
+      "key": " ├   MON ",
+      "format": "{name} {width}x{height}@{refresh-rate} ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "disk",
+      "key": " ├ 󰋊  DIS ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "localip",
+      "key": " ├ 󰩠  LAN ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "battery",
+      "key": " ├ 󰂄  BAT ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    {
+      "type": "poweradapter",
+      "key": " └ 󰈀  PWR ",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
+    },
+    "break",
+    "break",
+  ]
+}

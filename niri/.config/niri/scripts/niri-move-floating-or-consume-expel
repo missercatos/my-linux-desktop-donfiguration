@@ -1,0 +1,28 @@
+#!/bin/bash
+# 根据当前窗口类型执行不同的移动操作
+# 参数: $1 = direction (left 或 right)
+
+DIRECTION=$1
+STEP=${2:-100}  # 默认移动100像素
+
+# 获取当前聚焦窗口的信息
+FOCUSED_WINDOW=$(niri msg --json focused-window)
+
+# 检查是否是浮动窗口
+IS_FLOATING=$(echo "$FOCUSED_WINDOW" | jq -r '.is_floating')
+
+if [ "$IS_FLOATING" = "true" ]; then
+    # 浮动窗口：使用 move-floating-window 移动
+    if [ "$DIRECTION" = "left" ]; then
+        niri msg action move-floating-window --x "-$STEP"
+    elif [ "$DIRECTION" = "right" ]; then
+        niri msg action move-floating-window --x "+$STEP"
+    fi
+else
+    # 平铺窗口：使用原来的 consume-or-expel 功能
+    if [ "$DIRECTION" = "left" ]; then
+        niri msg action consume-or-expel-window-left
+    elif [ "$DIRECTION" = "right" ]; then
+        niri msg action consume-or-expel-window-right
+    fi
+fi

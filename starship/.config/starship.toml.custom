@@ -1,0 +1,156 @@
+format = '''
+┌──\([](bold fg:color_primary)$hostname\)-\[$directory\]-\[$time\] $git_branch$git_status $c $cpp $dart $deno $elixir $golang $haskell $java $julia $kotlin $lua $nodejs $perl $php $python $rlang $ruby $rust $scala $swift $zig
+└─<$username$character'''
+
+add_newline = true
+
+palette = 'colors'
+
+[palettes.colors]
+color_primary = '#7aa2f7'
+color_secondary = '#73daca'
+color_tertiary = '#bb9af7'
+color_error = '#f7768e'
+color_on_surface = '#c0caf5'
+
+[username]
+style_user = "bold fg:color_tertiary"
+style_root = "bold fg:color_error"
+show_always = true
+format = "[$user]($style)"
+
+[hostname]
+style = "bold fg:color_on_surface dimmed"
+ssh_only = false
+format = "[@$hostname]($style)"
+
+[directory]
+style = "bold fg:color_secondary"
+truncation_length = 5
+format = "[$path]($style)"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bold fg:color_on_surface"
+format = "at [$time]($style) "
+
+[git_branch]
+style = "bold bright-green"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "bold bright-red"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+
+[c]
+disabled = false
+symbol = " "
+style = "bold fg:color_primary"
+format = "via [$symbol($version(-$name) )]($style)"
+
+[cpp]
+disabled = false
+symbol = " "
+style = "bold fg:color_primary"
+format = "via [$symbol($version(-$name) )]($style)"
+
+[dart]
+symbol = " "
+style = "bold fg:color_secondary"
+format = "via [$symbol($version )]($style)"
+
+[deno]
+symbol = " "
+style = "bold fg:color_secondary"
+format = "via [$symbol($version )]($style)"
+
+[elixir]
+symbol = " "
+style = "bold fg:color_secondary"
+format = "via [$symbol($version )]($style)"
+
+[golang]
+symbol = " "
+style = "bold fg:color_secondary"
+format = "via [$symbol($version )]($style)"
+
+[haskell]
+symbol = " "
+style = "bold fg:color_primary"
+format = "via [$symbol($version )]($style)"
+
+[java]
+symbol = " "
+style = "bold fg:color_error"
+format = "via [$symbol($version )]($style)"
+
+[julia]
+symbol = " "
+style = "bold fg:color_tertiary"
+format = "via [$symbol($version )]($style)"
+
+[kotlin]
+symbol = " "
+style = "bold fg:color_tertiary"
+format = "via [$symbol($version )]($style)"
+
+[lua]
+symbol = " "
+style = "bold fg:color_secondary"
+format = "via [$symbol($version )]($style)"
+
+[nodejs]
+symbol = " "
+style = "bold fg:color_primary"
+format = "via [$symbol($version )]($style)"
+
+[perl]
+symbol = " "
+style = "bold fg:color_error"
+format = "via [$symbol($version )]($style)"
+
+[php]
+symbol = " "
+style = "bold fg:color_tertiary"
+format = "via [$symbol($version )]($style)"
+
+[python]
+symbol = " "
+style = "bold fg:color_tertiary"
+format = "via [$symbol($version )]($style)"
+
+[rlang]
+symbol = " "
+style = "bold fg:color_tertiary"
+format = "via [$symbol($version )]($style)"
+
+[ruby]
+symbol = " "
+style = "bold fg:color_error"
+format = "via [$symbol($version )]($style)"
+
+[rust]
+symbol = " "
+style = "bold fg:color_error"
+format = "via [$symbol($version )]($style)"
+
+[scala]
+symbol = " "
+style = "bold fg:color_error"
+format = "via [$symbol($version )]($style)"
+
+[swift]
+symbol = " "
+style = "bold fg:color_primary"
+format = "via [$symbol($version )]($style)"
+
+[zig]
+symbol = " "
+style = "bold fg:color_primary"
+format = "via [$symbol($version )]($style)"
+
+[character]
+success_symbol = "[>](bold fg:color_primary)"
+error_symbol = "[>](bold fg:color_error)"
+format = "$symbol "
