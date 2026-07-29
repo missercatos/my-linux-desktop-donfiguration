@@ -1,6 +1,6 @@
 # dotfiles
 
-GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri).
+GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri). Default shell: **fish** with vi mode. Zsh available as alternative.
 
 ## Packages
 
@@ -10,8 +10,9 @@ GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri).
 | `hyprland` | `~/.config/hypr/` | Hyprland config (mirrors niri behavior) |
 | `nvim` | `~/.config/nvim/` | Neovim config (ARKVIM + LazyVim) |
 | `kitty` | `~/.config/kitty/` | Kitty terminal |
-| `fish` | `~/.config/fish/` | Fish shell (config, aliases, functions) |
+| `fish` | `~/.config/fish/` | Fish shell (vi mode, config, aliases, functions) |
 | `starship` | `~/.config/starship.toml.custom` | Starship prompt backup (Matugen overwrites `starship.toml`) |
+| `zsh` | `~/.zshrc` | Zsh config (vi mode, dynamic colors, autocomplete) |
 | `fastfetch` | `~/.config/fastfetch/` | Fastfetch (kitty logo via `a.png`) |
 | `cava` | `~/.config/cava/` | Cava audio visualizer |
 | `btop` | `~/.config/btop/` | Btop resource monitor |
@@ -35,8 +36,11 @@ GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri).
 ## Bootstrap
 
 ```bash
-# Install stow
-sudo pacman -S stow
+# Install dependencies
+sudo pacman -S stow fish zsh zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete zsh-completions
+
+# Set fish as default shell
+chsh -s /usr/bin/fish
 
 # Clone and stow everything
 cd ~/dotfiles
@@ -51,6 +55,8 @@ sudo stow --target=/ sddm
 
 ## Notes
 
+- **Fish** is the default shell with vi mode (`fish_vi_key_bindings`). Mode indicator hidden to keep starship clean.
+- **Zsh** is available as alternative with vi mode (`bindkey -v`), `jk`/`kj` to exit insert mode, and dynamic syntax highlighting colors synced from cava/Matugen.
 - `.xprofile` is root-owned; fix with `sudo chown a:a ~/.xprofile` before stowing.
 - `sddm` package uses `--target=/` to place `/etc/sddm.conf`.
 - `starship.toml.custom` is the backup; Matugen generates `starship.toml` at runtime.
