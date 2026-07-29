@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# ANSI colors
+R='\033[0;31m'
+G='\033[0;32m'
+Y='\033[1;33m'
+B='\033[0;34m'
+C='\033[0;36m'
+W='\033[0;37m'
+N='\033[0m'
+
+# Arch logo (small)
+logo=(
+" ${B}    /\     ${N}"
+" ${B}   /  \    ${N}"
+" ${B}  /    \   ${N}"
+" ${C} /  /\  \  ${N}"
+" ${C}/__/  \__\ ${N}"
+)
+
+# gather info
+os="$(source /etc/os-release 2>/dev/null && echo "$PRETTY_NAME")"
+kernel="$(uname -r)"
+host="$(cat /proc/sys/kernel/hostname 2>/dev/null)"
+uptime_s="$(uptime -p | sed 's/up //')"
+
+cpu="$(awk -F': ' '/model name/{print $2; exit}' /proc/cpuinfo | sed 's/(R)//g; s/(TM)//g; s/  */ /g')"
+cores="$(nproc)"
+
+eval "$(awk '/^MemTotal/{t=$2} /^MemAvailable/{a=$2} END{printf "mt=%d ma=%d", t,a}' /proc/meminfo)"
+mu=$(( (mt - ma) / 1024 / 1024 ))
+mt_gib=$(( mt / 1024 / 1024 ))
+
+eval "$(df -BG / | awk 'NR==2{printf "st_total=%d st_used=%d", $2+0, $3+0}')"
+
+bat_cap=""; bat_st=""
+bat="/sys/class/power_supply/BAT0"
+[ -d "$bat" ] && bat_cap="$(cat "$bat/capacity" 2>/dev/null)" && bat_st="$(cat "$bat/status" 2>/dev/null)"
+
+# assemble right-side lines
+lines=()
+lines+=("${G}OS${N}       ${C}$os${N}")
+lines+=("${G}Kernel${N}   ${C}$kernel${N}")
+lines+=("${G}Memory${N}   ${C}${mu}MiB / ${mt_gib}GiB${N}")
+lines+=("${G}Storage${N}  ${C}${st_used}G / ${st_total}G${N}")
+[ -n "$bat_cap" ] && lines+=("${G}Battery${N}  ${C}${bat_cap}% (${bat_st})${N}")
+
+# print side by side
+max_logo=${#logo[@]}
+max_lines=${#lines[@]}
+rows=$(( max_logo > max_lines ? max_logo : max_lines ))
+
+for ((i=0; i<rows; i++)); do
+  left="${logo[$i]:-        }"
+  right="${lines[$i]:-}"
+  echo -e "$left   $right"
+done
