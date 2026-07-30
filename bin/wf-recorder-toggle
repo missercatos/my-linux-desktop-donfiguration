@@ -1,0 +1,12 @@
+#!/bin/bash
+REC_DIR="$HOME/Videos"
+mkdir -p "$REC_DIR"
+
+if pgrep -x wf-recorder > /dev/null; then
+    killall -SIGINT wf-recorder
+    notify-send "Recording saved" "$REC_DIR/"
+else
+    FILE="$REC_DIR/recording_$(date +%s).mp4"
+    wf-recorder -f "$FILE"
+    notify-send "Recording started" "$FILE"
+fi

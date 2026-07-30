@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+
+MENU_WIDTH=100
+MENU_HEIGHT=25
+
+MENU_ITEMS="\
+Terminal
+  Super+T         共享终端 (kitty)
+  Super+Return    独立终端 (kitty)
+  Super+Slash     临时浮动终端
+  Super+Alt+O     AI助手 opencode
+
+Apps
+  Super+B         浏览器 Firefox
+  Super+E         文件管理器
+  Super+Alt+E     Nautilus 文件管理器
+  Super+Z         程序启动器
+  Super+Alt+W     壁纸切换
+  Super+Shift+F10 随机下载壁纸
+  Super+P         提取窗口信息
+
+Close / Kill
+  Super+Q         关闭窗口
+  Alt+F4          强制杀死窗口
+  Alt+Shift+F4    强制杀死窗口及进程
+
+Focus navigation (hjkl)
+  Super+h/j/k/l   左/下/上/右 聚焦
+  Super+箭头      方向聚焦
+
+Window movement
+  Super+Ctrl+h/j/k/l   移动窗口
+  Super+Ctrl+left/right 移动窗口
+  Super+Ctrl+A/D       向左/右移动窗口
+
+Float window move
+  Super+Shift+h/j/k/l  移动浮动窗口
+
+Column / Window ops
+  Super+W         窗口上移
+  Super+S         切换特殊工作区
+  Super+Shift+S   移动窗口到特殊工作区
+  Super+[/]       向左/右移动窗口
+  Super+A/D       向左/右移动窗口
+  Super+,/.       合并/踢出列
+  Super+Shift+A/D 合并/踢出列
+
+Monitor focus
+  Super+Shift+箭头/h/j/k/l  切换显示器聚焦
+
+Move window to monitor
+  Super+Shift+Ctrl+箭头/h/j/k/l/A/D 移动窗口到显示器
+
+Move workspace to monitor
+  Super+Shift+Alt+箭头/h/j/k/l 移动工作区到显示器
+
+Workspace navigation
+  Super+Page_Up/Down  工作区上/下
+  Super+U/I           工作区上/下
+  Super+鼠标滚轮      工作区上/下
+  Super+Shift+Page_Up/Down  移动工作区
+  Super+Shift+U/I     移动工作区
+
+Move column to workspace
+  Super+Ctrl+Page_Up/Down  移动列到工作区
+  Super+Ctrl+U/I           移动列到工作区
+
+Workspace numbers 1-10
+  Super+1-0         切换到工作区 1-10
+  Super+Ctrl+1-0    移动窗口到工作区 1-10
+
+Window operations
+  Super+F           全屏 (最大化)
+  Super+Alt+F       全屏 (真正全屏)
+  Super+V           切换浮动
+  Super+Shift+V     切换特殊工作区
+  Super+N           切换特殊工作区
+  Super+Shift+X     切换组标签模式
+  Super+R           循环聚焦
+  Super+Shift+R     交换窗口
+  Super+C           居中窗口
+  Super++/-         调整窗口宽度
+  Super+Shift++/-   调整窗口高度
+
+Screen Record
+  Super+F3          录屏开始/停止 (wf-recorder)
+  Super+Ctrl+R      录屏开始/停止 (wf-recorder)
+
+Fcitx / Settings
+  Super+F1          切换输入法
+  Super+F2          设置
+  Super+F5          快速存档
+  Super+F8          快速读档
+
+DMS Components
+  Super+X           电源菜单
+  Super+Y           壁纸选择
+  Super+Alt+V       剪贴板
+  Super+Shift+N     记事本
+  Super+Alt+L       锁屏
+  Super+Alt+P       挂起
+  Ctrl+Alt+Delete   任务管理器
+  Super+Shift+W     窗口规则
+  Super+Escape      窗口规则
+  Ctrl+Shift+R      重命名工作区
+
+Screenshot
+  Super+Alt+A       选区截图
+  Super+Alt+Ctrl+A  显示器截图
+  Super+Alt+Ctrl+Shift+A  窗口截图
+  Print             全屏截图
+  Ctrl+Print        显示器截图
+  Shift+Print       选区截图
+  Super+Shift+S     编辑剪贴板图片
+
+Media controls
+  XF86AudioRaise     音量+
+  XF86AudioLower     音量-
+  XF86AudioMute      静音
+  XF86AudioMicMute   麦克风静音
+  XF86AudioPlay/Pause 播放/暂停
+  XF86AudioPrev/Next 上一首/下一首
+
+Brightness
+  XF86MonBrightnessUp   亮度+
+  XF86MonBrightnessDown 亮度-
+
+Mouse bindings
+  Super+左键        移动窗口
+  Super+右键        调整窗口大小
+  Super+中键        关闭窗口"
+
+FZF_CMD="echo \"$MENU_ITEMS\" | fzf --reverse --prompt='󰌌 快捷键: ' --info=hidden --border=none > /dev/null"
+
+if command -v kitty >/dev/null 2>&1; then
+    kitty --class "hypr-hotkey-menu" --title "Hyprland 快捷键菜单" \
+          -o remember_window_size=no -o initial_window_width=${MENU_WIDTH}c -o initial_window_height=${MENU_HEIGHT}c \
+          bash -c "$FZF_CMD"
+elif command -v foot >/dev/null 2>&1; then
+    foot --app-id "hypr-hotkey-menu" --title "Hyprland 快捷键菜单" \
+         --window-size-chars=${MENU_WIDTH}x${MENU_HEIGHT} \
+         bash -c "$FZF_CMD"
+elif command -v alacritty >/dev/null 2>&1; then
+    alacritty --class "hypr-hotkey-menu" --title "Hyprland 快捷键菜单" \
+              -o window.dimensions.columns=${MENU_WIDTH} -o window.dimensions.lines=${MENU_HEIGHT} \
+              -e bash -c "$FZF_CMD"
+elif command -v wezterm >/dev/null 2>&1; then
+    wezterm start --class "hypr-hotkey-menu" -- bash -c "$FZF_CMD"
+else
+    echo "$MENU_ITEMS" | fuzzel --dmenu -i -p "󰌌 快捷键: " -w ${MENU_WIDTH} > /dev/null
+fi
