@@ -1,5 +1,5 @@
 format = '''
-┌──\([](bold fg:color_primary)$hostname\)-\[$directory\]-\[$time\] $git_branch$git_status $c $cpp $dart $deno $elixir $golang $haskell $java $julia $kotlin $lua $nodejs $perl $php $python $rlang $ruby $rust $scala $swift $zig
+┌──\([](bold fg:color_primary)$hostname\)-\[$directory\]-\[$time\] $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
 └─<$username$character'''
 
 add_newline = true
@@ -41,114 +41,114 @@ format = "[$symbol$branch]($style) "
 
 [git_status]
 style = "bold bright-red"
-format = '([\[$all_status$ahead_behind\]]($style) )'
+format = '[$all_status$ahead_behind]($style) '
 
 [c]
 disabled = false
 symbol = " "
 style = "bold fg:color_primary"
-format = "via [$symbol($version(-$name) )]($style)"
+format = "[$symbol$version]($style) "
 
 [cpp]
 disabled = false
 symbol = " "
 style = "bold fg:color_primary"
-format = "via [$symbol($version(-$name) )]($style)"
+format = "[$symbol$version]($style) "
 
 [dart]
 symbol = " "
 style = "bold fg:color_secondary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [deno]
 symbol = " "
 style = "bold fg:color_secondary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [elixir]
 symbol = " "
 style = "bold fg:color_secondary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [golang]
 symbol = " "
 style = "bold fg:color_secondary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [haskell]
 symbol = " "
 style = "bold fg:color_primary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [java]
 symbol = " "
 style = "bold fg:color_error"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [julia]
 symbol = " "
 style = "bold fg:color_tertiary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [kotlin]
 symbol = " "
 style = "bold fg:color_tertiary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [lua]
 symbol = " "
 style = "bold fg:color_secondary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [nodejs]
 symbol = " "
 style = "bold fg:color_primary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [perl]
 symbol = " "
 style = "bold fg:color_error"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [php]
 symbol = " "
 style = "bold fg:color_tertiary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [python]
 symbol = " "
 style = "bold fg:color_tertiary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [rlang]
 symbol = " "
 style = "bold fg:color_tertiary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [ruby]
 symbol = " "
 style = "bold fg:color_error"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [rust]
 symbol = " "
 style = "bold fg:color_error"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [scala]
 symbol = " "
 style = "bold fg:color_error"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [swift]
 symbol = " "
 style = "bold fg:color_primary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [zig]
 symbol = " "
 style = "bold fg:color_primary"
-format = "via [$symbol($version )]($style)"
+format = "[$symbol$version]($style) "
 
 [character]
 success_symbol = "[>](bold fg:color_primary)"
