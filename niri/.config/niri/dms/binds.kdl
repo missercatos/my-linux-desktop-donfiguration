@@ -183,7 +183,9 @@ binds {
     // 按照预设切换窗口高度
     Mod+Shift+R  { switch-preset-window-height; }
     // 重置窗口高度
-    Mod+Ctrl+R { reset-window-height; }
+    Mod+Ctrl+Alt+R hotkey-overlay-title="重置窗口高度 Reset window height" { reset-window-height; }
+    // 录屏开始/停止 (wf-recorder)
+    Mod+Ctrl+R hotkey-overlay-title="录屏开始/停止 Screen record" { spawn "~/.local/bin/wf-recorder-toggle"; }
 
     Mod+F  hotkey-overlay-title="最大化 maximize" { maximize-column; }
     Mod+Alt+F hotkey-overlay-title="全屏 fullscreen"  { fullscreen-window; }
