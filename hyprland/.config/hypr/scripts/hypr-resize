@@ -1,0 +1,19 @@
+#!/bin/bash
+# usage: hypr-resize <x|y> <+|->
+
+DIR="$1"
+SIGN="$2"
+DELTA=20
+RATIO=0.1
+
+FLOATING=$(hyprctl activewindow -j | jq -r '.floating')
+
+if [[ "$FLOATING" == "true" ]]; then
+    if [[ "$DIR" == "x" ]]; then
+        hyprctl dispatch resizeactive ${SIGN}${DELTA} 0
+    else
+        hyprctl dispatch resizeactive 0 ${SIGN}${DELTA}
+    fi
+else
+    hyprctl dispatch layoutmsg "splitratio ${SIGN}${RATIO}"
+fi
