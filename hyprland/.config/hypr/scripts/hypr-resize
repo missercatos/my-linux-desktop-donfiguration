@@ -9,6 +9,7 @@ RATIO=0.1
 FLOATING=$(hyprctl activewindow -j | jq -r '.floating')
 
 if [[ "$FLOATING" == "true" ]]; then
+    [[ "$SIGN" == "+" ]] && SIGN=""
     if [[ "$DIR" == "x" ]]; then
         hyprctl dispatch resizeactive ${SIGN}${DELTA} 0
     else
