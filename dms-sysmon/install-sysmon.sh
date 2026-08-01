@@ -7,14 +7,30 @@ set -e
 DMS_DIR=/usr/share/quickshell/dms
 MODAL_FILE="$DMS_DIR/Modals/SysMonitorModal.qml"
 SRC_FILE="$(dirname "$0")/SysMonitorModal.qml"
+SERVICE_FILE="$DMS_DIR/Services/GitHubService.qml"
+SRC_SERVICE="$(dirname "$0")/Services/GitHubService.qml"
+CAVA_FILE="$DMS_DIR/Services/CavaService.qml"
+SRC_CAVA="$(dirname "$0")/Services/CavaService.qml"
 
-echo "[1/3] 复制 SysMonitorModal.qml"
+echo "[1/6] 复制 SysMonitorModal.qml"
 cp "$SRC_FILE" "$MODAL_FILE"
 chmod 644 "$MODAL_FILE"
 
-echo "[2/3] 注册 LazyLoader 到 DMSShell.qml"
+echo "[2/6] 复制 GitHubService.qml"
+mkdir -p "$(dirname "$SERVICE_FILE")"
+cp "$SRC_SERVICE" "$SERVICE_FILE"
+chmod 644 "$SERVICE_FILE"
+
+echo "[3/6] 复制 CavaService.qml (24 柱)"
+cp "$SRC_CAVA" "$CAVA_FILE"
+chmod 644 "$CAVA_FILE"
+
+echo "[4/6] 注册 LazyLoader 到 DMSShell.qml"
 SHELL_FILE="$DMS_DIR/DMSShell.qml"
 
+if grep -q "id: sysMonitorModalLoader" "$SHELL_FILE"; then
+    echo "  DMSShell.qml 已注册，跳过"
+else
 # 在 processListModalLoader 块之后插入 sysMonitorModalLoader
 awk '
     /id: processListModalLoader/ {
@@ -54,20 +70,25 @@ awk '
     }
     { print }
 ' "$SHELL_FILE" > "$SHELL_FILE.tmp" && mv "$SHELL_FILE.tmp" "$SHELL_FILE"
+fi
 
 # 给 DMSShellIPC 传参
 true
 
-echo "[3/3] 注册 IPC target 到 DMSShellIPC.qml"
+echo "[5/6] 注册 IPC target 到 DMSShellIPC.qml"
 IPC_FILE="$DMS_DIR/DMSShellIPC.qml"
 
 # 3a. required property
 grep -q "sysMonitorModalLoader" "$IPC_FILE" || sed -i 's/^    required property var windowRuleModalLoader$/    required property var windowRuleModalLoader\n    required property var sysMonitorModalLoader/' "$IPC_FILE"
 
-# 3b. 在 processlist target 块后插入 IpcHandler
+if grep -q 'target: "sysmon"' "$IPC_FILE"; then
+    echo "  DMSShellIPC.qml 已注册，跳过"
+else
+# 3b. 在 processlist target 块（闭合后）插入 IpcHandler
 awk '
     /target: "processlist"/ {
         print
+        print "    }"
         print ""
         print "    IpcHandler {"
         print "        function open(): string {"
@@ -109,15 +130,25 @@ awk '
         print ""
         print "        target: \"sysmon\""
         print "    }"
+        print ""
+        in_block = 1
+        next
+    }
+    in_block && /^    }$/ {
+        in_block = 0
+        next
+    }
+    in_block {
         next
     }
     { print }
 ' "$IPC_FILE" > "$IPC_FILE.tmp" && mv "$IPC_FILE.tmp" "$IPC_FILE"
+fi
 
 # 3c. DMSShell 传参给 IPC
 grep -q "sysMonitorModalLoader: sysMonitorModalLoader" "$SHELL_FILE" || sed -i 's/^        windowRuleModalLoader: windowRuleModalLoader$/        windowRuleModalLoader: windowRuleModalLoader\n        sysMonitorModalLoader: sysMonitorModalLoader/' "$SHELL_FILE"
 
-echo "[4/4] 注册 PopoutService 函数"
+echo "[6/6] 注册 PopoutService 函数"
 POPOUT_FILE="$DMS_DIR/Services/PopoutService.qml"
 
 # 4a. properties
