@@ -144,4 +144,9 @@ window-rule {
     default-floating-position x=10 y=10 relative-to="bottom-right"
     open-focused false
 }
+// Chrome 整窗轻微透明，配合全局 blur
+window-rule {
+    match app-id="google-chrome"
+    opacity 0.9
+}
 

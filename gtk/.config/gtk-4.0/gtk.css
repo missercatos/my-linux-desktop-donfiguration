@@ -1,2 +1,25 @@
 @import url("dank-colors.css");
 @import 'colors.css';
+
+/* Nautilus 半透明背景，配合 niri 全局 blur */
+window.nautilus-window {
+    background-color: transparent;
+}
+.nautilus-window headerbar,
+.nautilus-window .toolbar {
+    background-color: alpha(@headerbar_bg_color, 0.85);
+}
+.nautilus-window placessidebar,
+.nautilus-window .navigation-sidebar,
+.nautilus-window .sidebar {
+    background-color: alpha(@sidebar_bg_color, 0.85);
+}
+.nautilus-window notebook,
+.nautilus-window notebook > stack,
+.nautilus-window .nautilus-grid-view,
+.nautilus-window .nautilus-list-view,
+.nautilus-window .content-view,
+.nautilus-window .view,
+.nautilus-window .floating-bar {
+    background-color: alpha(@view_bg_color, 0.85);
+}
