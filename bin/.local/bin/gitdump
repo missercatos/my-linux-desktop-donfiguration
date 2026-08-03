@@ -98,6 +98,25 @@ if log:
 else:
     print('[!] logs/HEAD 不可用')
 
+# 2.5 探测 stash: refs/stash 与 logs/refs/stash（stash 引用不在分支上，git log 看不到，必须单独探测）
+stash_found = 0
+ref_stash = fetch('.git/refs/stash')
+if ref_stash and re.fullmatch(r'[0-9a-f]{40}', ref_stash.decode('utf-8', 'replace').strip()):
+    sha = ref_stash.decode().strip()
+    commits.append((sha, 'stash: (refs/stash)'))
+    stash_found += 1
+stash_log = fetch('.git/logs/refs/stash')
+if stash_log:
+    for line in stash_log.decode('utf-8', 'replace').splitlines():
+        parts = line.split()
+        if len(parts) >= 2 and re.fullmatch(r'[0-9a-f]{40}', parts[1]):
+            sha = parts[1]
+            msg = ' '.join(parts[6:])
+            commits.append((sha, 'stash: ' + msg))
+            stash_found += 1
+if stash_found:
+    print(f'[*] stash: 发现 {stash_found} 条 stash 记录')
+
 # 3. BFS 下载 objects
 def download_object(sha):
     p = os.path.join(objects_dir, sha[:2], sha[2:])
@@ -218,6 +237,7 @@ if not commits:
 print()
 print('[+] 恢复文件:')
 all_files = set()
+printed = set()
 for sha, msg in commits:
     if not download_object(sha):
         continue
@@ -233,15 +253,19 @@ for sha, msg in commits:
     except Exception:
         continue
     all_files.update(files.keys())
-    label = msg or 'none'
-    print(f'    commit {sha[:7]} ({label}):')
-    for name in sorted(files):
-        print(f'        {name}')
+    if sha not in printed:
+        printed.add(sha)
+        label = msg or 'none'
+        print(f'    commit {sha[:7]} ({label}):')
+        for name in sorted(files):
+            print(f'        {name}')
 
-# 5. 提取并写出所有 blob 内容
+# 5. 提取并写出所有 blob 内容（同名文件优先取 stash 版本，其次最新 commit）
 os.makedirs(out, exist_ok=True)
 count = 0
 for name in sorted(all_files):
+    chosen = None
+    chosen_msg = None
     for sha, msg in commits:
         if not download_object(sha):
             continue
@@ -257,18 +281,25 @@ for name in sorted(all_files):
         except Exception:
             continue
         if name in files:
-            blob = files[name]
-            p = os.path.join(objects_dir, blob[:2], blob[2:])
-            if os.path.exists(p):
-                with open(p, 'rb') as f:
-                    raw = zlib.decompress(f.read())
-                _, _, bbody = parse_object(blob)
-                dest = os.path.join(out, name)
-                os.makedirs(os.path.dirname(dest) or out, exist_ok=True)
-                with open(dest, 'wb') as f:
-                    f.write(bbody)
-                count += 1
-            break
+            if msg.startswith('stash:'):
+                chosen = files[name]
+                chosen_msg = msg
+                break
+            if chosen is None:
+                chosen = files[name]
+                chosen_msg = msg
+    if chosen is not None:
+        blob = chosen
+        p = os.path.join(objects_dir, blob[:2], blob[2:])
+        if os.path.exists(p):
+            with open(p, 'rb') as f:
+                raw = zlib.decompress(f.read())
+            _, _, bbody = parse_object(blob)
+            dest = os.path.join(out, name)
+            os.makedirs(os.path.dirname(dest) or out, exist_ok=True)
+            with open(dest, 'wb') as f:
+                f.write(bbody)
+            count += 1
 print(f'[+] 写出文件: {count} 个 -> {out}/')
 print('    提示: 被删除的文件在历史提交里, 用 git log 与 git show <commit>:<file> 找回')
 "
