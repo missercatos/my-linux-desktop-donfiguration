@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>毛玻璃效果测试页</title>
+  <style>
+    body { margin: 0; font: 20px sans-serif; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; }
+    .box { height: 200px; display: flex; align-items: center; justify-content: center; color: #fff; text-shadow: 0 1px 2px #000; }
+    .box:nth-child(1) { background: linear-gradient(45deg, #f00, #ff0); }
+    .box:nth-child(2) { background: linear-gradient(45deg, #0f0, #0ff); }
+    .box:nth-child(3) { background: linear-gradient(45deg, #00f, #f0f); }
+    .box:nth-child(4) { background: repeating-linear-gradient(45deg, #333 0 20px, #777 20px 40px); }
+    .box:nth-child(5) { background: radial-gradient(circle, #ff8800, #880000); }
+    .box:nth-child(6) { background: conic-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); }
+    p { padding: 20px; }
+  </style>
+</head>
+<body>
+  <p>开启扩展的毛玻璃后，整页内容会被半透明层覆盖并模糊。</p>
+  <div class="grid">
+    <div class="box">1</div><div class="box">2</div><div class="box">3</div>
+    <div class="box">4</div><div class="box">5</div><div class="box">6</div>
+  </div>
+</body>
+</html>

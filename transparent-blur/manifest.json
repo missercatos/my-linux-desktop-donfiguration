@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Transparent Blur",
+  "version": "1.0",
+  "description": "半透明 + 毛玻璃模糊，作用于整个页面",
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Transparent Blur"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content.css"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
