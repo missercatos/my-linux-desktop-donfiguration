@@ -1,0 +1,43 @@
+[env]
+STARSHIP_CONFIG = "/home/a/.config/tactical/starship.toml"
+ZDOTDIR = "/home/a/.config/tactical/zsh"
+
+[terminal.shell]
+program = "/usr/bin/zsh"
+args = ["-l"]
+
+[font]
+size = 10
+normal = { family = "JetBrains Maple Mono" }
+
+[colors.primary]
+background = "#000000"
+foreground = "#33ff33"
+
+[colors.cursor]
+text = "#002200"
+cursor = "#33ff33"
+
+[colors.selection]
+text = "#002200"
+background = "#33ff33"
+
+[colors.normal]
+black = "#002200"
+red = "#005500"
+green = "#00aa00"
+yellow = "#66ff33"
+blue = "#00cc44"
+magenta = "#00ff66"
+cyan = "#66ff88"
+white = "#b3ffb3"
+
+[colors.bright]
+black = "#004400"
+red = "#33ff33"
+green = "#66ff66"
+yellow = "#99ff99"
+blue = "#44cc44"
+magenta = "#00ff88"
+cyan = "#88ffaa"
+white = "#ccffcc"

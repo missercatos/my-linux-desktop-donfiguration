@@ -10,6 +10,9 @@ GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri). Default shell: **fis
 | `hyprland` | `~/.config/hypr/` | Hyprland config (mirrors niri behavior) |
 | `nvim` | `~/.config/nvim/` | Neovim config (ARKVIM + LazyVim) |
 | `kitty` | `~/.config/kitty/` | Kitty terminal |
+| `foot` | `~/.config/foot/` | Foot terminal（战略终端一号：纯黑 + 古早 CRT 绿，zsh 经 ZDOTDIR 完全隔离） |
+| `alacritty` | `~/.config/alacritty/` | Alacritty terminal（战略终端二号：与 foot 同套战略配置） |
+| `tactical` | `~/.config/tactical/` | 战略终端共享配置（单行磷光绿语义色 starship + 隔离 zsh + 原版 fastfetch `f`） |
 | `fish` | `~/.config/fish/` | Fish shell (vi mode, config, aliases, functions) |
 | `starship` | `~/.config/starship.toml.custom` | Starship prompt backup (Matugen overwrites `starship.toml`) |
 | `zsh` | `~/.zshrc` | Zsh config (vi mode, dynamic colors, autocomplete) |
