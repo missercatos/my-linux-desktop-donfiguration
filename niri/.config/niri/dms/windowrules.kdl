@@ -88,6 +88,14 @@ window-rule {
 	open-floating true
 	default-floating-position x=20 y=20 relative-to="top"
 }
+// nvim Space+K 编译运行用的浮动终端（屏幕中央，800x500）
+window-rule {
+    match app-id="nvim-float-term"
+    match title="^编译运行$"
+    open-floating true
+    default-column-width { fixed 800; }
+    default-window-height { fixed 500; }
+}
 window-rule {
     match app-id="bluetui"
     match app-id="impala"
