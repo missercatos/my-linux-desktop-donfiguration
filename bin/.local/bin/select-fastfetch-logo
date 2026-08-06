@@ -1,0 +1,59 @@
+#!/bin/bash
+CAVA_THEME="$HOME/.config/cava/themes/your-theme"
+FASTFETCH_CONFIG="$HOME/.config/fastfetch/config.jsonc"
+FASTFETCH_DIR="$HOME/.config/fastfetch"
+
+if [ ! -f "$CAVA_THEME" ]; then
+  exit 0
+fi
+
+PRIMARY=$(grep 'gradient_color_2' "$CAVA_THEME" | head -1 | sed "s/.*'#\([^']*\)'.*/\1/")
+if [ -z "$PRIMARY" ]; then
+  exit 0
+fi
+
+R=$((16#${PRIMARY:0:2}))
+G=$((16#${PRIMARY:2:2}))
+B=$((16#${PRIMARY:4:2}))
+
+HSL=$(awk "BEGIN {
+  r=$R/255; g=$G/255; b=$B/255
+  max=(r>g)?r:g; max=(max>b)?max:b
+  min=(r<g)?r:g; min=(min<b)?min:b
+  l=(max+min)/2
+  if(max==min){h=0; s=0}
+  else{
+    d=max-min
+    s=(l>0.5)?d/(2-max-min):d/(max+min)
+    if(max==r) h=(g-b)/d+((g<b)?6:0)
+    else if(max==g) h=(b-r)/d+2
+    else h=(r-g)/d+4
+    h=h*60
+  }
+  printf \"%d %d %.0f\", h, s*100, l*100
+}")
+
+HUE=$(echo "$HSL" | awk '{print $1}')
+SAT=$(echo "$HSL" | awk '{print $2}')
+
+if [ "$SAT" -lt 15 ]; then
+  IMG="f.png"
+elif [ "$HUE" -ge 200 ] && [ "$HUE" -lt 260 ]; then
+  IMG="a.png"
+elif [ "$HUE" -ge 20 ] && [ "$HUE" -lt 50 ]; then
+  IMG="b.png"
+elif [ "$HUE" -ge 260 ] && [ "$HUE" -lt 310 ]; then
+  IMG="c.png"
+elif [ "$HUE" -ge 340 ] || [ "$HUE" -lt 10 ]; then
+  IMG="d.png"
+elif [ "$HUE" -ge 80 ] && [ "$HUE" -lt 160 ]; then
+  IMG="e.png"
+elif [ "$HUE" -ge 50 ] && [ "$HUE" -lt 80 ]; then
+  IMG="g.png"
+else
+  IMG="a.png"
+fi
+
+if [ -f "$FASTFETCH_DIR/$IMG" ]; then
+  sed -i "s|\"source\": \"~/.config/fastfetch/[a-g]\.png\"|\"source\": \"~/.config/fastfetch/$IMG\"|" "$FASTFETCH_CONFIG"
+fi
