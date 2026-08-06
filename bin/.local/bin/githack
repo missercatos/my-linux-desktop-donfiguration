@@ -282,3 +282,47 @@ class GitHack:
         self.step_recover()
         self.step_summary()
         self.auto_cat_flag()
+
+
+# ========== 入口 ==========
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2 or sys.argv[1] in ('-h', '--help'):
+        print('''githack -- BugScanTeam GitHack 的 Python3 纯净重写（零依赖 stdlib）
+
+用法:
+  githack <URL>                     恢复 .git 泄露, 自动 cat 出 flag* 文件
+  githack <URL> --out 目录          指定输出目录（默认 githack_<host>/）
+  githack <URL> --cat 相对路径      恢复后直接打印指定文件内容
+
+示例:
+  githack http://目标/.git
+  githack http://目标/ --out restore
+  githack http://目标/ --cat .git/index''')
+        sys.exit(0)
+
+    url = sys.argv[1]
+    out_dir = None
+    cat_path = None
+    quiet = False
+    i = 2
+    while i < len(sys.argv):
+        if sys.argv[i] == '--out' and i + 1 < len(sys.argv):
+            out_dir = sys.argv[i + 1]; i += 2
+        elif sys.argv[i] == '--cat' and i + 1 < len(sys.argv):
+            cat_path = sys.argv[i + 1]; i += 2
+        elif sys.argv[i] in ('-q', '--quiet'):
+            quiet = True; i += 1
+        else:
+            print(f'[!] 未知选项: {sys.argv[i]}', file=sys.stderr); sys.exit(1)
+
+    if out_dir is None:
+        host = url.rstrip('/').replace('https://', '').replace('http://', '')
+        host = host.replace('/', '_').replace(':', '_')
+        out_dir = f'githack_{host}'
+
+    gh = GitHack(url, out_dir, quiet)
+    gh.run()
+
+    if cat_path:
+        gh.cat_file(cat_path)
