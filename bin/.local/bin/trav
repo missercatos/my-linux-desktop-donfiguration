@@ -6,7 +6,7 @@
 # 注意: 多个值空间是纯字符串拼接, 分隔符(如 . 后缀前的点)由用户在值里写好
 
 set -u
-BASE="" SPACES="" RULE="" EXT_SPACE="" USER="" RECURSE=0 MAXDEPTH=5 TIMEOUT=5 THREADS=1
+BASE="" SPACES="" RULE="" EXT_SPACE="" USER="" RECURSE=0 MAXDEPTH=5 TIMEOUT=5 THREADS=1 FOUND=0
 
 usage() {
     cat <<'EOF'
@@ -102,7 +102,9 @@ probe() {
         *)              echo "未知判别规则: $RULE" >&2; exit 1 ;;
     esac
 
-    echo "HIT: $url -> $code"
+    echo -n "HIT: "; [ -n "$USER" ] && echo -n "$USER:$val => " || echo -n "$val => "
+    echo "$url -> $code"
+    FOUND=1
     case "$RULE" in
         grep:*) echo "$body" | grep -oE "${RULE#grep:}" | sed 's/^/    /' ;;
         contains:*) echo "    ...${RULE#contains:}..." ;;
@@ -126,6 +128,7 @@ run() {
     for c in "${cand[@]}"; do
         for e in "${exts[@]}"; do
             probe "$(join_url "$base" "$c$e")" "$c" "$depth"
+            [ "$FOUND" = 1 ] && [ "$RECURSE" = 0 ] && return 0
         done
     done
 }
@@ -150,3 +153,4 @@ if [ "$THREADS" -gt 1 ]; then
 fi
 
 run "$BASE" 1
+exit $(( FOUND ? 0 : 1 ))
