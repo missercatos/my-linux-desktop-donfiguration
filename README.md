@@ -34,7 +34,7 @@ GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri). Default shell: **fis
 | `applications` | `~/.local/share/applications/` | Custom desktop entries |
 | `icons` | `~/.local/share/icons/` | Icon themes (Adwaita-Matugen, Klassy, Slot-Beauty-Dark) |
 | `sddm` | `/etc/sddm.conf` | SDDM config (needs `sudo stow --target=/ sddm`) |
-| `bin` | `~/.local/bin/` | User scripts (trav 值空间遍历/爆破 · gitdump .git 泄露恢复 · githack Python3 版 GitHack · svndump SVN 泄露利用 · dsstore .DS_Store 解析, 37+ scripts) |
+| `bin` | `~/.local/bin/` | User scripts (trav 值空间遍历/爆破 · gitdump .git 泄露恢复 · githack Python3 版 GitHack · svndump SVN 泄露利用 · hgdump HG(Mercurial) 泄露利用 · dsstore .DS_Store 解析, 37+ scripts) |
 
 ## Bootstrap
 
