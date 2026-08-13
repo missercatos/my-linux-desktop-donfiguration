@@ -7,12 +7,12 @@ window.nautilus-window {
 }
 .nautilus-window headerbar,
 .nautilus-window .toolbar {
-    background-color: alpha(@headerbar_bg_color, 0.85);
+    background-color: alpha(@headerbar_bg_color, 0.45);
 }
 .nautilus-window placessidebar,
 .nautilus-window .navigation-sidebar,
 .nautilus-window .sidebar {
-    background-color: alpha(@sidebar_bg_color, 0.85);
+    background-color: alpha(@sidebar_bg_color, 0.45);
 }
 .nautilus-window notebook,
 .nautilus-window notebook > stack,
@@ -21,5 +21,5 @@ window.nautilus-window {
 .nautilus-window .content-view,
 .nautilus-window .view,
 .nautilus-window .floating-bar {
-    background-color: alpha(@view_bg_color, 0.85);
+    background-color: alpha(@view_bg_color, 0.45);
 }
