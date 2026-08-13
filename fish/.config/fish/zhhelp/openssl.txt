@@ -1,0 +1,15 @@
+openssl  -  加密库命令行工具
+常用指令集:
+  # 生成私钥
+  openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048
+  # 生成自签名证书(10年)
+  openssl req -x509 -new -key key.pem -days 3650 -out cert.pem
+  # 查看证书信息
+  openssl x509 -in cert.pem -text -noout
+  # 查看远程证书
+  openssl s_client -connect host:443 -showcerts
+  # 对称加密
+  openssl enc -aes-256-cbc -salt -in f -out f.enc
+  openssl enc -d -aes-256-cbc -in f.enc -out f
+  # 生成随机密码
+  openssl rand -base64 16

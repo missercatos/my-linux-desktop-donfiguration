@@ -1,0 +1,12 @@
+make  -  构建自动化工具(读 Makefile)
+用法: make [目标] [变量=值...]
+常用指令集:
+  make                   # 构建默认目标(通常是all)
+  make clean             # 清理产物
+  make install           # 安装
+  make -j8               # 8线程并行构建
+  make -j$(nproc)        # 全部核心并行
+  make -n                # 只显示要执行的命令(预演)
+  make -f 文件名         # 指定Makefile
+  make V=1               # 显示完整命令
+  make -C 目录           # 进入目录构建

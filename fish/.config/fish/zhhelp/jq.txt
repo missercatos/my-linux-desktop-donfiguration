@@ -1,0 +1,17 @@
+jq  -  JSON 处理工具
+用法: cat file.json | jq '过滤器'
+常用过滤器:
+  .               整个JSON
+  .key            取字段
+  .a.b.c          嵌套取字段
+  .[0] / .[]      取数组元素/遍历
+  .[].name        取数组每项字段
+  select(.x>10)   条件过滤
+  map(.name)      映射
+  length          长度
+  -r              原始输出(去引号)
+常用指令集:
+  cat a.json | jq .                     # 美化输出
+  curl -s api | jq .data.name           # 取字段
+  jq '.[] | select(.age>20)' users.json # 过滤
+  jq -r '.items[].url' list.json        # 提取纯文本

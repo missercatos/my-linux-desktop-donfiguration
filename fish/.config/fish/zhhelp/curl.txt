@@ -1,0 +1,23 @@
+curl  -  网络传输工具（下载/上传）
+用法: curl [选项] URL
+常用参数:
+  -o 文件     保存为指定文件名
+  -O          按 URL 原文件名保存
+  -L          跟随重定向
+  -I          只显示响应头
+  -s          静默模式(不显示进度)
+  -v          详细输出(调试用)
+  -k          忽略 HTTPS 证书校验
+  -u 用户:密码  HTTP 基础认证
+  -X 方法     指定请求方法(POST/PUT/DELETE...)
+  -H 头       添加请求头, 如 -H "Accept: text/html"
+  -d 数据      POST 表单数据, 如 -d "a=1&b=2"
+  -F 字段      上传文件, 如 -F "file=@a.txt"
+  --limit-rate 限速, 如 --limit-rate 2M
+常用指令集:
+  curl -O https://例.com/file.tar.gz          # 下载
+  curl -L -o out.html https://例.com           # 跟随跳转保存
+  curl -I https://例.com                       # 看响应头
+  curl -X POST -d "u=1" https://例.com/api     # POST 请求
+  curl -u admin:123 -X DELETE https://例.com/x # 带认证
+  curl -k https://自签证书主机/                # 忽略证书

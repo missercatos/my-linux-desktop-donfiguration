@@ -1,0 +1,21 @@
+pacman  -  Arch Linux 包管理器
+用法: pacman [操作] [包名...]
+常用操作:
+  -S 包        安装包
+  -Sy          刷新软件源
+  -Syu         完整系统更新(推荐)
+  -Ss 关键字   搜索软件源中的包
+  -Si 包       查看包信息
+  -Qs 关键字   搜索已安装的包
+  -Qi 包       查看已装包信息
+  -Ql 包       列出包内文件
+  -Qo 文件     文件属于哪个包
+  -R 包        卸载包
+  -Rns 包      卸载并删配置和依赖
+  -Sc          清理缓存
+常用指令集:
+  sudo pacman -Syu               # 更新系统
+  sudo pacman -S package         # 安装
+  pacman -Ss keyword             # 搜索
+  sudo pacman -Rns package       # 彻底卸载
+  pacman -Qe                     # 列出显式安装的包

@@ -1,0 +1,15 @@
+docker  -  容器管理工具
+常用指令集:
+  docker ps                     # 运行中的容器
+  docker ps -a                  # 所有容器
+  docker images                 # 本地镜像
+  docker run -it ubuntu bash    # 交互运行容器
+  docker run -d -p 8080:80 nginx # 后台+端口映射
+  docker exec -it 容器ID bash   # 进入运行中的容器
+  docker logs -f 容器ID         # 看日志
+  docker stop/start/restart 容器ID
+  docker rm 容器ID              # 删除容器
+  docker rmi 镜像ID             # 删除镜像
+  docker pull 镜像名            # 拉取镜像
+  docker build -t 名字 .        # 构建镜像
+  docker compose up -d          # 启动compose栈

@@ -1,0 +1,14 @@
+sed  -  流编辑器(处理文本)
+用法: sed [选项] '脚本' 文件
+常用脚本:
+  s/旧/新/g     替换全部 / p 打印 / d 删除
+  N 行操作: '5d' / '3,8d' / '5p' / '$d'
+  -n            静默(只输出匹配)
+  -i            直接改文件(常用 -i.bak 备份)
+常用指令集:
+  sed -i 's/foo/bar/g' file.txt           # 全部替换
+  sed -i 's/^#//' config.conf             # 去掉行首#
+  sed -n '10,20p' file                    # 打印10-20行
+  sed '/^$/d' file                        # 删除空行
+  sed 's/  */ /g' file                    # 合并空格
+  sed -i '1i 新首行' file                 # 行首插入

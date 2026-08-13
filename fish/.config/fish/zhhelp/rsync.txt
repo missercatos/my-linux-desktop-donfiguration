@@ -1,0 +1,18 @@
+rsync  -  高效同步/备份工具
+用法: rsync [选项] 源 目标
+  源/目标形如: 路径 / user@host:路径
+常用参数:
+  -a          归档模式(保留权限时间)
+  -v          显示过程
+  -r          递归
+  -z          传输压缩
+  -P          进度+断点续传
+  -n --dry-run  预演(不实际操作)
+  --delete    删除目标多余文件
+  --exclude=模式   排除
+  -e ssh      通过 ssh 传输
+常用指令集:
+  rsync -av dir1/ dir2/                  # 目录同步(斜杠重要)
+  rsync -avz src/ user@host:/dest/       # 远程备份
+  rsync -avn src/ dst/                   # 先预演
+  rsync -av --delete src/ mirrors/       # 完全镜像

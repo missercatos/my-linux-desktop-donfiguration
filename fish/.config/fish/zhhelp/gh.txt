@@ -1,0 +1,13 @@
+gh  -  GitHub 官方命令行
+常用指令集:
+  gh auth login                 # 登录
+  gh repo clone 用户/仓库       # 克隆
+  gh repo create 名字           # 创建仓库
+  gh issue list / create        # 问题管理
+  gh pr create                  # 创建PR
+  gh pr view                    # 查看PR
+  gh pr merge                   # 合并PR
+  gh pr checkout                # 切到PR分支
+  gh release create v1.0        # 发版
+  gh search repos 关键字        # 搜索仓库
+  gh run list / watch           # Actions

@@ -1,0 +1,14 @@
+scp  -  基于 ssh 的文件复制
+用法: scp [选项] 源 目标
+  目标格式: user@host:路径
+常用参数:
+  -r          复制目录
+  -P 端口     指定 ssh 端口(大写P)
+  -C          传输压缩
+  -i 密钥文件  指定私钥
+  -p          保留时间和权限
+常用指令集:
+  scp a.txt user@host:/home/user/        # 上传
+  scp user@host:/path/a.txt ./           # 下载
+  scp -r dir/ user@host:/dest/           # 目录
+  scp -P 2222 a.txt user@host:~/         # 非默认端口

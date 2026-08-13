@@ -1,0 +1,9 @@
+node  -  JavaScript 运行时
+常用指令集:
+  node -v                    # 查看版本
+  node script.js             # 运行脚本
+  node -e 'console.log(1)'   # 直接执行代码
+  node -i / --interactive    # 交互式REPL
+  node --watch script.js     # 文件变化自动重启
+  node --inspect script.js   # 调试模式(配合DevTools)
+  node -p '1+2'              # 执行并打印结果

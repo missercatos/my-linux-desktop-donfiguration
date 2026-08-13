@@ -1,0 +1,11 @@
+magick  -  ImageMagick 7 主命令(替代convert)
+用法同 convert, 例如:
+  magick a.png b.jpg               # 格式转换
+  magick a.png -resize 50% b.png   # 缩放
+  magick a.png -quality 80 b.jpg   # 压缩
+  magick a.png -rotate 90 b.png    # 旋转
+  magick a.png -grayscale b.png    # 灰度
+  magick a.png -blur 0x5 b.png     # 模糊
+  magick *.png out.pdf             # 转PDF
+  magick a.png -negate b.png       # 反色
+  magick -size 800x600 xc:#336699 out.png  # 生成纯色图

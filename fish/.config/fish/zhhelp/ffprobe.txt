@@ -1,0 +1,10 @@
+ffprobe  -  音视频信息探测(ffmpeg家族)
+用法: ffprobe [选项] 文件
+常用指令集:
+  ffprobe file.mp4                  # 基本信息
+  ffprobe -v error -show_format file.mp4   # 容器格式信息
+  ffprobe -v error -show_streams file.mp4  # 流信息(编码/分辨率)
+  ffprobe -v error -show_frames -count_frames file.mp4
+  ffprobe -v quiet -print_format json -show_format file.mp4  # JSON输出
+  # 只取时长
+  ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 file.mp4
