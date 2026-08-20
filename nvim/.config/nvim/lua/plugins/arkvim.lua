@@ -24,7 +24,7 @@ return {
         colors.bg_statusline = "NONE"
       end,
       on_highlights = function(hl)
-        hl.Comment = { fg = "#9aa5d8" }
+        hl.Comment = { fg = "#b6bfe8" }
         hl.Normal = { bg = "NONE", ctermbg = "NONE" }
         hl.NormalNC = { bg = "NONE", ctermbg = "NONE" }
         hl.NormalFloat = { bg = "NONE", ctermbg = "NONE" }
