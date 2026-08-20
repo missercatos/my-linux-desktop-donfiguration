@@ -2,14 +2,28 @@
 
 GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri). Default shell: **fish** with vi mode. Zsh available as alternative.
 
+## 一键安装
+
+```bash
+./install.sh
+```
+
+脚本会依次：安装官方仓库软件 → 安装 AUR 软件（无 AUR 助手时自动装 yay）→ `chsh` 切换到 fish → 用 Stow 将全部配置移植到 `~`（含 `/etc/sddm.conf`）→ 修正 `~/.xprofile` 归属 → 重载 niri 配置。
+
+## 中文化
+
+- **man 手册**：安装 `man-pages-zh_cn`，`MANPATH=/usr/share/man/zh_CN:`（fish `config.fish` 与 `environment.d/locale.conf` 中配置，尾部冒号追加默认路径）。
+- **`-h`/`--help` 中文**：`fish/.config/fish/functions/*.fish` 是 70+ 个包装函数，拦截 `-h`/`--help` 输出 `fish/.config/fish/zhhelp/*.txt` 的中文解释（未收录的命令自动回落到英文原帮助）。新增工具时：写 `zhhelp/<工具>.txt` + 复制任意现有包装函数改名即可。
+- **GNU 工具 `--help`**：`LANG/LANGUAGE=zh_CN.UTF-8` 已配置（`environment.d/locale.conf`），coreutils 等 gettext 工具直接输出中文。
+
 ## Packages
 
 | Package | Target | Description |
 |---|---|---|
 | `niri` | `~/.config/niri/` | Niri compositor config (modular KDL) |
 | `hyprland` | `~/.config/hypr/` | Hyprland config (mirrors niri behavior) |
-| `nvim` | `~/.config/nvim/` | Neovim config (ARKVIM + LazyVim) |
-| `kitty` | `~/.config/kitty/` | Kitty terminal |
+| `nvim` | `~/.config/nvim/` | Neovim config (ARKVIM + LazyVim, 注释色已加亮 `#7f8ac4`) |
+| `kitty` | `~/.config/kitty/` | Kitty terminal（`bright.conf` 加亮 color8，vim 注释随之变亮但仍暗于正文；不随 DMS 主题覆盖） |
 | `foot` | `~/.config/foot/` | Foot terminal（战略终端一号：纯黑 + 古早 CRT 绿，zsh 经 ZDOTDIR 完全隔离） |
 | `alacritty` | `~/.config/alacritty/` | Alacritty terminal（战略终端二号：与 foot 同套战略配置） |
 | `tactical` | `~/.config/tactical/` | 战略终端共享配置（单行磷光绿语义色 starship + 隔离 zsh + 原版 fastfetch `f`） |
@@ -56,6 +70,8 @@ sudo chown a:a ~/.xprofile
 sudo stow --target=/ sddm
 ```
 
+> 推荐直接用 `./install.sh` 代替上面的手工流程。
+
 ## Notes
 
 - **Fish** is the default shell with vi mode (`fish_vi_key_bindings`). Mode indicator hidden to keep starship clean.
@@ -64,5 +80,5 @@ sudo stow --target=/ sddm
 - `sddm` package uses `--target=/` to place `/etc/sddm.conf`.
 - `starship.toml.custom` is the backup; Matugen generates `starship.toml` at runtime.
 - Machine-specific files **not included**: `kwinoutputconfig.json`, `plasma-org.kde.plasma.desktop-appletsrc`.
-- Nested `.git` dirs exist in `nvim/` and some `plasma-theme` splash themes — manage with `.gitignore` or submodules.
+- Nested `.git` dirs exist in some `plasma-theme` splash themes — manage with `.gitignore` or submodules.
 - Some `bin/` scripts are Arch Linux-specific (pacman wrappers); portable scripts are mixed in.

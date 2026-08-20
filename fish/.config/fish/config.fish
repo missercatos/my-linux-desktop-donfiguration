@@ -4,7 +4,9 @@ end
 set fish_greeting ""
 fish_vi_key_bindings
 function fish_mode_prompt; end
-set -p PATH ~/.local/bin
+set -gx MANPATH /usr/share/man/zh_CN:
+set -gx LANGUAGE zh_CN.UTF-8
+set -p PATH ~/hackingtools/bin ~/.local/bin
 starship init fish | source
 zoxide init fish --cmd cd | source
 # 111
