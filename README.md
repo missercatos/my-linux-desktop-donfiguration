@@ -8,7 +8,12 @@ GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri). Default shell: **fis
 ./install.sh
 ```
 
-脚本会依次：安装官方仓库软件 → 安装 AUR 软件（无 AUR 助手时自动装 yay）→ `chsh` 切换到 fish → 用 Stow 将全部配置移植到 `~`（含 `/etc/sddm.conf`）→ 修正 `~/.xprofile` 归属 → 重载 niri 配置。
+脚本会依次：安装官方/archlinuxcn 仓库软件（含 `noctalia-qs`，即 dms 用的 quickshell）→ 安装 AUR 软件（无 AUR 助手时自动装 yay）→ 若检测到 `qs` 与 qt6-base 版本不匹配（`symbol lookup error`）则自动从 AUR 重建 `quickshell-git` → `chsh` 切换到 fish → 用 Stow 将全部配置移植到 `~`（含 `/etc/sddm.conf`）→ 修正 `~/.xprofile` 归属 → 重载 niri 配置。
+
+> **qs 符号错误排查**：`qt6-base` 升级后 `dms ipc ...`（如 Mod+Z 应用启动器）可能报
+> `qs: symbol lookup error ... QUntypedPropertyBinding`，原因是 archlinuxcn 预编译的
+> `noctalia-qs` 未跟上 qt6-base 版本。直接重跑 `./install.sh` 会自动重建；或手动：
+> `sudo pacman -Rdd noctalia-qs && yay -S --aur quickshell-git`。
 
 ## 中文化
 
@@ -22,8 +27,8 @@ GNU Stow-managed dotfiles for Arch Linux (Hyprland + niri). Default shell: **fis
 |---|---|---|
 | `niri` | `~/.config/niri/` | Niri compositor config (modular KDL) |
 | `hyprland` | `~/.config/hypr/` | Hyprland config (mirrors niri behavior) |
-| `nvim` | `~/.config/nvim/` | Neovim config (ARKVIM + LazyVim, 注释色已加亮 `#7f8ac4`) |
-| `kitty` | `~/.config/kitty/` | Kitty terminal（`bright.conf` 加亮 color8，vim 注释随之变亮但仍暗于正文；不随 DMS 主题覆盖） |
+| `nvim` | `~/.config/nvim/` | Neovim config (ARKVIM + LazyVim, 注释色已加亮 `#9aa5d8`) |
+| `kitty` | `~/.config/kitty/` | Kitty terminal（`bright.conf` 加亮：前景 `#f8f6ee`、背景加深 `#05060c`、color8 提亮 `#cbc7ba`，vim 注释随之变亮但仍暗于正文；不随 DMS 主题覆盖） |
 | `foot` | `~/.config/foot/` | Foot terminal（战略终端一号：纯黑 + 古早 CRT 绿，zsh 经 ZDOTDIR 完全隔离） |
 | `alacritty` | `~/.config/alacritty/` | Alacritty terminal（战略终端二号：与 foot 同套战略配置） |
 | `tactical` | `~/.config/tactical/` | 战略终端共享配置（单行磷光绿语义色 starship + 隔离 zsh + 原版 fastfetch `f`） |
