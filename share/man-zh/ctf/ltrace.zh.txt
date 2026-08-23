@@ -1,0 +1,17 @@
+ltrace - 库函数调用追踪
+========================
+
+简介：跟踪程序的动态库函数调用，用于分析程序行为。
+
+常用命令：
+  ltrace ./binary                           追踪所有库函数调用
+  ltrace -e malloc+free ./binary            仅追踪malloc和free
+  ltrace -e strlen+strcmp ./binary          追踪字符串操作
+  ltrace -c ./binary                        统计库函数调用次数
+  ltrace -p <pid>                           附加到运行中的进程
+  ltrace -o out.txt ./binary               输出到文件
+
+CTF常用技巧：
+  ltrace ./binary 2>&1 | grep -i flag      追踪中搜索flag
+  ltrace -e printf ./binary                查看printf参数
+  ltrace -e system+execve ./binary         查看系统命令执行

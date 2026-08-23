@@ -1,0 +1,17 @@
+file - 文件类型识别工具
+=======================
+
+简介：通过魔术数字判断文件类型，不依赖扩展名。
+
+常用命令：
+  file ./binary                          识别文件类型
+  file -b ./binary                       仅显示类型（无文件名）
+  file -k ./binary                       启用额外检查
+  file -m /usr/share/misc/magic.mgc 指定魔术文件
+  file -r ./directory                    递归扫描目录
+  file -z ./archive.tar.gz               检查压缩文件内容
+
+CTF常用技巧：
+  file -b ./unknown                      快速识别未知文件
+  file -z ./firmware                     查看压缩包内容
+  file ./image.bin && strings ./image.bin 检查隐藏内容

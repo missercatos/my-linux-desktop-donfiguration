@@ -1,0 +1,18 @@
+ffmpeg - 音视频转码剪辑工具
+
+常用命令:
+  ffmpeg -i input.mp4 output.avi                # 格式转换
+  ffmpeg -i in.mp4 -ss 00:01:00 -t 00:02:00 out.mp4  # 截取片段
+  ffmpeg -i in.mp4 -vn -acodec copy out.mp3    # 提取音频
+  ffmpeg -i in.mp4 -vf scale=640:480 out.mp4   # 缩放视频
+  ffmpeg -i in.mp4 -r 30 out.mp4               # 设置帧率
+
+关键选项:
+  -i    输入文件
+  -ss    开始时间
+  -t    持续时间
+  -vn    不处理视频
+  -an    不处理音频
+  -vf    视频滤镜
+  -af    音频滤镜
+  -c copy    直接复制（不重新编码）

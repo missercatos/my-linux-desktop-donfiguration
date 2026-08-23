@@ -1,0 +1,31 @@
+openssl - 加密解密工具包
+========================
+
+简介：通用加密工具库，支持多种加密算法。
+
+常用命令：
+
+加密/解密：
+  openssl enc -aes-256-cbc -in file.txt -out file.enc   加密文件
+  openssl enc -aes-256-cbc -d -in file.enc -out file.txt  解密文件
+  openssl enc -aes-256-cbc -d -in file.enc -k password   带密码解密
+  openssl enc -bf -in file.txt -out file.enc             Blowfish加密
+
+哈希：
+  openssl dgst -sha256 file              计算SHA256哈希
+  openssl dgst -md5 file                 计算MD5哈希
+  openssl dgst -sha256 -hmac "key" file  HMAC-SHA256
+
+RSA：
+  openssl rsa -in key.pem -text -noout   查看RSA密钥信息
+  openssl rsa -in key.pem -pubout -out pub.pem  导出公钥
+  openssl rsautl -encrypt -inkey pub.pem -in file -out file.enc  RSA加密
+  openssl rsautl -decrypt -inkey key.pem -in file.enc  RSA解密
+
+Base64：
+  openssl base64 -in file -out file.b64  Base64编码
+  openssl base64 -d -in file.b64 -out file  Base64解码
+
+CTF常用技巧：
+  openssl dgst -md5 file1 file2         同时计算多个文件哈希
+  openssl rsa -in private.pem -text     查看私钥详情

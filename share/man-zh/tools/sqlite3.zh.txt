@@ -1,0 +1,15 @@
+sqlite3 - 嵌入式SQL数据库
+
+常用命令:
+  sqlite3 database.db                        # 打开数据库
+  .tables                                    # 列出所有表
+  .schema table_name                         # 查看表结构
+  SELECT * FROM table_name;                  # 查询数据
+
+关键点:
+  .tables    列出表
+  .schema    查看表结构
+  .headers on    显示列名
+  .mode column    列模式输出
+  .quit    退出
+  .help    帮助信息

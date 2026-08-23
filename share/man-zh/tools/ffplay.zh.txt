@@ -1,0 +1,17 @@
+ffplay - 简易媒体播放器
+
+常用命令:
+  ffplay file.mp4                             # 播放视频
+  ffplay -fs file.mp4                         # 全屏播放
+  ffplay -loop 0 file.mp4                     # 循环播放
+  ffplay -af volume=0.5 file.mp4              # 调整音量
+  ffplay -vf scale=640:480 file.mp4           # 缩放播放
+
+关键选项:
+  -fs    全屏模式
+  -loop 0    无限循环
+  -vn    不播放视频
+  -sn    不播放字幕
+  -af    音频滤镜
+  -vf    视频滤镜
+  -nodisp    无显示窗口

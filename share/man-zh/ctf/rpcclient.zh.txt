@@ -1,0 +1,24 @@
+rpcclient - RPC客户端
+======================
+
+简介：用于查询Windows RPC服务的工具，常用于域环境枚举。
+
+常用命令：
+  rpcclient -U user host                连接RPC服务
+  rpcclient -U user%pass host           带密码连接
+  rpcclient -U "" host -N               匿名连接
+
+常用枚举命令：
+  enumdomusers                          枚举域用户
+  enumdomgroups                         枚举域组
+  lookupnames admin                     名称解析
+  lookuprids <rid>                      RID解析
+  querydominfo                          查询域信息
+  getsid                                获取SID
+  lsaenumsid                            枚举SID
+  queryuser <rid>                       查询用户信息
+  querygroup <rid>                      查询组信息
+
+CTF常用技巧：
+  rpcclient -U "" target -N             匿名枚举域用户
+  rpcclient -U user target              登录后枚举域信息

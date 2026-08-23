@@ -1,0 +1,19 @@
+curl - URL数据传输工具
+
+常用命令:
+  curl -O http://example.com/file.txt          # 下载文件，保留原名
+  curl -o output.txt http://example.com/file   # 下载文件，指定输出名
+  curl -d "name=value" http://example.com/post # 发送POST数据
+  curl -u user:password http://example.com     # 使用认证
+  curl -v http://example.com                   # 显示详细信息
+  curl -x http://proxy:port http://example.com # 通过代理
+
+关键选项:
+  -O    下载文件，使用服务器文件名
+  -o    指定输出文件名
+  -d    发送POST数据
+  -u    用户认证
+  -v    详细模式
+  -x    设置代理
+  -L    跟随重定向
+  -k    忽略SSL证书错误

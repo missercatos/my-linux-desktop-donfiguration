@@ -1,0 +1,16 @@
+aria2c - 多协议下载工具
+
+常用命令:
+  aria2c http://example.com/file.txt            # 下载文件
+  aria2c -x 4 -s 4 http://example.com/file     # 4线程分段下载
+  aria2c -i urllist.txt                         # 从文件批量下载
+  aria2c -d /path/to/save http://example.com/file # 指定保存目录
+
+关键选项:
+  -x    最大连接数
+  -s    每个文件连接数
+  -i    从文件读取URL列表
+  -d    指定下载目录
+  -o    指定输出文件名
+  -c    断点续传
+  --max-concurrent-downloads=5    最大并发下载数

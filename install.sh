@@ -29,6 +29,11 @@ OFFICIAL_PKGS=(
     imagemagick ffmpeg jq sqlite openssl gdb tldr
     coreutils findutils sed grep procps-ng util-linux iproute2
     nodejs yt-dlp docker mpv wl-clipboard wireplumber networkmanager
+    # CTF/安全工具
+    binwalk gdb radare2 rizin ghidra jadx
+    wireshark-cli socat smbclient strace ltrace
+    # Python CTF 库
+    python-pwntools python-capstone python-unicorn python-pycryptodomex ropgadget
     # zsh 备选
     zsh zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete zsh-completions
     # 中文 man 手册
@@ -119,4 +124,25 @@ if command -v niri >/dev/null && pgrep -x niri >/dev/null; then
     niri msg action reload-config || warn "niri 重载失败，请手动执行 niri msg action reload-config"
 fi
 
+# -------------------------------------------------------------
+# 6. 安装 h 命令到 ~/.local/bin
+# -------------------------------------------------------------
+if [[ -f "$REPO_DIR/bin/h" ]]; then
+    info "安装 h 命令到 ~/.local/bin ..."
+    mkdir -p "$HOME/.local/bin"
+    cp "$REPO_DIR/bin/h" "$HOME/.local/bin/h"
+    chmod +x "$HOME/.local/bin/h"
+fi
+
+# -------------------------------------------------------------
+# 7. 设置中文 man 手册路径
+# -------------------------------------------------------------
+MAN_ZH_DIR="$REPO_DIR/share/man-zh"
+if [[ -d "$MAN_ZH_DIR" ]]; then
+    info "配置中文帮助文件路径 ..."
+    mkdir -p "$HOME/.local/share/man-zh"
+    cp -r "$MAN_ZH_DIR"/* "$HOME/.local/share/man-zh/"
+fi
+
 info "全部完成。默认 shell 为 fish，man 手册为中文（MANPATH 已配置）。"
+info "h 命令已安装，输入 h 查看工具速查手册。"

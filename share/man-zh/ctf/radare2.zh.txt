@@ -1,0 +1,31 @@
+radare2 - 逆向工程框架
+======================
+
+简介：开源逆向工程框架，集反汇编、调试、分析于一体。
+
+常用命令：
+  r2 -d ./binary            打开二进制文件（调试模式）
+  r2 -A ./binary            自动分析后打开
+  aaa                       自动分析（深度分析）
+  aad                       分析数据引用
+  aau                       分析未使用的代码
+  pdf                       反汇编当前函数
+  pdf @main                 反汇编指定函数
+  s 0x401000                跳转到地址
+  s sym.main                跳转到符号
+  iz                        列出字符串（数据段）
+  izj                       JSON格式输出字符串
+  axt @sym.main             查看交叉引用
+  axf @sym.main             查看函数交叉引用
+  woz                       查找ROP gadgets
+  /ad pop rdi               搜索汇编指令
+  wao sys_write             修改系统调用类型
+
+CTF常用技巧：
+  aaa; iz                   快速列出字符串
+  aaaa                      深度分析（慢但全面）
+ VV                        可视化函数调用图
+  ao                        查看当前指令信息
+  iS                        查看段信息
+  ie                        查看入口点
+  afl                       列出所有函数

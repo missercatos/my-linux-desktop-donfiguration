@@ -1,0 +1,16 @@
+chafa - 终端图像渲染工具
+
+常用命令:
+  chafa image.png                            # 在终端显示图像
+  chafa --size=80x24 image.png               # 指定显示尺寸
+  chafa --colors=256 image.png               # 使用256色
+  chafa --symbols=braille image.png          # 使用盲文符号
+  chafa --fill=space image.png               # 使用空格填充
+
+关键选项:
+  --size    显示尺寸
+  --colors    颜色数量（16/256/24bit）
+  --symbols    符号类型（half/braille/space）
+  --fill    填充字符
+  --center    居中显示
+  --animate    支持动画

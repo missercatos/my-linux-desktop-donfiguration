@@ -1,0 +1,15 @@
+qrencode - 二维码生成工具
+
+常用命令:
+  qrencode "Hello World" -o output.png       # 生成二维码图片
+  qrencode -t ANSI "Hello World"             # 终端显示二维码
+  qrencode -s 10 "text" -o out.png           # 设置模块大小
+  qrencode -l M "text" -o out.png            # 设置纠错级别
+
+关键选项:
+  -o    输出文件
+  -t    输出类型（PNG/ANSI/ASCII）
+  -s    模块大小（像素）
+  -l    纠错级别（L/M/Q/H）
+  -m    边距大小
+  -v    版本（1-40）

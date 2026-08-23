@@ -1,0 +1,40 @@
+pwn - pwntools框架
+====================
+
+简介：Python二进制漏洞利用框架，CTF必备工具。
+
+基础用法（Python脚本）：
+  from pwn import *
+
+  # 本地调试
+  p = process('./binary')
+
+  # 远程连接
+  p = remote('host', port)
+
+  # 发送数据
+  p.send(data)
+  p.sendline(data)        # 自动添加换行符
+  p.sendafter('>', data)  # 等待提示后发送
+
+  # 接收数据
+  data = p.recv(n)        # 接收n字节
+  data = p.recvline()     # 接收一行
+  data = p.recvuntil('flag{')  # 接收到特定字符串
+
+  # ELF相关
+  elf = ELF('./binary')
+  libc = ELF('./libc.so')
+  rop = ROP(elf)
+
+  # 调试
+  gdb.attach(p, 'b main')
+
+  # 利用模板
+  payload = flat(
+      b'A' * offset,
+      rop.find_gadget(['pop rdi', 'ret'])[1],
+      next(libc.search(b'/bin/sh')),
+      libc.sym['system']
+  )
+  p.sendline(payload)

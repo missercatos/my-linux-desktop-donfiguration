@@ -1,0 +1,18 @@
+rabin2 - 二进制信息提取工具
+============================
+
+简介：radare2套件中的二进制文件分析工具。
+
+常用命令：
+  rabin2 -I ./binary              显示二进制文件信息（架构、类型等）
+  rabin2 -s ./binary              显示符号表
+  rabin2 -z ./binary              显示字符串
+  rabin2 -S ./binary              显示段信息
+  rabin2 -E ./binary              显示导出符号
+  rabin2 -i ./binary              显示导入函数
+  rabin2 -c ./binary              显示类信息（Java/DEX）
+
+CTF常用技巧：
+  rabin2 -I ./binary              快速查看架构信息
+  rabin2 -i ./binary | grep system  查找是否有system导入
+  rabin2 -z ./binary | grep -i flag  搜索flag字符串

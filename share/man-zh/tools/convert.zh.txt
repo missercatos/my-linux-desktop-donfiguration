@@ -1,0 +1,17 @@
+convert - ImageMagick图像处理（旧版）
+
+常用命令:
+  convert input.png output.jpg                 # 格式转换
+  convert -resize 800x600 input.jpg output.jpg # 缩放图像
+  convert -rotate 90 input.jpg output.jpg      # 旋转图像
+  convert -crop 100x100+50+50 in.jpg out.jpg  # 裁剪图像
+  convert -quality 85 input.png output.jpg     # 设置质量
+
+关键选项:
+  -resize    缩放尺寸
+  -rotate    旋转角度
+  -crop    裁剪区域
+  -quality    JPEG质量（0-100）
+  -flip    垂直翻转
+  -flop    水平翻转
+  -unsharp    锐化

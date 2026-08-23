@@ -1,0 +1,16 @@
+fd - 现代化find替代工具
+
+常用命令:
+  fd "pattern"                               # 搜索文件名
+  fd -e txt                                  # 按扩展名搜索
+  fd -t f "pattern" dir                      # 搜索指定目录下的文件
+  fd -H "pattern"                            # 包含隐藏文件
+  fd -e js . src                             # 在src目录搜索js文件
+
+关键选项:
+  -e    按扩展名过滤
+  -t    类型过滤（f文件/d目录）
+  -H    包含隐藏文件
+  -i    忽略大小写
+  -d    限制深度
+  --exec    执行命令
