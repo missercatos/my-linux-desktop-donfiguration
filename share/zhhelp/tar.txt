@@ -1,0 +1,23 @@
+tar  -  打包工具(gzip/bzip2/xz)
+用法: tar [选项] 归档文件 [文件...]
+═══ 全部参数 ═══
+常用参数:
+  -c   创建归档
+  -x   解包
+  -t   列出内容
+  -f   指定归档文件名
+  -z   通过 gzip 压缩(或识别 .gz)
+  -j   通过 bzip2 压缩(或识别 .bz2)
+  -J   通过 xz 压缩(或识别 .xz)
+  -v   显示详细信息
+  -C 目录   切换工作目录
+  --exclude=模式   排除
+  --strip-components=N  去掉前 N 层路径
+═══ 常用用法 ═══
+常用指令集:
+  tar -czvf app.tar.gz dir/            # 压缩成 .tar.gz
+  tar -cjvf app.tar.bz2 dir/           # 压缩成 .tar.bz2
+  tar -xzvf app.tar.gz                 # 解压
+  tar -xzvf app.tar.gz -C /to/dir      # 解压到目录
+  tar -tzf app.tar.gz                  # 只看内容
+  tar -czf s.tar.gz dir --exclude='*.tmp'

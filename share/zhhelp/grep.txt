@@ -1,0 +1,22 @@
+grep  -  文本搜索
+用法: grep [选项] 模式 [文件...]
+═══ 全部参数 ═══
+常用参数:
+  -r          递归搜索目录
+  -i          忽略大小写
+  -n          显示行号
+  -v          反选(不匹配的行)
+  -c          只计数
+  -l          只输出文件名
+  -E          扩展正则(egrep)
+  -P           Perl 正则
+  -A 行数/-B 行数   上下文
+  -o          只输出匹配部分
+  --color=auto  高亮
+═══ 常用用法 ═══
+常用指令集:
+  grep -rn "关键字" .                  # 目录内递归搜索
+  grep -i error app.log | head          # 忽略大小写
+  grep -E "err|fail" log               # 多关键字
+  grep -v '^#' config.conf             # 去掉注释行
+  ps aux | grep -i [f]irefox           # 找进程(技巧)

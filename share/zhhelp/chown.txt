@@ -1,0 +1,10 @@
+chown  -  修改文件属主/属组
+用法: chown [选项] 属主[:属组] 文件
+═══ 全部参数 ═══
+常用参数:
+  -R          递归
+═══ 常用用法 ═══
+常用指令集:
+  chown user file.txt             # 改属主
+  chown user:group file.txt       # 属主+属组
+  chown -R user:group dir/        # 递归

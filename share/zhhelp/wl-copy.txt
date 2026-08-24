@@ -1,0 +1,12 @@
+wl-copy  -  Wayland 剪贴板写入
+═══ 常用用法 ═══
+常用指令集:
+  echo text | wl-copy              # 复制文本
+  cat file | wl-copy               # 复制文件内容
+  wl-copy < image.png              # 复制图片
+  wl-paste > file.txt              # 粘贴到文件
+  wl-paste --no-newline            # 粘贴去掉换行
+  wl-copy --clear                  # 清空剪贴板
+  wl-copy --paste                  # 粘贴并保持(wl-paste)
+  # 截图到剪贴板
+  grim -g "$(slurp)" - | wl-copy

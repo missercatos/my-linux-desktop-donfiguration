@@ -135,7 +135,20 @@ if [[ -f "$REPO_DIR/bin/h" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 7. 设置中文 man 手册路径
+# 7. 安装中文帮助包装 (bash/zsh)
+# -------------------------------------------------------------
+if [[ -d "$REPO_DIR/share/zhhelp" ]]; then
+    info "安装中文帮助文件到 ~/.local/share/zhhelp ..."
+    mkdir -p "$HOME/.local/share/zhhelp"
+    cp "$REPO_DIR/share/zhhelp"/*.txt "$HOME/.local/share/zhhelp/"
+fi
+if [[ -f "$REPO_DIR/share/zhhelp-wrapper.sh" ]]; then
+    info "安装中文帮助包装脚本 ..."
+    cp "$REPO_DIR/share/zhhelp-wrapper.sh" "$HOME/.local/share/zhhelp-wrapper.sh"
+fi
+
+# -------------------------------------------------------------
+# 8. 设置中文 man 手册路径
 # -------------------------------------------------------------
 MAN_ZH_DIR="$REPO_DIR/share/man-zh"
 if [[ -d "$MAN_ZH_DIR" ]]; then

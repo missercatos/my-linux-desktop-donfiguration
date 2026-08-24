@@ -1,0 +1,16 @@
+sftp  -  安全文件传输(交互式)
+用法: sftp 用户@主机
+交互命令: ls / lls / cd / lcd / get 下载 /
+  put 上传 / mkdir / rm / rmdir / pwd /
+  exit / bye / help / !命令(执行本地命令)
+═══ 全部参数 ═══
+常用参数:
+  -P 端口      指定端口
+  -i 密钥      指定私钥
+═══ 常用用法 ═══
+常用指令集:
+  sftp user@host                    # 连接
+  sftp> get file.txt                # 下载
+  sftp> put file.txt                # 上传
+  sftp> get -r dir/                 # 递归下载
+  sftp -P 2222 user@host

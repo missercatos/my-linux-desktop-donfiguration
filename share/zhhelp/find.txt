@@ -1,0 +1,19 @@
+find  -  文件查找
+用法: find 路径 [表达式]
+常用表达式:
+  -name 模式     按名查 ('*.txt')
+  -iname 模式    忽略大小写查找
+  -type f/d/l    按类型(文件/目录/链接)
+  -size +100M    按大小
+  -mtime -7      修改时间7天内 / +7 超过7天
+  -maxdepth N    最大深度
+  -exec cmd {} ; 对结果执行命令
+  -delete        删除结果
+  -print0        以0结尾输出(配合 xargs -0)
+═══ 常用用法 ═══
+常用指令集:
+  find . -name "*.log"                     # 找文件
+  find / -type f -size +1G 2>/dev/null     # 找大文件
+  find . -mtime +30 -exec rm {} \;        # 删30天前文件
+  find . -name "*~" -delete               # 删临时文件
+  find . -type f | xargs wc -l            # 统计行数

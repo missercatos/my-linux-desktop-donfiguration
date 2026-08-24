@@ -1,0 +1,16 @@
+dig  -  DNS 查询工具
+用法: dig [选项] 域名 [查询类型]
+查询类型: A AAAA MX NS TXT CNAME SOA
+═══ 全部参数 ═══
+常用参数:
+  @DNS服务器   指定 DNS 服务器
+  +short      只显示结果
+  +trace      跟踪解析全过程
+  -x IP       反向解析
+═══ 常用用法 ═══
+常用指令集:
+  dig example.com                   # A记录
+  dig example.com MX                # 邮件记录
+  dig example.com +short            # 简洁输出
+  dig @8.8.8.8 example.com          # 指定DNS
+  dig -x 1.2.3.4                    # 反查域名

@@ -1,0 +1,12 @@
+pactl  -  PulseAudio 控制命令
+═══ 常用用法 ═══
+常用指令集:
+  pactl info                       # 服务器信息
+  pactl list sinks                 # 输出设备列表
+  pactl list sources               # 输入设备列表
+  pactl list short sinks           # 简列出输出
+  pactl set-sink-volume @DEFAULT_SINK@ -10%   # 音量-
+  pactl set-sink-volume @DEFAULT_SINK@ +10%   # 音量+
+  pactl set-sink-mute @DEFAULT_SINK@ toggle   # 静音切换
+  pactl set-default-sink 序号      # 切换输出设备
+  pactl set-source-mute @DEFAULT_SOURCE@ toggle  # 麦克风静音

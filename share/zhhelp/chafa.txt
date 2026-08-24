@@ -1,0 +1,24 @@
+chafa  -  终端图形/字符画渲染工具
+用法: chafa [选项] 图片文件...
+═══ 全部参数 ═══
+常用参数:
+  -s 宽x高      输出尺寸(字符)
+  -c N          颜色数量(如 16/256/full)
+  --symbols     图形符号集, 如 symbols=block+border
+  --format      输出格式(符号/六块/点阵/半块)
+  -f            format: symbols|blocks|dots|halfblocks
+  --colors N    颜色限制
+  --animate     动画(GIF)
+  --speed N     动画速度
+  --fg-only     只显示前景
+  --bg-only     只显示背景
+  --fit-width   适配终端宽度
+  --invert      反转
+═══ 常用用法 ═══
+常用指令集:
+  chafa photo.jpg                       # 显示图片
+  chafa -s 80x40 photo.jpg              # 指定尺寸
+  chafa --symbols block+border -s 100x50 img.png
+  chafa -f halfblocks photo.jpg         # 半块渲染
+  chafa --animate gif.gif               # 播放GIF
+  ls *.jpg | xargs -I{} chafa -s 40x20 {}

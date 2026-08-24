@@ -1,0 +1,14 @@
+ps  -  进程查看
+═══ 全部参数 ═══
+常用参数:
+  -e / -A     所有进程
+  -f          完整格式
+  -u 用户     指定用户
+  -aux        所有含其他用户(BSD风格)
+═══ 常用用法 ═══
+常用指令集:
+  ps aux                       # 所有进程
+  ps aux | grep -i name        # 找某进程
+  ps -ef --forest              # 树状层级
+  ps aux --sort=-%mem | head   # 内存TOP10
+  (实时监控用 top/htop)

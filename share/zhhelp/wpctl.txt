@@ -1,0 +1,11 @@
+wpctl  -  PipeWire 控制命令(Wayland音频)
+═══ 常用用法 ═══
+常用指令集:
+  wpctl status                     # 设备/会话总览
+  wpctl inspect 节点ID             # 查看节点详情
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.5   # 音量50%
+  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 0.8  # 音量(允许>100%)
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+   # 音量+5%
+  wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle # 静音切换
+  wpctl set-default 节点ID         # 设置默认设备
+  wpctl volume                       # 当前音量

@@ -1,0 +1,20 @@
+yt-dlp  -  视频下载工具(youtube等)
+用法: yt-dlp [选项] URL
+═══ 全部参数 ═══
+常用参数:
+  -f 格式       指定清晰度(如 -f 1080p)
+  -f best      最高画质
+  --list-formats   列出所有可用格式
+  -o 模板       输出文件名
+  -x            只提取音频
+  --audio-format mp3   音频转mp3
+  -P 目录       保存到目录
+  -c            断点续传
+  --proxy socks5://127.0.0.1:1080
+═══ 常用用法 ═══
+常用指令集:
+  yt-dlp https://youtu.be/xxx          # 默认下载
+  yt-dlp -f best URL                   # 最高画质
+  yt-dlp --list-formats URL            # 看格式
+  yt-dlp -x --audio-format mp3 URL     # 提取音频
+  yt-dlp -f "bv*+ba/b" -o "%(title)s.%(ext)s" URL

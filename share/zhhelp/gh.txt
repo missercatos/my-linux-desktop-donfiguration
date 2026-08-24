@@ -1,0 +1,247 @@
+gh - GitHub官方命令行工具
+═══════════════════════════════════════════════════════════════
+
+═══ 全部参数 ═══
+
+── 认证 ──
+  gh auth login                                交互式登录
+  gh auth logout                               登出
+  gh auth status                               查看登录状态
+  gh auth setup-git                            配置git凭证
+  gh auth token                                查看当前token
+
+── 仓库操作 ──
+  gh repo view                                 查看当前仓库
+  gh repo view <owner/repo>                    查看指定仓库
+  gh repo clone <owner/repo>                   克隆仓库
+  gh repo clone <owner/repo> --fork            Fork并克隆
+  gh repo create <name>                        创建仓库(交互式)
+  gh repo create <name> --public               创建公开仓库
+  gh repo create <name> --private              创建私有仓库
+  gh repo create <name> --clone                创建并自动clone
+  gh repo create <name> --public --source=. --remote=origin --push
+                                               创建并推送当前目录
+  gh repo create org/<name>                    在组织下创建
+  gh repo fork <owner/repo>                    Fork仓库
+  gh repo edit --visibility public             改为公开
+  gh repo edit --visibility private            改为私有
+  gh repo delete <owner/repo>                  删除仓库
+  gh repo archive <owner/repo>                 归档仓库
+  gh repo unarchive <owner/repo>               取消归档
+  gh repo enable-pages                         启用GitHub Pages
+  gh repo disable-pages                        禁用GitHub Pages
+  gh repo view --web                           浏览器打开
+
+── Issue 操作 ──
+  gh issue list                                列出Issue
+  gh issue list --label "bug"                  按标签筛选
+  gh issue list --assignee "@me"               按指派人筛选
+  gh issue list --state open                   按状态筛选
+  gh issue list --limit 10                     限制数量
+  gh issue view <number>                       查看Issue详情
+  gh issue view <number> --web                 浏览器打开
+  gh issue create                              创建Issue(交互式)
+  gh issue create --title "标题" --body "内容"  创建Issue
+  gh issue create --label "bug"                带标签创建
+  gh issue close <number>                      关闭Issue
+  gh issue reopen <number>                     重新打开
+  gh issue comment <number> --body "评论"       添加评论
+  gh issue edit <number> --title "新标题"       编辑标题
+  gh issue edit <number> --add-label "bug"     添加标签
+  gh issue edit <number> --remove-label "bug"  移除标签
+  gh issue edit <number> --assignee "@me"      指派自己
+  gh issue transfer <number> <owner/repo>      转移到其他仓库
+  gh issue delete <number>                     删除Issue
+
+── PR 操作 ──
+  gh pr list                                   列出PR
+  gh pr list --state open                      按状态筛选
+  gh pr list --reviewer "@me"                  按审查者筛选
+  gh pr list --label "bug"                     按标签筛选
+  gh pr view <number>                          查看PR详情
+  gh pr view <number> --web                    浏览器打开
+  gh pr view <number> --files                  查看变更文件
+  gh pr create                                创建PR(交互式)
+  gh pr create --title "标题" --body "内容"     创建PR
+  gh pr create --base main                     指定目标分支
+  gh pr create --head feature                  指定来源分支
+  gh pr create --draft                         创建草稿PR
+  gh pr checkout <number>                      切换到PR分支
+  gh pr merge <number>                         合并PR(默认merge)
+  gh pr merge <number> --merge                 merge方式合并
+  gh pr merge <number> --squash                squash方式合并
+  gh pr merge <number> --rebase                rebase方式合并
+  gh pr merge <number> --auto                  自动合并(通过审查后)
+  gh pr review <number> --approve              批准PR
+  gh pr review <number> --request-changes      要求修改
+  gh pr review <number> --body "评论"           添加审查评论
+  gh pr close <number>                         关闭PR
+  gh pr reopen <number>                        重新打开
+  gh pr comment <number> --body "评论"          添加评论
+  gh pr diff <number>                          查看diff
+  gh pr checks <number>                        查看CI状态
+  gh pr ready <number>                         标记为可审查
+  gh pr edit <number> --title "新标题"          编辑标题
+  gh pr edit <number> --add-label "bug"        添加标签
+  gh pr lock <number>                          锁定讨论
+  gh pr unlock <number>                        解锁讨论
+
+── Fork 工作流(跨仓库PR) ──
+  gh pr create \
+    --repo 原作者/仓库名 \
+    --base main \
+    --head 你的用户名:feature分支 \
+    --title "PR标题" \
+    --body "描述"
+  关键参数:
+    --repo     目标仓库(原项目)
+    --base     目标分支(你要合并到哪)
+    --head     来源(你的fork:分支名)
+
+── Release 操作 ──
+  gh release list                              列出Release
+  gh release view <tag>                        查看Release
+  gh release create <tag>                      创建Release(交互式)
+  gh release create <tag> --title "标题"       指定标题
+  gh release create <tag> --notes "说明"       指定说明
+  gh release create <tag> --notes-file notes.md 从文件读取说明
+  gh release create <tag> --target main        指定目标分支
+  gh release create <tag> --draft              创建草稿
+  gh release create <tag> --prerelease         创建预发布
+  gh release create <tag> ./file.zip           上传附件
+  gh release edit <tag>                        编辑Release
+  gh release delete <tag>                      删除Release
+  gh release download <tag>                    下载附件
+  gh release view <tag> --web                  浏览器打开
+
+── Actions 操作 ──
+  gh run list                                  列出工作流
+  gh run view <run-id>                         查看运行详情
+  gh run watch <run-id>                        实时监控
+  gh run rerun <run-id>                        重新运行
+  gh run cancel <run-id>                       取消运行
+  gh run download <run-id>                     下载制品
+  gh workflow list                             列出工作流文件
+  gh workflow run <workflow>                   手动触发
+  gh workflow run <workflow> -f key=value      带参数触发
+  gh workflow view <workflow>                  查看工作流详情
+  gh workflow enable <workflow>                启用工作流
+  gh workflow disable <workflow>               禁用工作流
+
+── 搜索 ──
+  gh search repos <keyword>                   搜索仓库
+  gh search issues <keyword>                  搜索Issue
+  gh search prs <keyword>                     搜索PR
+  gh search code <keyword>                    搜索代码
+  gh search commits <keyword>                 搜索提交
+  gh search issues --owner <user>             按作者筛选
+  gh search repos --language python           按语言筛选
+  gh search repos --sort stars                按星数排序
+
+── Gist 操作 ──
+  gh gist list                                列出Gist
+  gh gist view <id>                           查看Gist
+  gh gist create <file>                       创建Gist
+  gh gist create <file> --public              创建公开Gist
+  gh gist edit <id>                           编辑Gist
+  gh gist delete <id>                         删除Gist
+  gh gist clone <id>                          克隆Gist
+
+── SSH Key ──
+  gh ssh-key list                             列出SSH Key
+  gh ssh-key add <file> --title "名称"        添加SSH Key
+  gh ssh-key delete <id>                      删除SSH Key
+
+── API 操作 ──
+  gh api <endpoint>                           调用API
+  gh api repos/{owner}/{repo}                 获取仓库信息
+  gh api -X POST repos/{owner}/{repo}/collaborators/{user} -f permission=push
+                                             邀请协作者
+  gh api repos/{owner}/{repo}/transfer -X POST -f new_owner=org
+                                             转移仓库到组织
+  gh api repos/{owner}/{repo}/topics          获取Topics
+  gh api -X PUT repos/{owner}/{repo}/topics -f names[]=tag1
+                                             设置Topics
+
+── 环境变量 ──
+  gh env list                                 列出环境
+  gh env create <name>                        创建环境
+  gh env delete <name>                        删除环境
+  gh env view <name>                          查看环境
+  gh variable list                            列出变量
+  gh variable set <name> --body "value"       设置变量
+  gh variable delete <name>                   删除变量
+  gh secret list                              列出Secrets
+  gh secret set <name> --body "value"         设置Secret
+  gh secret delete <name>                     删除Secret
+
+── 全局选项 ──
+  -R, --repo <owner/repo>                     指定仓库
+  --hostname <host>                           指定GitHub实例
+  --help                                      显示帮助
+  --version                                   显示版本
+  -v, --verbose                               详细输出
+  --json <fields>                             JSON输出
+  -q, --jq <expression>                       jq过滤
+  -t, --template <template>                   模板输出
+  --paginate                                  分页输出
+  -L, --limit <num>                           限制输出数量
+
+
+═══ 常用用法 ═══
+
+── 日常工作流 ──
+  gh auth login                               登录
+  gh repo clone user/repo                     克隆
+  gh pr list                                  查看待审PR
+  gh pr checkout 42                           切到PR本地审查
+  gh pr merge 42 --squash                     合并PR
+  gh issue create                             提Issue
+  gh issue list --assignee "@me"              我的Issue
+
+── 创建PR ──
+  git checkout -b feat/xxx                    建分支
+  git add . && git commit -m "feat: xxx"      提交
+  git push -u origin feat/xxx                 推送
+  gh pr create --title "feat: xxx" --body "描述"
+                                              创建PR
+  gh pr create --base main --head feat/xxx    指定分支创建
+
+── 审查PR ──
+  gh pr checkout 42                           切到PR
+  # 审查代码...
+  gh pr review 42 --approve                   批准
+  gh pr merge 42 --squash                     合并
+
+── Fork + 跨仓库PR ──
+  gh repo clone 原作者/项目 --fork            Fork并克隆
+  git remote add upstream <原项目url>          添加上游
+  git checkout -b my-fix                      建分支
+  # 修改代码...
+  git push origin my-fix                      推送
+  gh pr create \
+    --repo 原作者/项目 \
+    --base main \
+    --head 我的用户名:my-fix \
+    --title "fix: 修复xxx" \
+    --body "描述"
+
+── Release 发版 ──
+  git tag -a v1.0.0 -m "版本说明"            打tag
+  git push origin v1.0.0                      推送tag
+  gh release create v1.0.0 \
+    --title "v1.0.0" \
+    --notes "更新说明"                         创建Release
+  gh release create v1.0.0 ./dist/*.zip       上传附件
+
+── CI/CD ──
+  gh run list                                 查看工作流
+  gh run watch                                实时监控
+  gh workflow run deploy                      手动触发
+
+── Issue 管理 ──
+  gh issue create --title "bug报告" --body "复现步骤..."
+                                              创建Issue
+  gh issue list --label "bug" --state open    筛选Issue
+  gh issue close 123                          关闭Issue
+  gh issue comment 123 --body "已修复"        添加评论

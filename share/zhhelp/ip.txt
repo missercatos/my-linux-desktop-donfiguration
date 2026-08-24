@@ -1,0 +1,10 @@
+ip  -  网络配置工具(替代 ifconfig)
+═══ 常用用法 ═══
+常用指令集:
+  ip addr / ip a            # 查看IP地址
+  ip link                   # 查看网卡状态
+  ip route / ip r           # 路由表
+  ip neigh                  # ARP邻居表
+  ip link set dev eth0 up/down  # 启用/禁用网卡
+  ip addr add 192.168.1.10/24 dev eth0  # 加IP
+  ip route add default via 192.168.1.1   # 加默认路由

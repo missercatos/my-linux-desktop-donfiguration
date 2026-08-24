@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# h - 安全工具与功能工具速查手册
+# h - 工具大全速查手册
 # 用法: h          显示所有工具分类
 #       h -c <cmd> 显示指定命令详情
 #       h -s <关键字> 搜索工具
+#       h -l       仅列出命令名
 
 set -euo pipefail
 
@@ -15,184 +16,195 @@ BOLD='\033[1m'  DIM='\033[2m'
 # ── 中文帮助文件目录 ──
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MAN_ZH_DIR="${SCRIPT_DIR}/../share/man-zh"
-# 如果当前目录下没有，尝试 ~/.local/share/man-zh
 if [[ ! -d "$MAN_ZH_DIR" ]]; then
     MAN_ZH_DIR="${HOME}/.local/share/man-zh"
 fi
+ZHELP_DIR="${HOME}/.local/share/zhhelp"
+[[ ! -d "$ZHELP_DIR" ]] && ZHELP_DIR="${HOME}/.config/fish/zhhelp"
 
-# ── 工具数据库 ──
-# 格式: "命令|领域|简介|英文名"
+# ══════════════════════════════════════════
+# 工具数据库 - 格式: "命令|简介|英文名"
+# ══════════════════════════════════════════
 
-# CTF/安全工具
-declare -a CTF_RECON=(
-    "nmap|网络扫描|端口服务探测|Network Mapper"
-    "masscan|网络扫描|大规模快速扫描|Mass IP Port Scanner"
-    "zmap|网络扫描|互联网范围扫描|Internet-wide Network Scanner"
-    "hping3|网络扫描|定制化发包测试|Active Network Smashing Tool"
-    "fping|网络扫描|多主机并行ping|Fast Ping Tool"
-    "arping|网络扫描|ARP层主机探测|ARP Ping"
+declare -a CAT_NET=(
+    "curl|URL数据传输|URL Transfer Tool"
+    "wget|非交互式下载|Non-interactive Downloader"
+    "aria2c|多协议下载|Multi-protocol Downloader"
+    "arping|ARP层主机探测|ARP Ping"
+    "traceroute|路由追踪|Trace Route"
 )
 
-declare -a CTF_WEB=(
-    "nikto|Web渗透|Web漏洞扫描器|Web Server Scanner"
-    "dirb|Web渗透|目录与文件枚举|Web Content Scanner"
-    "gobuster|Web渗透|目录/DNS/VHost爆破|Directory Scanner"
-    "ffuf|Web渗透|快速Web模糊测试|Fuzz Faster U Fool"
-    "wfuzz|Web渗透|Web应用模糊测试|Web Application Fuzzer"
-    "feroxbuster|Web渗透|Rust快速目录扫描|Fast Directory Scanner"
-    "arjun|Web渗透|HTTP参数发现|HTTP Parameter Discovery"
-    "nuclei|Web渗透|模板化漏洞扫描|Vulnerability Scanner"
-    "httpx|Web渗透|HTTP探测工具|HTTP Toolkit"
-    "subfinder|Web渗透|子域名枚举|Subdomain Discovery"
-    "katana|Web渗透|网页爬虫框架|Web Crawler"
-    "gau|Web渗透|获取已知URL|Get All URLs"
-    "sqlmap|Web渗透|SQL注入自动化|SQL Injection Tool"
+declare -a CAT_REV=(
+    "gdb|GNU调试器|GNU Debugger"
+    "radare2|逆向工程框架|Reverse Engineering Framework"
+    "r2|radare2别名|radare2 Alias"
+    "rizin|逆向框架分支|Reverse Engineering Framework"
+    "ghidra|NSA逆向套件|Software Reverse Engineering"
+    "jadx|APK反编译|Dex to Java Decompiler"
+    "binwalk|固件分析提取|Firmware Analysis Tool"
+    "strings|提取可打印字符串|Print Strings"
+    "objdump|目标文件反汇编|Object File Dump"
+    "readelf|ELF文件解析|ELF File Reader"
+    "ROPgadget|ROP链构造|ROP Gadget Finder"
+    "rabin2|二进制信息提取|Binary Info Reader"
+    "rz-bin|rizin二进制工具|Binary Tool"
+    "pwn|pwntools框架|Pwn Tools"
+    "ROPgadget|ROP链构造|ROP Gadget Finder"
 )
 
-declare -a CTF_BRUTE=(
-    "hydra|暴力破解|网络登录破解|Login Cracker"
-    "medusa|暴力破解|并行网络登录测试|Parallel Network Login Tester"
-    "ncrack|暴力破解|网络认证暴力破解|Network Authentication Cracker"
-    "john|密码破解|密码哈希破解|John the Ripper"
-    "hashcat|密码破解|GPU密码恢复|Advanced Password Recovery"
-    "crunch|密码破解|字典生成工具|Wordlist Generator"
+declare -a CAT_WEB=(
+    "sqlmap|SQL注入自动化|SQL Injection Tool"
 )
 
-declare -a CTF_REV=(
-    "gdb|逆向分析|GNU调试器|GNU Debugger"
-    "radare2|逆向分析|逆向工程框架|Reverse Engineering Framework"
-    "r2|逆向分析|radare2别名|radare2 Alias"
-    "rizin|逆向分析|radare2分支|Reverse Engineering Framework"
-    "ghidra|逆向分析|NSA逆向工具套件|Software Reverse Engineering"
-    "jadx|逆向分析|APK反编译工具|Dex to Java Decompiler"
-    "binwalk|逆向分析|固件分析提取|Firmware Analysis Tool"
-    "strings|逆向分析|提取可打印字符串|Print Strings"
-    "objdump|逆向分析|目标文件反汇编|Object File Dump"
-    "readelf|逆向分析|ELF文件解析|ELF File Reader"
-    "ROPgadget|逆向分析|ROP链构造工具|ROP Gadget Finder"
-    "rabin2|逆向分析|二进制信息提取|Binary Info Reader"
-    "rz-bin|逆向分析|rizin二进制工具|Binary Tool"
-    "pwn|逆向分析|pwntools框架入口|Pwn Tools"
+declare -a CAT_PROTO=(
+    "wireshark|网络协议分析|Network Protocol Analyzer"
+    "tshark|终端抓包|Terminal Wireshark"
+    "socat|双向数据流中继|Socket Relay"
+    "smbclient|SMB/CIFS客户端|SMB Client"
+    "rpcclient|RPC客户端|RPC Client"
 )
 
-declare -a CTF_CRYPTO=(
-    "openssl|密码学|加密解密工具包|SSL/TLS Toolkit"
-    "capstone|密码学|多架构反汇编引擎|Disassembly Framework"
-    "unicorn|密码学|多架构CPU模拟器|CPU Emulator Framework"
+declare -a CAT_CRYPTO=(
+    "openssl|加密解密工具包|SSL/TLS Toolkit"
 )
 
-declare -a CTF_NET=(
-    "wireshark|协议分析|网络协议抓包|Network Protocol Analyzer"
-    "tshark|协议分析|终端抓包工具|Terminal Wireshark"
-    "socat|协议分析|双向数据流中继|Socket Relay"
-    "smbclient|协议分析|SMB/CIFS客户端|SMB Client"
-    "rpcclient|协议分析|RPC客户端|RPC Client"
-    "tcpdump|协议分析|命令行抓包|Network Sniffer"
+declare -a CAT_TRACE=(
+    "strace|系统调用追踪|System Call Trace"
+    "ltrace|库函数调用追踪|Library Call Trace"
+    "file|文件类型识别|File Type Detector"
+    "base64|Base64编解码|Base64 Encoder/Decoder"
 )
 
-declare -a CTF_DEBUG=(
-    "strace|系统追踪|系统调用追踪|System Call Trace"
-    "ltrace|系统追踪|库函数调用追踪|Library Call Trace"
-    "file|文件识别|文件类型识别|File Type Detector"
-    "base64|编码转换|Base64编解码|Base64 Encoder/Decoder"
+declare -a CAT_MEDIA=(
+    "ffmpeg|音视频转码剪辑|Multimedia Framework"
+    "ffprobe|媒体文件信息|Media Analyzer"
+    "ffplay|简易媒体播放器|Simple Media Player"
+    "convert|ImageMagick图像处理|ImageMagick Convert"
+    "magick|ImageMagick7命令|ImageMagick 7"
+    "identify|图像格式识别|Image Identifier"
+    "mpv|高性能视频播放器|Video Player"
+    "jp2a|图片转ASCII艺术|JPEG to ASCII"
+    "chafa|终端图像渲染|Terminal Image Viewer"
 )
 
-# 功能工具
-declare -a TOOL_MEDIA=(
-    "ffmpeg|音视频处理|音视频转码剪辑|Multimedia Framework"
-    "ffprobe|音视频处理|媒体文件信息|Media Analyzer"
-    "ffplay|音视频处理|简易媒体播放器|Simple Media Player"
-    "convert|图像处理|ImageMagick图像处理|ImageMagick Convert"
-    "magick|图像处理|ImageMagick7命令|ImageMagick 7"
-    "identify|图像处理|图像格式识别|Image Identifier"
-    "mpv|媒体播放|高性能视频播放器|Video Player"
-    "jp2a|终端显示|图片转ASCII艺术|JPEG to ASCII"
-    "chafa|终端显示|终端图像渲染|Terminal Image Viewer"
+declare -a CAT_TERM=(
+    "tmux|终端会话管理|Terminal Multiplexer"
+    "btop|资源使用监控|Resource Monitor"
+    "eza|现代化ls替代|Modern ls Replacement"
+    "bat|带高亮的cat|Cat with Highlighting"
+    "fzf|模糊查找|Fuzzy Finder"
+    "jq|JSON命令行处理|JSON Processor"
+    "tree|树形目录结构|Directory Tree"
+    "ripgrep|高速正则搜索|Fast Regex Search"
+    "fd|现代化find替代|Modern find Alternative"
 )
 
-declare -a TOOL_SYS=(
-    "tmux|终端复用|终端会话管理|Terminal Multiplexer"
-    "btop|系统监控|资源使用监控|Resource Monitor"
-    "eza|文件查看|现代化ls替代|Modern ls Replacement"
-    "bat|文件查看|带高亮的cat|Cat with Syntax Highlighting"
-    "fzf|模糊搜索|命令行模糊查找|Fuzzy Finder"
-    "jq|数据处理|JSON命令行处理|JSON Processor"
-    "tree|目录展示|树形目录结构|Directory Tree"
-    "ripgrep|文本搜索|高速正则搜索|Fast Regex Search"
-    "fd|文件查找|现代化find替代|Modern find Alternative"
+declare -a CAT_VCS=(
+    "git|分布式版本控制|Distributed Version Control"
+    "gh|GitHub命令行工具|GitHub CLI"
 )
 
-declare -a TOOL_NET=(
-    "curl|网络传输|URL数据传输|URL Transfer Tool"
-    "wget|网络传输|非交互式下载|Non-interactive Downloader"
-    "aria2c|网络传输|多协议下载工具|Multi-protocol Downloader"
+declare -a CAT_DEV=(
+    "docker|应用容器引擎|Container Engine"
+    "docker-compose|多容器编排|Docker Compose"
+    "cargo|Rust包管理|Rust Package Manager"
+    "rustc|Rust编译器|Rust Compiler"
+    "gcc|GNU编译器|GNU Compiler"
+    "g++|C++编译器|GNU C++ Compiler"
+    "make|构建自动化|Build Automation"
+    "cmake|跨平台构建|Cross-platform Build"
+    "node|Node.js运行时|Node.js Runtime"
+    "npm|Node包管理|Node Package Manager"
+    "python|Python解释器|Python Interpreter"
+    "python3|Python3解释器|Python3 Interpreter"
 )
 
-declare -a TOOL_DEV=(
-    "git|版本控制|分布式版本控制|Distributed Version Control"
-    "docker|容器化|应用容器引擎|Container Engine"
-    "sqlite3|数据库|嵌入式SQL数据库|SQLite CLI"
-    "qrencode|编码生成|二维码生成|QR Code Encoder"
+declare -a CAT_PKG=(
+    "pacman|Arch包管理|Arch Package Manager"
+    "yay|AUR助手|AUR Helper"
+    "paru|AUR助手|AUR Helper"
 )
 
-# ── 函数 ──
+declare -a CAT_SYS=(
+    "systemctl|系统服务管理|Systemd Service Control"
+    "journalctl|系统日志查看|Systemd Journal"
+)
 
-print_tree() {
-    local category="$1"
-    local color="$2"
-    local tools=("${!3}")
-    local last=${#tools[@]}
-    local i=0
+# ══════════════════════════════════════════
+# 所有分类数组（用于搜索和遍历）
+# ══════════════════════════════════════════
+ALL_CATS=(
+    "CAT_NET:网络传输"
+    "CAT_REV:逆向分析"
+    "CAT_WEB:Web渗透"
+    "CAT_PROTO:协议分析"
+    "CAT_CRYPTO:密码学"
+    "CAT_TRACE:系统追踪"
+    "CAT_MEDIA:音视频处理"
+    "CAT_TERM:终端工具"
+    "CAT_VCS:版本控制"
+    "CAT_DEV:编程开发"
+    "CAT_PKG:包管理"
+    "CAT_SYS:系统管理"
+)
 
-    echo -e "  ${color}├── ${BOLD}${category}${N}"
+# ══════════════════════════════════════════
+# 函数
+# ══════════════════════════════════════════
+
+print_category() {
+    local arr_name="$1"
+    local cat_name="$2"
+    local -n tools="$arr_name"
+    local count=${#tools[@]}
+
+    echo -e "${BOLD}${C}═══════════════════════════════════════════════════════${N}"
+    echo -e "${BOLD}${C}  分类: ${W}${cat_name}${N} ${D}(${count}个工具)${N}"
+    echo -e "${BOLD}${C}═══════════════════════════════════════════════════════${N}"
+
     for entry in "${tools[@]}"; do
-        IFS='|' read -r cmd domain desc en_name <<< "$entry"
-        ((i++))
-        if [[ $i -eq $last ]]; then
-            echo -e "  ${color}│   └── ${W}${cmd}${N} ${D}── ${desc}${N}"
-        else
-            echo -e "  ${color}│   ├── ${W}${cmd}${N} ${D}── ${desc}${N}"
-        fi
+        IFS='|' read -r cmd desc en_name <<< "$entry"
+        printf "  ${W}%-16s${N} ${D}[${cat_name}]${N} %s\n" "$cmd" "$desc"
     done
+    echo ""
 }
 
 show_detail() {
     local cmd="$1"
-    local found=0
 
     # 查找中文帮助文件
     local zh_file=""
-    for dir in ctf tools; do
-        if [[ -f "${MAN_ZH_DIR}/${dir}/${cmd}.zh.txt" ]]; then
-            zh_file="${MAN_ZH_DIR}/${dir}/${cmd}.zh.txt"
-            break
-        fi
-    done
+    if [[ -f "${ZHELP_DIR}/${cmd}.txt" ]]; then
+        zh_file="${ZHELP_DIR}/${cmd}.txt"
+    elif [[ -f "${MAN_ZH_DIR}/ctf/${cmd}.zh.txt" ]]; then
+        zh_file="${MAN_ZH_DIR}/ctf/${cmd}.zh.txt"
+    elif [[ -f "${MAN_ZH_DIR}/tools/${cmd}.zh.txt" ]]; then
+        zh_file="${MAN_ZH_DIR}/tools/${cmd}.zh.txt"
+    fi
 
-    echo -e "${BOLD}${C}═══════════════════════════════════════${N}"
+    echo -e "${BOLD}${C}═══════════════════════════════════════════════════════${N}"
     echo -e "${BOLD}${W}  命令: ${cmd}${N}"
-    echo -e "${BOLD}${C}═══════════════════════════════════════${N}"
+    echo -e "${BOLD}${C}═══════════════════════════════════════════════════════${N}"
 
-    # 显示英文原版帮助
-    echo -e "\n${Y}── 英文帮助 ──${N}"
+    # 显示中文帮助（优先）
+    if [[ -n "$zh_file" ]]; then
+        echo ""
+        cat "$zh_file"
+        echo ""
+    fi
+
+    # 显示英文原版帮助（作为补充）
+    echo -e "${Y}── 英文帮助 ──${N}"
     if command -v "$cmd" &>/dev/null; then
         if "$cmd" -h &>/dev/null 2>&1; then
-            "$cmd" -h 2>&1 | head -40
+            "$cmd" -h 2>&1 | head -50
         elif "$cmd" --help &>/dev/null 2>&1; then
-            "$cmd" --help 2>&1 | head -40
+            "$cmd" --help 2>&1 | head -50
         else
             echo -e "${D}(无 -h/--help 输出)${N}"
         fi
     else
         echo -e "${D}(命令未安装)${N}"
-    fi
-
-    # 显示中文帮助
-    if [[ -n "$zh_file" ]]; then
-        echo -e "\n${G}── 中文摘要 ──${N}"
-        cat "$zh_file"
-    else
-        echo -e "\n${D}(暂无中文帮助文件)${N}"
     fi
     echo ""
 }
@@ -201,44 +213,50 @@ search_tools() {
     local keyword="$1"
     echo -e "${BOLD}${C}搜索: ${keyword}${N}\n"
 
-    # 构建完整的工具列表用于搜索
-    local all_tools=(
-        "${CTF_RECON[@]}" "${CTF_WEB[@]}" "${CTF_BRUTE[@]}" "${CTF_REV[@]}"
-        "${CTF_CRYPTO[@]}" "${CTF_NET[@]}" "${CTF_DEBUG[@]}"
-        "${TOOL_MEDIA[@]}" "${TOOL_SYS[@]}" "${TOOL_NET[@]}" "${TOOL_DEV[@]}"
-    )
-
     local found=0
-    for entry in "${all_tools[@]}"; do
-        if [[ "$entry" == *"$keyword"* ]]; then
-            IFS='|' read -r cmd domain desc en_name <<< "$entry"
-            echo -e "  ${W}${cmd}${N} ${D}[${domain}]${N} ${desc} (${en_name})"
-            found=1
-        fi
+    for cat_info in "${ALL_CATS[@]}"; do
+        IFS=':' read -r arr_name cat_name <<< "$cat_info"
+        local -n tools="$arr_name"
+        for entry in "${tools[@]}"; do
+            if [[ "$entry" == *"$keyword"* ]]; then
+                IFS='|' read -r cmd desc en_name <<< "$entry"
+                printf "  ${W}%-16s${N} ${D}[${cat_name}]${N} %s (${en_name})\n" "$cmd" "$desc"
+                found=1
+            fi
+        done
     done
 
-    if [[ $found -eq 0 ]]; then
-        echo -e "  ${D}未找到匹配的工具${N}"
-    fi
+    [[ $found -eq 0 ]] && echo -e "  ${D}未找到匹配的工具${N}"
 }
 
-# ── 主逻辑 ──
+list_commands() {
+    for cat_info in "${ALL_CATS[@]}"; do
+        IFS=':' read -r arr_name cat_name <<< "$cat_info"
+        local -n tools="$arr_name"
+        for entry in "${tools[@]}"; do
+            IFS='|' read -r cmd desc en_name <<< "$entry"
+            echo "$cmd"
+        done
+    done | sort
+}
+
+# ══════════════════════════════════════════
+# 主逻辑
+# ══════════════════════════════════════════
 
 case "${1:-}" in
     -c|--cmd)
-        if [[ -z "${2:-}" ]]; then
-            echo -e "${R}用法: h -c <命令名>${N}" >&2
-            exit 1
-        fi
+        [[ -z "${2:-}" ]] && { echo -e "${R}用法: h -c <命令名>${N}" >&2; exit 1; }
         show_detail "$2"
         exit 0
         ;;
     -s|--search)
-        if [[ -z "${2:-}" ]]; then
-            echo -e "${R}用法: h -s <关键字>${N}" >&2
-            exit 1
-        fi
+        [[ -z "${2:-}" ]] && { echo -e "${R}用法: h -s <关键字>${N}" >&2; exit 1; }
         search_tools "$2"
+        exit 0
+        ;;
+    -l|--list)
+        list_commands
         exit 0
         ;;
     -h|--help)
@@ -246,62 +264,33 @@ case "${1:-}" in
         echo ""
         echo "选项:"
         echo "  (无参数)      显示所有工具分类速查"
-        echo "  -c, --cmd     显示指定命令详情"
+        echo "  -c, --cmd     显示指定命令详情（中文帮助 + 英文帮助）"
         echo "  -s, --search  搜索工具"
+        echo "  -l, --list    仅列出所有命令名"
         echo "  -h, --help    显示此帮助"
         echo ""
         echo "示例:"
-        echo "  h              显示工具分类树"
-        echo "  h -c gdb       显示gdb的中英文帮助"
+        echo "  h              显示工具分类大全"
+        echo "  h -c git       显示git的完整中文帮助"
         echo "  h -s 逆向      搜索含'逆向'的工具"
+        echo "  h -l           列出所有命令名"
         exit 0
         ;;
 esac
 
-# ── 主显示 ──
+# ══════════════════════════════════════════
+# 主显示 - 完全展开格式
+# ══════════════════════════════════════════
 
 echo -e "${BOLD}${C}╔══════════════════════════════════════════════════════════╗${N}"
-echo -e "${BOLD}${C}║${N}  ${BOLD}${W}安全工具与功能工具速查手册${N}  ${D}v1.0${N}                     ${C}║${N}"
+echo -e "${BOLD}${C}║${N}  ${BOLD}${W}工具大全速查手册${N}  ${D}v2.0${N}                                ${C}║${N}"
 echo -e "${BOLD}${C}╚══════════════════════════════════════════════════════════╝${N}"
 echo ""
 
-# ── CTF工具 ──
-echo -e "${BOLD}${R}┌─── CTF / 安全工具 ───────────────────────────────────┐${N}"
-echo ""
+for cat_info in "${ALL_CATS[@]}"; do
+    IFS=':' read -r arr_name cat_name <<< "$cat_info"
+    print_category "$arr_name" "$cat_name"
+done
 
-print_tree "网络扫描" "${R}" CTF_RECON[@]
-echo ""
-print_tree "Web渗透" "${M}" CTF_WEB[@]
-echo ""
-print_tree "暴力破解" "${Y}" CTF_BRUTE[@]
-echo ""
-print_tree "逆向分析" "${C}" CTF_REV[@]
-echo ""
-print_tree "密码学" "${G}" CTF_CRYPTO[@]
-echo ""
-print_tree "协议分析" "${B}" CTF_NET[@]
-echo ""
-print_tree "系统追踪" "${M}" CTF_DEBUG[@]
-
-echo ""
-echo -e "${BOLD}${R}└──────────────────────────────────────────────────────┘${N}"
-echo ""
-
-# ── 功能工具 ──
-echo -e "${BOLD}${G}┌─── 功能工具 ─────────────────────────────────────────┐${N}"
-echo ""
-
-print_tree "音视频处理" "${C}" TOOL_MEDIA[@]
-echo ""
-print_tree "系统工具" "${G}" TOOL_SYS[@]
-echo ""
-print_tree "网络传输" "${B}" TOOL_NET[@]
-echo ""
-print_tree "开发工具" "${M}" TOOL_DEV[@]
-
-echo ""
-echo -e "${BOLD}${G}└──────────────────────────────────────────────────────┘${N}"
-echo ""
-
-# 提示
-echo -e "${D}用法: h -c <命令> 查看详情 | h -s <关键字> 搜索${N}"
+echo -e "${D}──────────────────────────────────────────────────────────${N}"
+echo -e "${D}用法: h -c <命令> 查看详情 | h -s <关键字> 搜索 | h -l 列出所有命令${N}"

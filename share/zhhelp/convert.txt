@@ -1,0 +1,15 @@
+convert(ImageMagick)  -  图像处理转换
+═══ 常用用法 ═══
+常用指令集:
+  convert a.png b.jpg              # 格式转换
+  convert a.png -resize 800x600 b.png   # 缩放
+  convert a.png -resize 50% b.png       # 缩放50%
+  convert a.png -quality 80 b.jpg       # 压缩质量
+  convert a.png -rotate 90 b.png        # 旋转
+  convert a.png -crop 100x100+0+0 b.png # 裁剪
+  convert a.png -grayscale b.png        # 转灰度
+  convert a.png -blur 0x5 b.png         # 模糊
+  convert a.png -brightness-contrast 20x10 b.png  # 亮度对比度
+  convert a.png b.png +append out.png   # 水平拼接
+  # 批量转换
+  mogrify -resize 800x *.jpg

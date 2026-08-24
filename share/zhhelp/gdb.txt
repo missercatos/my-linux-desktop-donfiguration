@@ -1,0 +1,17 @@
+gdb  -  GNU 调试器
+═══ 常用用法 ═══
+常用指令集:
+  gdb ./程序                 # 启动调试
+  gdb ./程序 core            # 调试core转储
+  gdb --args ./程序 参数...   # 带参数启动
+调试命令:
+  run / r         运行
+  break 函数名/行号   打断点
+  next / n        单步跳过
+  step / s        单步进入
+  continue / c    继续执行
+  print / p 变量   查看变量
+  bt              查看调用栈
+  info breakpoints    列出断点
+  delete N        删除断点
+  quit / q        退出

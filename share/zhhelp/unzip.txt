@@ -1,0 +1,18 @@
+unzip  -  解压 zip 包
+用法: unzip [选项] 压缩包 [文件...]
+═══ 全部参数 ═══
+常用参数:
+  -d 目录     解压到指定目录
+  -l          列出包内容(不解压)
+  -o          覆盖已存在文件
+  -n          不覆盖已存在文件
+  -q          静默模式
+  -P 密码     指定密码解压
+  -t          测试压缩包完整性
+  -j          丢弃目录结构(全部平铺)
+═══ 常用用法 ═══
+常用指令集:
+  unzip backup.zip                      # 解压到当前目录
+  unzip backup.zip -d /data/            # 指定目录
+  unzip -l backup.zip                   # 只查看内容
+  unzip -j flatten.zip                  # 平铺解压
