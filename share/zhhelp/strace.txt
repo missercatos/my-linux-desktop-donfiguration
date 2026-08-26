@@ -1,0 +1,43 @@
+strace - 系统调用与信号追踪工具
+═══ 全部参数 ═══
+-e <表达式>        过滤跟踪的系统调用
+   trace=<调用>    跟踪指定系统调用（如trace=open,read,write）
+   network         跟踪所有网络相关调用
+   file            跟踪文件相关调用
+   process         跟踪进程相关调用
+   signal          跟踪信号相关调用
+   ipc             跟踪IPC相关调用
+   memory          跟踪内存相关调用
+   stat            跟踪stat系列调用
+   verbose         跟踪所有调用
+-f                 跟踪子进程
+-F                 跟踪vfork创建的子进程（旧版本）
+-t                 显示时间戳（秒）
+-tt                显示时间戳（微秒）
+-ttt               显示时间戳（epoch）
+-T                 显示每个调用耗时
+-p <PID>          附加到运行中的进程
+-o <文件>          输出到文件（覆盖）
+-O <文件>          输出到文件（追加）
+-s <长度>          字符串截断长度（默认32）
+-c                 统计模式（汇总调用次数/耗时）
+-C                 统计+详细输出
+-S <排序>          统计排序（time, calls, errors, name）
+-d                 strace自身调试输出
+-v                 无缩印输出
+-x <格式>          十六进制输出字符串（hex, ascii）
+-y                 显示文件描述符路径
+-Y                 显示socket路径
+-z                 显示命令行参数
+
+═══ 常用用法 ═══
+strace ./binary                                  追踪程序执行
+strace -e trace=open,read,write ./binary         仅跟踪文件操作
+strace -e trace=network ./binary                 仅跟踪网络调用
+strace -f -o out.txt ./binary                    跟踪子进程并输出到文件
+strace -p <PID>                                  附加到运行进程
+strace -e trace=network -p <PID>                 追踪进程网络调用
+strace -T -e trace=write ./binary                显示write调用耗时
+strace -c ./binary                               统计系统调用汇总
+strace -s 1024 -e trace=open ./binary            增大字符串截断长度
+strace -y -e trace=network ./binary              显示socket路径

@@ -1,0 +1,27 @@
+traceroute - 路由追踪工具
+═══ 全部参数 ═══
+常用参数:
+  主机名/IP     目标地址
+  -m 最大跳数   最大跳数(默认30)
+  -n            不解析域名
+  -w 超时       等待超时(秒)
+  -q 探测次数   每跳探测次数
+  -I            使用ICMP协议
+  -T            使用TCP协议
+  -U            使用UDP协议(默认)
+  -p 端口       目标端口
+  -I 接口      指定网络接口
+  -f 起始跳数   起始TTL
+  -g 路由       松散源路由
+  -z            发送间隔
+  --mtu         显示MTU
+
+═══ 常用用法 ═══
+常用指令集:
+  traceroute host               # 追踪到host的路由
+  traceroute -I host            # 使用ICMP协议
+  traceroute -T host            # 使用TCP协议
+  traceroute -n host            # 不解析域名
+  traceroute -m 15 host         # 限制最大跳数
+  traceroute -q 1 host          # 每跳只探测1次
+  traceroute -w 3 host          # 设置等待时间

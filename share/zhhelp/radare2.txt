@@ -1,0 +1,28 @@
+radare2 - 逆向工程框架
+═══ 全部参数 ═══
+-d, --debug          调试模式
+-A, --auto-analyze   自动分析
+-w, --write          可写模式
+-c <cmd>             执行命令
+-e <k=v>             设置变量
+-q, --quiet          静默模式
+-C, --cfmt           输出C格式
+-p <file>            使用脚本文件
+-t <trace>           跟踪文件
+
+═══ 常用用法 ═══
+r2 -d ./binary              调试模式启动
+aaa                         全面分析
+pdf                         反汇编当前函数
+pdf @main                   反汇编main
+s 0x401000                  跳转到地址
+iz                          列出字符串
+axt @sym.imp.printf         交叉引用
+/ad pop rdi                 搜索指令序列
+afl                         列出所有函数
+dr                          查看寄存器值
+dc                          继续执行
+db 0x401050                 设置断点
+ds                          单步执行
+/w /bin/sh                  搜索字符串
+axf @main                   查看函数调用

@@ -1,0 +1,38 @@
+identify - ImageMagick图像格式识别工具
+═══ 全部参数 ═══
+-verbose            详细输出（所有图像属性）
+-format <格式>      自定义输出格式
+%w                  图像宽度
+%h                  图像高度
+%d                  深度（位深）
+%z                  色彩空间
+%r                  分辨率
+%b                  文件大小
+%f                  文件名
+%m                  格式（如PNG, JPEG）
+%#                  唯一签名
+%[property]         读取属性（如 %[colorspace]）
+-list format        列出支持的格式
+-list color         列出支持的颜色
+-list font          列出支持的字体
+-validate <图像>    验证图像完整性
+-define <key>=<val> 定义配置选项
+-density <DPI>      设置分辨率
+-depth <位>         设置深度
+-repage             重置图像几何信息
+-parse-only         仅解析不读取图像数据
+-quiet              静默模式
+-noop               空操作（仅验证）
+
+═══ 常用用法 ═══
+identify image.png                              识别图像基本信息
+identify -verbose image.png                     显示所有图像属性
+identify -format "%wx%h" image.png              仅显示宽x高
+identify -format "%m %wx%h %b" image.png        格式+尺寸+大小
+identify *.png                                  批量识别
+identify -format "%b" image.png                 仅显示文件大小
+identify -format "%[colorspace]" image.png      显示色彩空间
+identify -format "%d-bit" image.png             显示位深度
+identify -list format                           列出支持格式
+identify -format "%f: %wx%h\n" *.jpg            批量输出文件名和尺寸
+identify -format "%#" image.png                 显示图像签名

@@ -1,0 +1,20 @@
+binwalk - 固件分析与提取工具
+═══ 全部参数 ═══
+-e, --extract               自动提取已识别文件
+-M, --matryoshka            递归扫描提取
+-B, --signature             签名扫描（默认）
+-A, --opcodes               CPU指令扫描
+-R, --raw                   指定raw字符串扫描
+-d, --depth <n>             递归深度
+-D, --dd <fmt:type:cmd>     递归提取（monkey模式）
+-I, --ignore <width>        忽略指定结果
+
+═══ 常用用法 ═══
+binwalk firmware.bin                 扫描固件文件
+binwalk -e firmware.bin              提取识别的文件
+binwalk -M firmware.bin              递归扫描和提取
+binwalk -D 'raw:squashfs' firmware   指定提取格式
+binwalk -e --depth=2 firmware        限制递归深度
+binwalk -A firmware.bin              搜索CPU指令
+binwalk -R '\x89PNG' firmware        搜索原始字符串
+提取结果保存在 _filename.extracted/ 目录

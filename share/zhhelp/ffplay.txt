@@ -1,0 +1,41 @@
+ffplay - FFmpeg简易媒体播放器
+═══ 全部参数 ═══
+-x <宽>             强制窗口宽度
+-y <高>             强制窗口高度
+-s <WxH>            设置窗口大小
+-fs                 全屏模式
+-an                 禁用音频
+-vn                 禁用视频
+-sn                 禁用字幕
+-ss <位置>          跳转到指定位置（秒/H:MM:SS）
+-t <时长>           播放指定时长
+-loop <次数>        循环播放（0为无限循环）
+-pix_fmt <格式>     像素格式（如yuv420p）
+-vf <滤镜>          视频滤镜
+-af <滤镜>          音频滤镜
+-window_title <标题> 窗口标题
+-autoframe          自动调整帧率
+-ac <声道数>        声道数
+-ar <采样率>        音频采样率
+-vol <音量>         音量（0-256）
+-droppednext        显示丢帧信息
+-sync <类型>        同步模式（audio, video, ext）
+-speed <倍速>       播放速度
+-bufsize <大小>     缓冲区大小
+-max_delay <延迟>   最大延迟
+-framedrop          允许丢帧
+
+═══ 常用用法 ═══
+ffplay file.mp4                             播放视频文件
+ffplay -fs file.mp4                         全屏播放
+ffplay -loop 0 file.mp4                     无限循环播放
+ffplay -vf crop=640:480 file.mp4            裁剪播放
+ffplay -an file.mp4                         禁用音频
+ffplay -vn file.mp4                         禁用视频
+ffplay -ss 00:01:30 file.mp4               从1分30秒开始
+ffplay -t 30 file.mp4                      播放30秒
+ffplay -vf scale=640:480 file.mp4          缩放播放
+ffplay -af volume=2.0 file.mp3             调整音量
+ffplay -i http://example.com/stream         播放网络流
+ffplay -f v4l2 /dev/video0                  播放摄像头
+ffplay -vf "transpose=1" file.mp4          旋转90度

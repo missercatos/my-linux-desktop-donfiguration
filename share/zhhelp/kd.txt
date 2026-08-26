@@ -1,0 +1,24 @@
+kd - 命令行词典工具
+═══ 全部参数 ═══
+常用参数:
+  单词          查询单词
+  -t "短语"     翻译短语
+  -s            朗读发音
+  --json        JSON格式输出
+  --daemon      后台运行
+  -d 词典       指定词典
+  -f 格式       输出格式
+  -l            列出可用词典
+  -v            详细输出
+  -h            显示帮助
+
+═══ 常用用法 ═══
+常用指令集:
+  kd word                    # 查询单词
+  kd -t "Hello World"       # 翻译短语
+  kd -s word                 # 朗读发音
+  kd --json word             # JSON输出
+  kd --daemon                # 启动后台服务
+  kd -l                      # 列出可用词典
+  kd -t "你好"               # 中译英
+  kd -t "Hello" -t "World"  # 多词翻译

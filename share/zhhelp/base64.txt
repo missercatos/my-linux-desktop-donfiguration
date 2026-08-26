@@ -1,0 +1,25 @@
+base64 - Base64编解码工具
+═══ 全部参数 ═══
+-d, --decode         解码模式
+-w, --wrap <列数>    每行字符数（默认76，0表示不换行）
+-i, --ignore-garbage 忽略非Base64字符
+--help               显示帮助
+--version            显示版本
+
+═══ 编码方式 ═══
+标准Base64：A-Z, a-z, 0-9, +, /（填充=）
+URL安全Base64：A-Z, a-z, 0-9, -, _（无填充）
+Base64常用于：邮件附件、URL参数、JWT令牌、数据传输
+
+═══ 常用用法 ═══
+echo "text" | base64                       编码字符串
+echo "encoded" | base64 -d                 解码字符串
+base64 file.bin > file.b64                 编码文件
+base64 -d file.b64 > file.bin              解码文件
+base64 -w 0 file.bin > file.b64            不换行编码
+echo "aGVsbG8=" | base64 -d               解码
+printf "text" | base64                     无换行编码
+base64 -d <<< "dGVzdA=="                   解码（bash）
+base64 -i file -o file.b64                 指定输入输出文件
+base64 -d -i file.b64 -o file.bin          解码指定文件
+base64 --ignore-garbage -d file.b64        忽略非法字符解码

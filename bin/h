@@ -130,6 +130,11 @@ declare -a CAT_SYS=(
     "journalctl|系统日志查看|Systemd Journal"
 )
 
+declare -a CAT_AI=(
+    "kd|命令行词典翻译|Command Dictionary"
+    "dsh|DeepSeek Harness|DeepSeek Harness"
+)
+
 # ══════════════════════════════════════════
 # 所有分类数组（用于搜索和遍历）
 # ══════════════════════════════════════════
@@ -146,6 +151,7 @@ ALL_CATS=(
     "CAT_DEV:编程开发"
     "CAT_PKG:包管理"
     "CAT_SYS:系统管理"
+    "CAT_AI:AI工具"
 )
 
 # ══════════════════════════════════════════

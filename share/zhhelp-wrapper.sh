@@ -99,6 +99,55 @@ _zhhelp_wrap find
 # ── 安全工具 ──
 _zhhelp_wrap openssl
 _zhhelp_wrap gdb
+_zhhelp_wrap r2
+_zhhelp_wrap radare2
+_zhhelp_wrap rizin
+_zhhelp_wrap ghidra
+_zhhelp_wrap jadx
+_zhhelp_wrap binwalk
+_zhhelp_wrap strings
+_zhhelp_wrap objdump
+_zhhelp_wrap readelf
+_zhhelp_wrap ROPgadget
+_zhhelp_wrap rabin2
+_zhhelp_wrap rz-bin
+_zhhelp_wrap pwn
+_zhhelp_wrap sqlmap
+_zhhelp_wrap wireshark
+_zhhelp_wrap tshark
+_zhhelp_wrap socat
+_zhhelp_wrap smbclient
+_zhhelp_wrap rpcclient
+_zhhelp_wrap strace
+_zhhelp_wrap ltrace
+_zhhelp_wrap file
+_zhhelp_wrap base64
+
+# ── 终端工具 ──
+_zhhelp_wrap btop
+_zhhelp_wrap eza
+_zhhelp_wrap bat
+_zhhelp_wrap tree
+_zhhelp_wrap fd
+_zhhelp_wrap identify
+
+# ── 编程开发 ──
+_zhhelp_wrap docker-compose
+_zhhelp_wrap rustc
+_zhhelp_wrap gcc
+_zhhelp_wrap g++
+_zhhelp_wrap cmake
+_zhhelp_wrap python
+_zhhelp_wrap python3
+
+# ── 网络工具 ──
+_zhhelp_wrap traceroute
+_zhhelp_wrap arping
+_zhhelp_wrap aria2c
+
+# ── AI工具 ──
+_zhhelp_wrap kd
+_zhhelp_wrap dsh
 
 # ── 其他 ──
 _zhhelp_wrap make

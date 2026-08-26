@@ -1,0 +1,17 @@
+jadx - APK反编译工具
+═══ 全部参数 ═══
+-d, --output-dir <dir>     输出目录（默认当前）
+-r, --no-res               不反编译资源
+-deobf, --deobf            启用反混淆
+-show-bad-code             显示无法反编译的代码
+-nosrc                    不提取源码
+-e, --export-gradle        导出为Gradle项目
+
+═══ 常用用法 ═══
+jadx -d output ./app.apk           反编译到output目录
+jadx-gui ./app.apk                 图形界面打开
+jadx -d out -deobf ./app.apk      反编译并反混淆
+jadx -d out --no-res ./app.apk    不反编译资源文件
+jadx -d out -show-bad-code ./app  显示所有代码（含错误）
+支持Java/Kotlin反编译为可读源码
+输出目录结构保持包名层级

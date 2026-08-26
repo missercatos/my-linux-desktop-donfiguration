@@ -1,0 +1,30 @@
+smbclient - SMB/CIFS网络文件系统客户端
+═══ 全部参数 ═══
+-U <用户>          指定用户名（格式：user%password）
+-P <端口>          指定端口（默认445）
+-L <主机>          列出主机共享资源
+-N                 无密码登录
+-d <级别>          调试级别
+-t <超时>          连接超时（秒）
+-s <配置>          指定smb.conf配置文件
+-R <名称解析>      名称解析顺序（lmhosts, wins, host）
+-S <服务器>        指定NetBIOS服务器
+-I <IP>            指定目标IP
+-m <协议版本>      SMB协议版本（max protocol）
+-c <命令>          连接后执行命令
+-p <端口>          指定端口
+-e                 使用加密
+-T <tar选项>       tar打包操作（c创建/x提取/r列出）
+
+═══ 常用用法 ═══
+smbclient //host/share -U user                     连接共享
+smbclient //host/share -U user%pass                带密码连接
+smbclient -L //host -U user                        列出主机共享
+smbclient -L //host                                列出匿名共享
+smbclient //host/share -U user -c "ls"             列出目录
+smbclient //host/share -U user -c "put local.txt"  上传文件
+smbclient //host/share -U user -c "get remote.txt" 下载文件
+smbclient //host/share -U user -c "mkdir newdir"   创建目录
+smbclient //host/share -U user -c "rm file.txt"    删除文件
+smbget -R smb://host/share/file                    递归下载
+smbclient //host/share -U user -Tc archive.tar dir  tar打包下载

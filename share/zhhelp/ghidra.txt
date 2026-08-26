@@ -1,0 +1,18 @@
+ghidra - NSA开源逆向工程套件
+═══ 全部参数 ═══
+ghidraRun                   启动GUI界面
+analyzeHeadless <dir> <proj> 批量分析（无GUI）
+-import <file>              导入二进制文件
+-postScript <script>        运行脚本
+-scriptPath <dir>           指定脚本目录
+-readOnly                   只读模式打开
+
+═══ 常用用法 ═══
+./ghidraRun                           启动GUI
+analyzeHeadless /tmp proj -import ./binary   命令行分析
+analyzeHeadless /tmp proj -postScript Analyze.java   运行脚本
+支持反编译为C伪代码（Decompiler窗口）
+自动分析所有函数和数据结构
+内置脚本支持（Java/Python）
+支持多种CPU架构和文件格式
+导出函数签名和反编译结果

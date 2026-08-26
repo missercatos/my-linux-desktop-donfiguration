@@ -1,0 +1,42 @@
+bat - 带语法高亮的cat替代工具
+═══ 全部参数 ═══
+-l, --language <语言>  指定语言高亮
+--list-languages       列出支持的语言
+--highlight-line <行>  高亮指定行
+--diff <文件A> <文件B> 对比两个文件
+--diff-context <行>    diff上下文行数
+--paging <模式>        分页模式（auto, always, never）
+-p, --plain            纯文本输出（无高亮/装饰）
+--style <样式>         显示样式（full, plain, numbers, header等）
+--decorations <模式>   装饰模式（auto, always, never）
+-n, --number           显示行号
+-r, --line-range <范围> 显示指定行范围（如5:10或:10）
+--tabs <宽度>          Tab宽度
+--wrap <模式>          换行模式（auto, never, character）
+--color <模式>         颜色模式（auto, always, never）
+--italic-text <模式>   斜体文本模式
+--theme <主题>         配色主题
+--list-themes          列出可用主题
+--file-name <名称>     指定文件名（用于语言检测）
+--stdin-filename <名称> 指定stdin文件名
+-u, --unbuffered       无缓冲输出
+--nonprintable-notation <符号> 不可打印字符表示
+--strip-ansi           移除ANSI转义码
+--ac                   显示不可见字符
+--tab-expand           Tab转空格
+--tabs <N>             设置Tab宽度
+
+═══ 常用用法 ═══
+bat file                                     显示文件（带高亮）
+bat -l py file.py                           指定Python高亮
+bat --list-languages                        列出支持语言
+bat --diff a.txt b.txt                      对比文件差异
+bat -p file                                 纯文本输出
+bat -n file                                 带行号显示
+bat --style=header file                     仅显示文件头
+bat --style=numbers file                    仅显示行号
+bat -r 5:10 file                            显示5-10行
+bat --theme="Monokai Extended" file         使用指定主题
+bat --list-themes                           列出可用主题
+echo "code" | bat -l python                 管道输入高亮
+bat --wrap=never file                       禁用自动换行

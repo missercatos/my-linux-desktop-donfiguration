@@ -1,0 +1,30 @@
+docker-compose - Docker多容器编排工具
+═══ 全部参数 ═══
+常用参数:
+  up          启动容器
+  down        停止并移除容器
+  ps          显示容器状态
+  logs        查看日志
+  exec        在运行容器中执行命令
+  build       构建镜像
+  pull        拉取镜像
+  restart     重启服务
+  stop        停止服务
+  start       启动服务
+  -d          后台运行
+  --build     重新构建
+  -f 文件     指定配置文件
+  -p 项目名   指定项目名
+  --remove-orphans  移除孤立容器
+
+═══ 常用用法 ═══
+常用指令集:
+  docker-compose up -d            # 后台启动容器
+  docker-compose down             # 停止并移除容器
+  docker-compose ps               # 查看容器状态
+  docker-compose logs             # 查看日志
+  docker-compose logs -f          # 实时跟踪日志
+  docker-compose exec web bash    # 进入web容器
+  docker-compose build            # 构建镜像
+  docker-compose up --build       # 重新构建并启动
+  docker-compose restart web      # 重启web服务

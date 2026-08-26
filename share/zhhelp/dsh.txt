@@ -1,0 +1,23 @@
+dsh - DeepSeek Harness工具
+═══ 全部参数 ═══
+常用参数:
+  --profile 名   使用指定配置文件
+  web            启动Web界面
+  --dump-config  显示配置信息
+  --help         显示帮助
+  --version      显示版本
+  -v             详细输出
+  -d             调试模式
+  -c 文件        指定配置文件
+  -p 端口        指定端口
+  -h             显示帮助
+
+═══ 常用用法 ═══
+常用指令集:
+  dsh --profile web          # 使用web配置
+  dsh web                    # 启动Web界面
+  dsh --dump-config          # 显示当前配置
+  dsh --help                 # 显示帮助信息
+  dsh --version              # 显示版本
+  dsh -c config.toml         # 指定配置文件
+  dsh -p 8080 web            # 指定端口启动

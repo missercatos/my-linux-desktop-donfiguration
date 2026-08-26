@@ -1,0 +1,34 @@
+aria2c - 多协议多源下载工具
+═══ 全部参数 ═══
+常用参数:
+  URL           下载地址
+  -x 线程数     最大连接数(如 -x 4)
+  -s 片段数     每个文件片段数(如 -s 4)
+  -o 输出文件   指定输出文件名
+  -d 目录       指定下载目录
+  -c            续传
+  -k 最小块大小  最小分块大小
+  -j 最大任务    最大同时下载任务数
+  -i 文件       从文件读取URL列表
+  -l 文件       下载列表文件
+  --file-allocation 分配方式
+  --check-integrity  校验完整性
+  --http-user 用户名
+  --http-passwd 密码
+  --header      添加HTTP头
+  --user-agent  用户代理
+  -U            指定User-Agent
+  --referer     设置Referer
+  --all-proxy   代理服务器
+  -h            显示帮助
+
+═══ 常用用法 ═══
+常用指令集:
+  aria2c url                              # 基本下载
+  aria2c -x 4 -s 4 url                    # 多线程下载
+  aria2c -i urllist.txt                   # 下载URL列表
+  aria2c -c -x 3 url                      # 续传+多线程
+  aria2c -d /path/to/dir url              # 指定下载目录
+  aria2c -o filename url                  # 指定输出文件名
+  aria2c -j 3 -x 2 -s 2 url              # 3个任务各2线程
+  aria2c --check-integrity url            # 校验下载

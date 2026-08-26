@@ -1,0 +1,26 @@
+rustc - Rust编译器
+═══ 全用参数 ═══
+常用参数:
+  文件.rs       编译Rust源文件
+  -o 输出       指定输出文件名
+  --edition 年   指定Rust版本(如2021)
+  --crate-type 类型  库类型(lib/bin)
+  --crate-name 名    指定crate名
+  -L 路径       添加库搜索路径
+  -l 库名       链接库
+  -C 选项       传递给代码生成器
+  --emit 类型   输出类型(obj/asm/llvm-ir)
+  -g            生成调试信息
+  -O            优化级别2
+  --color always  强制颜色输出
+  --error-format 格式  错误格式
+
+═══ 常用用法 ═══
+常用指令集:
+  rustc main.rs                    # 编译为可执行文件
+  rustc --edition 2021 main.rs     # 指定Rust版本
+  rustc -o myapp main.rs           # 指定输出名
+  rustc --crate-type lib lib.rs    # 编译为库
+  rustc -g main.rs                 # 生成调试信息
+  rustc -O main.rs                 # 优化编译
+  cargo build                      # 推荐使用cargo管理

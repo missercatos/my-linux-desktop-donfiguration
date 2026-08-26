@@ -1,0 +1,29 @@
+file - 文件类型识别工具
+═══ 全部参数 ═══
+-b, --brief         仅显示文件类型（不显示文件名）
+-i, --mime          输出MIME类型
+--mime-type         仅输出MIME类型
+--mime-encoding     仅输出MIME编码
+-k, --keep-going    继续检查（识别额外类型）
+-e, --exclude <测试> 排除指定测试
+-z, --uncompress    解压后检查
+-Z, --uncompress-noreport 解压后检查（不报告解压）
+-f <文件>           从文件读取待检查文件列表
+--separator <字符>  设置分隔符（-f模式）
+-P <数组长度>      数组打印长度限制
+-C <版本>          兼容magic文件版本
+--print0            以null分隔输出（-f模式）
+-h, --help          显示帮助
+-v, --version       显示版本
+
+═══ 常用用法 ═══
+file ./binary                             识别文件类型
+file -b ./binary                          仅显示类型（无文件名）
+file -i image.png                         显示MIME类型
+file -b --mime-type image.png             仅输出MIME类型
+file -k ./archive                         额外检查（识别嵌套类型）
+file -z compressed.gz                     解压后识别
+file -f filelist.txt                      批量检查文件列表
+file -e ascii -e compress ./file          排除特定测试
+file /usr/bin/*                           批量识别目录文件
+file -b --mime-encoding document.txt      识别文件编码
