@@ -107,6 +107,20 @@ if [[ -f "$REPO_DIR/share/zhhelp-wrapper.sh" ]]; then
 fi
 
 # -------------------------------------------------------------
+# 9. 安装fastfetch绿色版配置
+# -------------------------------------------------------------
+if [[ -f "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ]]; then
+    info "安装fastfetch绿色版配置 ..."
+    mkdir -p ~/.config/fastfetch
+    cp "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ~/.config/fastfetch/config-green.jsonc
+fi
+if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
+    mkdir -p ~/.local/bin
+    cp "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ~/.local/bin/fastfetch-switch.sh
+    chmod +x ~/.local/bin/fastfetch-switch.sh
+fi
+
+# -------------------------------------------------------------
 # 9. 设置默认shell为zsh
 # -------------------------------------------------------------
 if [[ "$(getent passwd "$USER_NAME" | cut -d: -f7)" != "/usr/bin/zsh" ]]; then

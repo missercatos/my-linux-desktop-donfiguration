@@ -157,5 +157,19 @@ if [[ -d "$MAN_ZH_DIR" ]]; then
     cp -r "$MAN_ZH_DIR"/* "$HOME/.local/share/man-zh/"
 fi
 
+# -------------------------------------------------------------
+# 9. 安装fastfetch绿色版配置
+# -------------------------------------------------------------
+if [[ -f "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ]]; then
+    info "安装fastfetch绿色版配置 ..."
+    mkdir -p "$HOME/.config/fastfetch"
+    cp "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" "$HOME/.config/fastfetch/config-green.jsonc"
+fi
+if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
+    mkdir -p "$HOME/.local/bin"
+    cp "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" "$HOME/.local/bin/fastfetch-switch.sh"
+    chmod +x "$HOME/.local/bin/fastfetch-switch.sh"
+fi
+
 info "全部完成。默认 shell 为 fish，man 手册为中文（MANPATH 已配置）。"
 info "h 命令已安装，输入 h 查看工具速查手册。"

@@ -8,7 +8,13 @@ args = ["-l"]
 
 [font]
 size = 10
-normal = { family = "JetBrains Maple Mono" }
+normal = { family = "JetBrains Maple Mono", style = "Regular" }
+bold = { family = "JetBrains Maple Mono", style = "Bold" }
+italic = { family = "JetBrains Maple Mono", style = "Italic" }
+bold_italic = { family = "JetBrains Maple Mono", style = "Bold Italic" }
+# CJK字体fallback
+[font.normal]
+family = "JetBrains Maple Mono"
 
 [colors.primary]
 background = "#000000"
