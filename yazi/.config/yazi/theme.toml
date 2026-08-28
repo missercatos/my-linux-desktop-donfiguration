@@ -1,5 +1,6 @@
 # yazi/theme.toml - 独立荧光绿色系主题
 # 仅用于foot/tmux，不依赖DMS
+# 格式基于matugen模板修正版
 
 # : Manager [[[
 
@@ -58,101 +59,176 @@ unset_alt    = { bg = "#ff7777", fg = "#002200", bold = true }
 # : Status [[[
 
 [status]
-separator_open  = ""
-separator_close = ""
-separator_style = { fg = "#002200", bg = "#002200" }
+sep_left  = { open = "🭁", close = "🭠" }
+sep_right = { open = "🭁", close = "🭠" }
 
-[status.perm]
-r = { fg = "#33ff33" }
-w = { fg = "#66ff66" }
-x = { fg = "#99ff99" }
-s = { fg = "#8a8a8a" }
-S = { fg = "#8a8a8a" }
-r = { fg = "#8a8a8a" }
-o = { fg = "#8a8a8a" }
-u = { fg = "#8a8a8a" }
-u_plus = { fg = "#8a8a8a" }
-g_plus = { fg = "#8a8a8a" }
-o_plus = { fg = "#8a8a8a" }
-n_plus = { fg = "#8a8a8a" }
-u_minus = { fg = "#8a8a8a" }
-g_minus = { fg = "#8a8a8a" }
-o_minus = { fg = "#8a8a8a" }
-n_minus = { fg = "#8a8a8a" }
+# Permissions
+perm_type  = { fg = "#33ff33" }
+perm_write = { fg = "#66ff66" }
+perm_read  = { fg = "#99ff99" }
+perm_exec  = { fg = "#8a8a8a" }
+perm_sep   = { fg = "#002200" }
 
-[status.size]
-none  = { fg = "#8a8a8a" }
-small = { fg = "#33ff33" }
-medium = { fg = "#66ff66" }
-large = { fg = "#99ff99" }
-
-[status.mtime]
-none  = { fg = "#8a8a8a" }
-older = { fg = "#33ff33" }
-recent = { fg = "#66ff66" }
-
-# : ]]]
-
-# : Filefluor [[[
-
-[file]
-rules = [
-    { name = "^/",       fg = "#33ff33" },
-    { name = "^README",  fg = "#66ff66", bold = true },
-    { name = "^LICENSE", fg = "#99ff99", bold = true },
-    { name = ".*rc$",    fg = "#66ff66" },
-]
-
-# : ]]]
-
-# : Pick [[[
-
-[pick]
-border   = { fg = "#33ff33" }
-active   = { fg = "#002200", bg = "#33ff33", bold = true }
-inactive = { fg = "#33ff33" }
-
-# : ]]]
-
-# : Input [[[
-
-[input]
-border   = { fg = "#33ff33" }
-active   = { fg = "#002200", bg = "#33ff33", bold = true }
-inactive = { fg = "#33ff33" }
-
-# : ]]]
-
-# : Select [[[
-
-[select]
-border   = { fg = "#33ff33" }
-active   = { fg = "#002200", bg = "#33ff33", bold = true }
-inactive = { fg = "#33ff33" }
-
-# : ]]]
-
-# : Tasks [[[
-
-[tasks]
-border   = { fg = "#33ff33" }
-active   = { fg = "#002200", bg = "#33ff33", bold = true }
-inactive = { fg = "#33ff33" }
+# Progress
+progress_label  = { bold = true }
+progress_normal = { fg = "#33ff33", bg = "#002200" }
+progress_error  = { fg = "#ff5555", bg = "#002200" }
 
 # : ]]]
 
 # : Which [[[
 
 [which]
-cols  = [ "fg:33ff33" ]
+cols = 3
+mask = { bg = "#002200" }
+cand = { fg = "#33ff33" }
+rest = { fg = "#66ff66" }
+desc = { fg = "#8a8a8a" }
+separator = " ▶ "
+separator_style = { fg = "#33ff33" }
+
+# : ]]]
+
+# : Notify [[[
+
+[notify]
+title_info  = { fg = "#33ff33" }
+title_warn  = { fg = "#66ff66" }
+title_error = { fg = "#ff5555" }
+
+# : ]]]
+
+# : Picker [[[
+
+[pick]
+border   = { fg = "#33ff33" }
+active   = { fg = "#66ff66", bold = true }
+inactive = {}
+
+# : ]]]
+
+# : Input [[[
+
+[input]
+border = { fg = "#33ff33" }
+value  = { fg = "#33ff33" }
+
+# : ]]]
+
+# : Completion [[[
+
+[cmp]
+border = { fg = "#33ff33", bg = "#002200" }
+
+# : ]]]
+
+# : Tasks [[[
+
+[tasks]
+border  = { fg = "#33ff33" }
+title   = {}
+hovered = { fg = "#66ff66", underline = true }
 
 # : ]]]
 
 # : Help [[[
 
 [help]
-on      = { fg = "#002200", bg = "#33ff33", bold = true }
-active  = { fg = "#33ff33" }
-inactive = { fg = "#66ff66" }
+on     = { fg = "#33ff33" }
+run    = { fg = "#66ff66" }
+footer = { fg = "#002200", bg = "#33ff33" }
+
+# : ]]]
+
+# : File-specific styles [[[
+
+[filetype]
+rules = [
+    # Images
+    { mime = "image/*", fg = "#66ff66" },
+
+    # Media
+    { mime = "{audio,video}/*", fg = "#99ff99" },
+
+    # Archives
+    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#33ff33" },
+
+    # Documents
+    { mime = "application/{pdf,doc,rtf}", fg = "#66ff66" },
+
+    # Special files
+    { name = "*", is = "orphan", bg = "#002200" },
+    { name = "*", is = "exec", fg = "#33ff33" },
+
+    # Fallback
+    { url = "*", fg = "#33ff33" },
+    { url = "*/", fg = "#66ff66" },
+]
+
+# : ]]]
+
+# : Icon [[[
+
+[icon]
+prepend_conds = [
+    { if = "dir & hidden", text = "", fg = "#8a8a8a" },
+    { if = "dir", text = "", fg = "#33ff33" },
+    { if = "orphan", text = "󰌌", fg = "#ff5555" },
+    { if = "link", text = "󰌷", fg = "#66ff66" },
+    { if = "exec & !dir", text = "󰆧", fg = "#99ff99" },
+    { if = "hidden", text = "󰈙", fg = "#8a8a8a" },
+]
+
+prepend_dirs = [
+    { name = "Desktop", text = "", fg = "#33ff33" },
+    { name = "Documents", text = "󰈙", fg = "#33ff33" },
+    { name = "Downloads", text = "󰇚", fg = "#33ff33" },
+    { name = "Pictures", text = "󰉏", fg = "#33ff33" },
+    { name = "Music", text = "󰎆", fg = "#33ff33" },
+    { name = "Videos", text = "󰕧", fg = "#33ff33" },
+    { name = "Public", text = "", fg = "#33ff33" },
+    { name = ".config", text = "", fg = "#66ff66" },
+    { name = ".git", text = "󰊢", fg = "#66ff66" },
+    { name = "Github", text = "󰊢", fg = "#66ff66" },
+    { name = "src", text = "", fg = "#66ff66" },
+]
+
+prepend_exts = [
+    { name = "png", text = "󰉏", fg = "#33ff33" },
+    { name = "jpg", text = "󰉏", fg = "#33ff33" },
+    { name = "jpeg", text = "󰉏", fg = "#33ff33" },
+    { name = "webp", text = "󰉏", fg = "#33ff33" },
+    { name = "svg", text = "󰜡", fg = "#33ff33" },
+    { name = "mp4", text = "󰕧", fg = "#33ff33" },
+    { name = "mkv", text = "󰕧", fg = "#33ff33" },
+    { name = "mp3", text = "󰎆", fg = "#33ff33" },
+    { name = "flac", text = "󰎆", fg = "#33ff33" },
+    { name = "zip", text = "󰛫", fg = "#66ff66" },
+    { name = "tar", text = "󰛫", fg = "#66ff66" },
+    { name = "gz", text = "󰛫", fg = "#66ff66" },
+    { name = "rar", text = "󰛫", fg = "#66ff66" },
+    { name = "7z", text = "󰛫", fg = "#66ff66" },
+    { name = "conf", text = "", fg = "#33ff33" },
+    { name = "toml", text = "", fg = "#33ff33" },
+    { name = "yaml", text = "", fg = "#33ff33" },
+    { name = "yml", text = "", fg = "#33ff33" },
+    { name = "json", text = "", fg = "#33ff33" },
+    { name = "sh", text = "", fg = "#33ff33" },
+    { name = "bash", text = "", fg = "#33ff33" },
+    { name = "py", text = "", fg = "#33ff33" },
+    { name = "rs", text = "", fg = "#33ff33" },
+    { name = "c", text = "", fg = "#33ff33" },
+    { name = "cpp", text = "", fg = "#33ff33" },
+    { name = "md", text = "", fg = "#33ff33" },
+    { name = "txt", text = "󰈙", fg = "#8a8a8a" },
+]
+
+prepend_files = [
+    { name = "PKGBUILD", text = "", fg = "#33ff33" },
+    { name = "README.md", text = "󰂺", fg = "#66ff66" },
+    { name = "Makefile", text = "", fg = "#66ff66" },
+    { name = ".bashrc", text = "", fg = "#66ff66" },
+    { name = ".zshrc", text = "", fg = "#66ff66" },
+]
 
 # : ]]]

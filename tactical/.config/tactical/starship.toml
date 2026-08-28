@@ -2,8 +2,8 @@
 # 仅用于foot/tmux，不依赖DMS/kitty
 
 format = '''
-┌──\([ 用户](bold fg:green)$hostname\)-\[$directory\]-\[$time\] $git_branch$git_status
-└─<$username$character'''
+┌──[$username](bold fg:green)\-[$hostname](bold fg:dim)-[$directory](bold fg:green)-[$time](bold fg:gray) $git_branch$git_status
+└─<$character'''
 
 add_newline = true
 
@@ -25,7 +25,7 @@ show_always = true
 format = "[$user]($style)"
 
 [hostname]
-style = "bold fg:dim dimmed"
+style = "bold fg:dim"
 ssh_only = false
 format = "[@$hostname]($style)"
 
