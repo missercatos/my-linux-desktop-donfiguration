@@ -1,9 +1,9 @@
 # tactical/starship.toml - 独立荧光绿色系Starship配置
 # 仅用于foot/tmux，不依赖DMS/kitty
 
-format = '''
-┌──[$username](bold fg:green)\-[$hostname](bold fg:dim)-[$directory](bold fg:green)-[$time](bold fg:gray) $git_branch$git_status
-└─<$character'''
+format = """
+┌──[$username](bold fg:green)-[$hostname](bold fg:dim)-[$directory](bold fg:green)-[$time](bold fg:gray) $git_branch$git_status
+└─<$character"""
 
 add_newline = true
 
