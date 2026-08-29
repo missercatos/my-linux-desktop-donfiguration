@@ -16,31 +16,42 @@ die()  { printf '\033[1;31m[error]\033[0m %s\n' "$*" >&2; exit 1; }
 command -v sudo >/dev/null || die "未找到 sudo"
 
 # -------------------------------------------------------------
-# 1. 安装官方/archlinuxcn 仓库软件
+# 1. 安装官方仓库软件
 # -------------------------------------------------------------
 OFFICIAL_PKGS=(
     # 桌面栈
     niri kitty fish neovim stow dms-shell dms-shell-niri
-    noctalia-qs base-devel
+    noctalia base-devel
     starship fastfetch cava btop yazi fuzzel foot alacritty
     eza bat zoxide tmux fzf ripgrep fd
     # 工具
     git gnupg openssh curl wget rsync gzip xz zip unzip 7zip
     imagemagick ffmpeg jq sqlite openssl gdb tldr
     coreutils findutils sed grep procps-ng util-linux iproute2
-    nodejs yt-dlp docker mpv wl-clipboard wireplumber networkmanager
+    nodejs yt-dlp docker docker-compose mpv wl-clipboard wireplumber networkmanager
+    # Kitty终端
+    kitty-shell-integration kitty-terminfo
+    # Git扩展
+    git-lfs
     # CTF/安全工具
     binwalk gdb radare2 rizin ghidra jadx
     wireshark-cli socat smbclient strace ltrace
     # Python CTF 库
     python-pwntools python-capstone python-unicorn python-pycryptodomex ropgadget
+    python-pyelftools python-pyserial
     # zsh 备选
     zsh zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete zsh-completions
     # 中文 man 手册
     man-pages-zh_cn
 )
-info "安装官方/archlinuxcn 仓库软件 ..."
-sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
+info "安装官方仓库软件 ..."
+FAILED_PKGS=()
+for pkg in "${OFFICIAL_PKGS[@]}"; do
+    if ! sudo pacman -S --needed --noconfirm "$pkg" 2>/dev/null; then
+        warn "安装 $pkg 失败，跳过"
+        FAILED_PKGS+=("$pkg")
+    fi
+done
 
 # -------------------------------------------------------------
 # 2. AUR 软件（dms 相关）
@@ -50,6 +61,7 @@ AUR_PKGS=(
     shorin-dms-niri-git
     shorin-contrib-git
     shorin-screenrec-menu-git
+    github-desktop-bin
 )
 
 AUR_HELPER=""
@@ -58,26 +70,42 @@ command -v paru >/dev/null && AUR_HELPER=paru
 if [[ -z "$AUR_HELPER" ]]; then
     info "未找到 AUR 助手，正在安装 yay ..."
     sudo pacman -S --needed --noconfirm base-devel git
-    git clone https://aur.archlinux.org/yay.git /tmp/opencode/yay-build
-    (cd /tmp/opencode/yay-build && makepkg -si --noconfirm)
-    AUR_HELPER=yay
+    if (git clone https://aur.archlinux.org/yay.git /tmp/opencode/yay-build &&
+        cd /tmp/opencode/yay-build && makepkg -si --noconfirm); then
+        AUR_HELPER=yay
+    else
+        warn "yay 安装失败，跳过 AUR 软件安装"
+    fi
 fi
-info "通过 $AUR_HELPER 安装 AUR 软件 ..."
-"$AUR_HELPER" -S --needed --noconfirm "${AUR_PKGS[@]}"
+if [[ -n "$AUR_HELPER" ]]; then
+    info "通过 $AUR_HELPER 安装 AUR 软件 ..."
+    for pkg in "${AUR_PKGS[@]}"; do
+        if ! "$AUR_HELPER" -S --needed --noconfirm "$pkg" 2>/dev/null; then
+            warn "安装 $pkg 失败，跳过"
+            FAILED_PKGS+=("$pkg")
+        fi
+    done
+else
+    warn "无 AUR 助手，跳过 AUR 软件安装"
+fi
 
 # -------------------------------------------------------------
 # 2.1 修复 qs 与 qt6-base 版本不匹配
-#     archlinuxcn 预编译的 noctalia-qs 在 qt6-base 升级后可能
+#     extra 仓库预编译的 noctalia 在 qt6-base 升级后可能
 #     出现 "symbol lookup error ... QUntypedPropertyBinding"，
 #     此时从 AUR 源码重建 quickshell-git 适配当前 qt6-base。
 # -------------------------------------------------------------
 if command -v qs >/dev/null && qs --version 2>&1 | grep -q "symbol lookup error"; then
     warn "检测到 qs 与 qt6-base 版本不匹配，从 AUR 重建 quickshell-git（耗时较长）..."
-    sudo pacman -Rdd --noconfirm noctalia-qs 2>/dev/null || true
-    if "$AUR_HELPER" -S --noconfirm --aur quickshell-git; then
-        info "quickshell-git 重建完成"
+    sudo pacman -Rdd --noconfirm noctalia 2>/dev/null || true
+    if [[ -n "$AUR_HELPER" ]]; then
+        if "$AUR_HELPER" -S --noconfirm --aur quickshell-git; then
+            info "quickshell-git 重建完成"
+        else
+            warn "自动重建失败，请手动执行：yay -S --aur quickshell-git"
+        fi
     else
-        warn "自动重建失败，请手动执行：yay -S --aur quickshell-git"
+        warn "无 AUR 助手，请手动执行：yay -S --aur quickshell-git"
     fi
 fi
 
@@ -169,6 +197,10 @@ if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
     mkdir -p "$HOME/.local/bin"
     cp "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" "$HOME/.local/bin/fastfetch-switch.sh"
     chmod +x "$HOME/.local/bin/fastfetch-switch.sh"
+fi
+
+if [[ ${#FAILED_PKGS[@]} -gt 0 ]]; then
+    warn "以下包安装失败，请手动检查: ${FAILED_PKGS[*]}"
 fi
 
 info "全部完成。默认 shell 为 fish，man 手册为中文（MANPATH 已配置）。"

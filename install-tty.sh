@@ -20,15 +20,15 @@ command -v sudo >/dev/null || die "未找到 sudo"
 # -------------------------------------------------------------
 TTY_PKGS=(
     # 终端
-    foot tmux zsh
+    foot alacritty tmux zsh
     # Shell增强
     zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting
     # 文件管理
     yazi eza bat fzf fd ripgrep tree
     # 系统监控
-    btop
+    btop fastfetch
     # 提示符
-    starship
+    starship zoxide
     # 中文支持
     noto-fonts-cjk man-pages-zh_cn
     # 工具
@@ -36,11 +36,17 @@ TTY_PKGS=(
     # 开发
     git gh
     # AI工具
-    nodejs npm python python3
+    nodejs npm python
 )
 
 info "安装TUI相关软件 ..."
-sudo pacman -S --needed --noconfirm "${TTY_PKGS[@]}"
+FAILED_PKGS=()
+for pkg in "${TTY_PKGS[@]}"; do
+    if ! sudo pacman -S --needed --noconfirm "$pkg" 2>/dev/null; then
+        warn "安装 $pkg 失败，跳过"
+        FAILED_PKGS+=("$pkg")
+    fi
+done
 
 # -------------------------------------------------------------
 # 2. 安装AUR工具
@@ -51,9 +57,12 @@ command -v paru >/dev/null && AUR_HELPER=paru
 if [[ -z "$AUR_HELPER" ]]; then
     info "未找到 AUR 助手，正在安装 yay ..."
     sudo pacman -S --needed --noconfirm base-devel git
-    git clone https://aur.archlinux.org/yay.git /tmp/opencode/yay-build
-    (cd /tmp/opencode/yay-build && makepkg -si --noconfirm)
-    AUR_HELPER=yay
+    if (git clone https://aur.archlinux.org/yay.git /tmp/opencode/yay-build &&
+        cd /tmp/opencode/yay-build && makepkg -si --noconfirm); then
+        AUR_HELPER=yay
+    else
+        warn "yay 安装失败，跳过 AUR 软件安装"
+    fi
 fi
 
 # -------------------------------------------------------------
@@ -62,6 +71,13 @@ fi
 info "移植foot配置 ..."
 mkdir -p ~/.config/foot
 cp "$REPO_DIR/foot/.config/foot/foot.ini" ~/.config/foot/foot.ini
+
+# -------------------------------------------------------------
+# 3.1 移植alacritty配置
+# -------------------------------------------------------------
+info "移植alacritty配置 ..."
+mkdir -p ~/.config/alacritty
+cp "$REPO_DIR/alacritty/.config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
 
 # -------------------------------------------------------------
 # 4. 移植tmux配置
@@ -77,12 +93,37 @@ mkdir -p ~/.config/yazi
 cp "$REPO_DIR/yazi/.config/yazi/theme.toml" ~/.config/yazi/theme.toml
 
 # -------------------------------------------------------------
+# 5.1 移植btop配置
+# -------------------------------------------------------------
+info "移植btop配置 ..."
+mkdir -p ~/.config/btop
+cp "$REPO_DIR/btop/.config/btop/"* ~/.config/btop/ 2>/dev/null || true
+
+# -------------------------------------------------------------
+# 5.2 移植starship配置
+# -------------------------------------------------------------
+info "移植starship配置 ..."
+cp "$REPO_DIR/starship/.config/starship.toml.custom" ~/.config/starship.toml.custom 2>/dev/null || true
+
+# -------------------------------------------------------------
 # 6. 移植tactical配置（独立绿色主题）
 # -------------------------------------------------------------
 info "移植tactical配置 ..."
 mkdir -p ~/.config/tactical/zsh
 cp "$REPO_DIR/tactical/.config/tactical/starship.toml" ~/.config/tactical/starship.toml
 cp "$REPO_DIR/tactical/.config/tactical/zsh/.zshrc" ~/.config/tactical/zsh/.zshrc
+
+# -------------------------------------------------------------
+# 6.1 移植bash配置
+# -------------------------------------------------------------
+info "移植bash配置 ..."
+cp "$REPO_DIR/bash/.bashrc" ~/.bashrc 2>/dev/null || true
+
+# -------------------------------------------------------------
+# 6.2 移植zsh配置
+# -------------------------------------------------------------
+info "移植zsh配置 ..."
+cp "$REPO_DIR/zsh/.zshrc" ~/.zshrc 2>/dev/null || true
 
 # -------------------------------------------------------------
 # 7. 安装h命令
@@ -139,6 +180,10 @@ STARSHIP_CONFIG=$HOME/.config/tactical/starship.toml
 ZDOTDIR=$HOME/.config/tactical/zsh
 COLORTERM=truecolor
 EOF
+
+if [[ ${#FAILED_PKGS[@]} -gt 0 ]]; then
+    warn "以下包安装失败，请手动检查: ${FAILED_PKGS[*]}"
+fi
 
 info "全部完成！"
 info "请重新登录或执行以下命令生效："
