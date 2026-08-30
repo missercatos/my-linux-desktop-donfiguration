@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # =============================================================
 # TUI System Configuration Script
-# 仅安装TUI相关配置，荧光绿色系主题
-# 用法: ./install-tty.sh [--update]
+# TUI config only, fluorescent green theme
+# Usage: ./install-tty.sh [--update]
 # =============================================================
 set -uo pipefail
 
@@ -10,33 +10,20 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USER_NAME="${SUDO_USER:-$USER}"
 
 # -------------------------------------------------------------
-# 语言控制（开始英文，装完字体后切中文）
+# Info functions (English only)
 # -------------------------------------------------------------
-LANG_EN=1
-
-# 英文信息函数
-info_en() { printf '\033[1;32m[tty-install]\033[0m %s\n' "$*"; }
-warn_en() { printf '\033[1;33m[tty-warning]\033[0m %s\n' "$*"; }
-die_en()  { printf '\033[1;31m[tty-error]\033[0m %s\n' "$*" >&2; exit 1; }
-
-# 中文信息函数
-info_cn() { printf '\033[1;32m[tty安装]\033[0m %s\n' "$*"; }
-warn_cn() { printf '\033[1;33m[tty警告]\033[0m %s\n' "$*"; }
-die_cn()  { printf '\033[1;31m[tty错误]\033[0m %s\n' "$*" >&2; exit 1; }
-
-# 统一接口
-info() { [[ "$LANG_EN" == "1" ]] && info_en "$@" || info_cn "$@"; }
-warn() { [[ "$LANG_EN" == "1" ]] && warn_en "$@" || warn_cn "$@"; }
-die()  { [[ "$LANG_EN" == "1" ]] && die_en "$@" || die_cn "$@"; }
+info() { printf '\033[1;32m[tty-install]\033[0m %s\n' "$*"; }
+warn() { printf '\033[1;33m[tty-warning]\033[0m %s\n' "$*"; }
+die()  { printf '\033[1;31m[tty-error]\033[0m %s\n' "$*" >&2; exit 1; }
 
 # -------------------------------------------------------------
 # 0. Auto Update
 # -------------------------------------------------------------
 if [[ "${1:-}" == "--update" ]]; then
-    info_en "Pulling latest config from GitHub..."
+    info "Pulling latest config from GitHub..."
     cd "$REPO_DIR"
-    git pull origin main || die_en "Pull failed, check network"
-    info_en "Config updated, please re-run script"
+    git pull origin main || die "Pull failed, check network"
+    info "Config updated, please re-run script"
     exit 0
 fi
 
@@ -44,18 +31,17 @@ fi
 # 0.1 Pacman Auto Repair
 # -------------------------------------------------------------
 repair_pacman() {
-    info_en "Checking and repairing pacman..."
+    info "Checking and repairing pacman..."
     
     # 1. Check and repair keyring
     if [[ -d /etc/pacman.d/gnupg ]]; then
-        # Test if keyring is valid
         if ! sudo pacman-key --list-keys &>/dev/null; then
-            warn_en "Keyring corrupted, reinitializing..."
+            warn "Keyring corrupted, reinitializing..."
             sudo rm -rf /etc/pacman.d/gnupg
             sudo pacman-key --init
         fi
     else
-        info_en "Initializing pacman keyring..."
+        info "Initializing pacman keyring..."
         sudo pacman-key --init
     fi
     
@@ -64,31 +50,31 @@ repair_pacman() {
     
     # 3. Import archlinuxcn key if repo exists
     if grep -q "^\[archlinuxcn\]" /etc/pacman.conf 2>/dev/null; then
-        info_en "Importing archlinuxcn key..."
+        info "Importing archlinuxcn key..."
         sudo pacman-key --recv-keys 74F4207F0D0BC945E4AB5F78FE748387E4596636 2>/dev/null || true
         sudo pacman-key --lsign-key 74F4207F0D0BC945E4AB5F78FE748387E4596636 2>/dev/null || true
     fi
     
     # 4. Clean and rebuild package database
-    info_en "Rebuilding package database..."
+    info "Rebuilding package database..."
     sudo rm -f /var/lib/pacman/sync/*.db 2>/dev/null || true
     sudo pacman -Syy --noconfirm
     
     # 5. Verify SigLevel in pacman.conf
     if ! grep -q "^SigLevel.*=.*Required DatabaseOptional" /etc/pacman.conf 2>/dev/null; then
-        warn_en "Fixing SigLevel in pacman.conf..."
+        warn "Fixing SigLevel in pacman.conf..."
         sudo sed -i 's/^#SigLevel\s*=/SigLevel =/' /etc/pacman.conf
         sudo sed -i 's/^SigLevel\s*=\s*$/SigLevel = Required DatabaseOptional/' /etc/pacman.conf
     fi
     
-    info_en "Pacman repair completed"
+    info "Pacman repair completed"
 }
 
 # -------------------------------------------------------------
 # 0.2 Mirror Configuration (SJTU - only working mirror)
 # -------------------------------------------------------------
 configure_mirrors() {
-    info_en "Configuring mirror (SJTU)..."
+    info "Configuring mirror (SJTU)..."
     
     local mirror="https://mirrors.sjtug.sjtu.edu.cn"
     
@@ -110,15 +96,15 @@ EOF
     fi
     
     # Init pacman keys
-    info_en "Initializing pacman keys..."
+    info "Initializing pacman keys..."
     sudo pacman-key --init 2>/dev/null || true
     sudo pacman-key --populate archlinux 2>/dev/null || true
     
     # Force refresh package database
-    info_en "Refreshing package database..."
+    info "Refreshing package database..."
     sudo pacman -Syy --noconfirm
     
-    info_en "Mirror configured: $mirror"
+    info "Mirror configured: $mirror"
 }
 
 # -------------------------------------------------------------
@@ -128,17 +114,7 @@ repair_pacman
 configure_mirrors
 
 # -------------------------------------------------------------
-# 2. Install Chinese Fonts (first priority)
-# -------------------------------------------------------------
-info_en "Installing Chinese fonts..."
-sudo pacman -S --needed --noconfirm noto-fonts-cjk man-pages-zh_cn
-
-# Switch to Chinese after fonts installed
-LANG_EN=0
-info "中文字体安装完成，切换到中文显示"
-
-# -------------------------------------------------------------
-# 3. Install TUI Software
+# 2. Install TUI Software
 # -------------------------------------------------------------
 TTY_PKGS=(
     # Terminal
@@ -161,46 +137,46 @@ TTY_PKGS=(
     yay
 )
 
-info "安装TUI相关软件 ..."
+info "Installing TUI packages..."
 sudo pacman -S --needed --noconfirm "${TTY_PKGS[@]}" || {
-    warn "部分软件安装失败，继续执行..."
+    warn "Some packages failed, continuing..."
 }
 
 # -------------------------------------------------------------
-# 4. Check AUR Helper Status
+# 3. Check AUR Helper Status
 # -------------------------------------------------------------
 if command -v yay &>/dev/null; then
-    info "yay已安装: $(yay --version)"
+    info "yay installed: $(yay --version)"
 else
-    warn "yay未安装，请手动安装AUR助手"
-    warn "推荐: sudo pacman -S yay 或 sudo pacman -S paru"
-    warn "AUR功能将不可用"
+    warn "yay not installed, install AUR helper manually"
+    warn "Recommended: sudo pacman -S yay or sudo pacman -S paru"
+    warn "AUR functions will be unavailable"
 fi
 
 # -------------------------------------------------------------
-# 5. Deploy foot Config
+# 4. Deploy foot Config
 # -------------------------------------------------------------
-info "移植foot配置 ..."
+info "Deploying foot config..."
 mkdir -p ~/.config/foot
 cp "$REPO_DIR/foot/.config/foot/foot.ini" ~/.config/foot/foot.ini
 
 # -------------------------------------------------------------
-# 5.1 Deploy alacritty Config
+# 5. Deploy alacritty Config
 # -------------------------------------------------------------
-info "移植alacritty配置 ..."
+info "Deploying alacritty config..."
 mkdir -p ~/.config/alacritty
 cp "$REPO_DIR/alacritty/.config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
 
 # -------------------------------------------------------------
 # 6. Deploy tmux Config
 # -------------------------------------------------------------
-info "移植tmux配置 ..."
+info "Deploying tmux config..."
 cp "$REPO_DIR/tmux/.tmux.conf" ~/.tmux.conf
 
 # -------------------------------------------------------------
-# 6.1 Deploy zellij Config
+# 7. Deploy zellij Config
 # -------------------------------------------------------------
-info "移植zellij配置 ..."
+info "Deploying zellij config..."
 mkdir -p ~/.config/zellij
 mkdir -p ~/.config/zellij/themes
 mkdir -p ~/.config/zellij/layouts
@@ -215,23 +191,23 @@ if [[ -f "$REPO_DIR/zellij/.config/zellij/layouts/green-tty.kdl" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 7. Deploy yazi Config
+# 8. Deploy yazi Config
 # -------------------------------------------------------------
-info "移植yazi配置 ..."
+info "Deploying yazi config..."
 mkdir -p ~/.config/yazi
 cp "$REPO_DIR/yazi/.config/yazi/theme.toml" ~/.config/yazi/theme.toml
 
 # -------------------------------------------------------------
-# 7.1 Deploy btop Config
+# 9. Deploy btop Config
 # -------------------------------------------------------------
-info "移植btop配置 ..."
+info "Deploying btop config..."
 mkdir -p ~/.config/btop
 mkdir -p ~/.config/btop/themes
 cp "$REPO_DIR/btop/.config/btop/"* ~/.config/btop/ 2>/dev/null || true
 
 # Deploy btop TTY green theme
 if [[ -f "$REPO_DIR/btop/.config/btop/themes/green-tty.theme" ]]; then
-    info "部署btop TTY绿色主题 ..."
+    info "Deploying btop TTY theme..."
     cp "$REPO_DIR/btop/.config/btop/themes/green-tty.theme" ~/.config/btop/themes/green-tty.theme
 fi
 if [[ -f "$REPO_DIR/btop/.config/btop/btop-tty.conf" ]]; then
@@ -239,47 +215,46 @@ if [[ -f "$REPO_DIR/btop/.config/btop/btop-tty.conf" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 7.2 Deploy starship Config
+# 10. Deploy starship Config
 # -------------------------------------------------------------
-info "移植starship配置 ..."
+info "Deploying starship config..."
 cp "$REPO_DIR/starship/.config/starship.toml.custom" ~/.config/starship.toml.custom 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 8. Deploy tactical Config (independent green theme)
+# 11. Deploy tactical Config (independent green theme)
 # -------------------------------------------------------------
-info "移植tactical配置 ..."
+info "Deploying tactical config..."
 mkdir -p ~/.config/tactical/zsh
 cp "$REPO_DIR/tactical/.config/tactical/starship.toml" ~/.config/tactical/starship.toml
 cp "$REPO_DIR/tactical/.config/tactical/zsh/.zshrc" ~/.config/tactical/zsh/.zshrc
 
 # Deploy neovim TTY green theme
 if [[ -d "$REPO_DIR/nvim/.config/nvim" ]]; then
-    info "部署neovim TTY绿色主题 ..."
+    info "Deploying neovim TTY theme..."
     mkdir -p ~/.config/nvim/lua/config
     cp "$REPO_DIR/nvim/.config/nvim/lua/config/tty-theme.lua" ~/.config/nvim/lua/config/tty-theme.lua 2>/dev/null || true
-    # Update init.lua to include TTY detection
     if [[ -f "$REPO_DIR/nvim/.config/nvim/init.lua" ]]; then
         cp "$REPO_DIR/nvim/.config/nvim/init.lua" ~/.config/nvim/init.lua
     fi
 fi
 
 # -------------------------------------------------------------
-# 8.1 Deploy bash Config
+# 12. Deploy bash Config
 # -------------------------------------------------------------
-info "移植bash配置 ..."
+info "Deploying bash config..."
 cp "$REPO_DIR/bash/.bashrc" ~/.bashrc 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 8.2 Deploy zsh Config
+# 13. Deploy zsh Config
 # -------------------------------------------------------------
-info "移植zsh配置 ..."
+info "Deploying zsh config..."
 cp "$REPO_DIR/zsh/.zshrc" ~/.zshrc 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 9. Install all bin scripts
+# 14. Install all bin scripts
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/bin" ]]; then
-    info "安装bin目录脚本 ..."
+    info "Installing bin scripts..."
     mkdir -p ~/.local/bin
     for script in "$REPO_DIR/bin/"*; do
         if [[ -f "$script" ]] && [[ "$(basename "$script")" != ".local" ]]; then
@@ -292,7 +267,7 @@ fi
 # Install root-level scripts (ff, etc)
 for script in ff; do
     if [[ -f "$REPO_DIR/$script" ]]; then
-        info "安装${script}脚本 ..."
+        info "Installing ${script} script..."
         mkdir -p ~/.local/bin
         cp "$REPO_DIR/$script" ~/.local/bin/
         chmod +x ~/.local/bin/"$script"
@@ -300,22 +275,10 @@ for script in ff; do
 done
 
 # -------------------------------------------------------------
-# 10. Install Chinese Help
-# -------------------------------------------------------------
-if [[ -d "$REPO_DIR/share/zhhelp" ]]; then
-    info "安装中文帮助 ..."
-    mkdir -p ~/.local/share/zhhelp
-    cp "$REPO_DIR/share/zhhelp"/*.txt ~/.local/share/zhhelp/
-fi
-if [[ -f "$REPO_DIR/share/zhhelp-wrapper.sh" ]]; then
-    cp "$REPO_DIR/share/zhhelp-wrapper.sh" ~/.local/share/zhhelp-wrapper.sh
-fi
-
-# -------------------------------------------------------------
-# 11. Install fastfetch green config
+# 15. Install fastfetch green config
 # -------------------------------------------------------------
 if [[ -f "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ]]; then
-    info "安装fastfetch绿色版配置 ..."
+    info "Deploying fastfetch green config..."
     mkdir -p ~/.config/fastfetch
     cp "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ~/.config/fastfetch/config-green.jsonc
 fi
@@ -326,10 +289,10 @@ if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 12. Install hackingtools
+# 16. Install hackingtools
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/hackingtools" ]]; then
-    info "安装hackingtools ..."
+    info "Installing hackingtools..."
     mkdir -p ~/.local/share/hackingtools
     cp -r "$REPO_DIR/hackingtools"/* ~/.local/share/hackingtools/
     
@@ -343,20 +306,20 @@ if [[ -d "$REPO_DIR/hackingtools" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 13. Set default shell to zsh
+# 17. Set default shell to zsh
 # -------------------------------------------------------------
 if [[ "$(getent passwd "$USER_NAME" | cut -d: -f7)" != "/usr/bin/zsh" ]]; then
-    info "设置默认shell为zsh ..."
+    info "Setting default shell to zsh..."
     sudo chsh -s /usr/bin/zsh "$USER_NAME"
 fi
 
 # -------------------------------------------------------------
-# 14. Configure Environment Variables
+# 18. Configure Environment Variables
 # -------------------------------------------------------------
-info "配置终端环境变量 ..."
+info "Configuring environment variables..."
 mkdir -p ~/.config/environment.d
 cat > ~/.config/environment.d/tty.conf << 'EOF'
-# TTY独立配置 - 荧光绿色系
+# TTY config - fluorescent green theme
 STARSHIP_CONFIG=$HOME/.config/tactical/starship.toml
 ZDOTDIR=$HOME/.config/tactical/zsh
 COLORTERM=truecolor
@@ -379,7 +342,7 @@ for rc in ~/.bashrc ~/.zshrc; do
         # Add fastfetch alias if not present
         if ! grep -q "fastfetch-switch.sh" "$rc" 2>/dev/null; then
             echo "" >> "$rc"
-            echo "# fastfetch自动检测TTY配置" >> "$rc"
+            echo "# fastfetch TTY auto-detect" >> "$rc"
             echo 'if [[ -f ~/.local/bin/fastfetch-switch.sh ]]; then' >> "$rc"
             echo "    alias fastfetch='~/.local/bin/fastfetch-switch.sh auto'" >> "$rc"
             echo 'fi' >> "$rc"
@@ -387,7 +350,7 @@ for rc in ~/.bashrc ~/.zshrc; do
     fi
 done
 
-info "全部完成！"
-info "请重新登录或执行以下命令生效："
+info "All done!"
+info "Please re-login or run:"
 info "  source ~/.config/tactical/zsh/.zshrc"
 info "  tmux source-file ~/.tmux.conf"

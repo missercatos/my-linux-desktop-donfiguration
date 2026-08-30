@@ -1,21 +1,21 @@
-# zellij配置 - 荧光绿色系
-# TTY独立配置
+# zellij config - fluorescent green theme
+# TTY independent config
 
-# 主题
+# Theme
 theme "green-tty"
 
-# 默认布局
+# Default layout
 default_layout "compact"
 
-# 鼠标支持
+# Mouse support
 mouse_mode true
 
-# 窗口边框
+# Pane frames
 pane_frames {
     hide_session_name false
 }
 
-# 状态栏配置
+# Status bar config
 status_bar {
     left {
         pane {
@@ -26,51 +26,51 @@ status_bar {
     right {
         pane {
             command "bash"
-            args "-c" "while true; do BATTERY=$(acpi -b 2>/dev/null | grep -oP '\\d+%' || echo 'N/A'); echo -ne \"\033[32m🔋 ${BATTERY}\033[0m\"; sleep 1; done"
+            args "-c" "while true; do BATTERY=$(acpi -b 2>/dev/null | grep -oP '\\d+%' || echo 'N/A'); echo -ne \"\033[32mBATT: ${BATTERY}\033[0m\"; sleep 1; done"
         }
     }
 }
 
-# 键绑定
+# Keybindings
 keybinds {
     unbind "Ctrl b"
     
-    # 窗口管理
+    # Window management
     bind "Ctrl a" { SwitchToMode "Session"; }
     bind "Ctrl n" { NewTab; }
     bind "Ctrl h" { GoToPreviousTab; }
     bind "Ctrl l" { GoToNextTab; }
     bind "Ctrl x" { CloseTab; }
     
-    # 面板管理
+    # Pane management
     bind "Ctrl d" { Detach; }
     bind "Ctrl z" { ToggleFloatingPanes; }
     
-    # 分屏
+    # Split
     bind "Alt d" { NewPane "Down"; }
     bind "Alt r" { NewPane "Right"; }
     
-    # Session模式
+    # Session mode
     unbind "Ctrl o"
     bind "Ctrl s" { SwitchToMode "Scroll"; }
     
-    # 快捷操作
-    bind "Alt n" { NewTab; "name"; }
+    # Quick actions
+    bind "Alt n" { NewTab; }
     bind "Alt h" { GoToPreviousTab; }
     bind "Alt l" { GoToNextTab; }
     bind "Alt x" { CloseTab; }
     
-    # 会话管理
+    # Session management
     bind "Ctrl q" { Quit; }
 }
 
-# 插件
+# Plugins
 plugins {
     compact-bar location="zellij:compact-bar"
     status-bar location="zellij:status-bar"
 }
 
-# 布局
+# Layout
 layout {
     pane borderless=true
     pane split_direction="vertical" {
@@ -78,7 +78,7 @@ layout {
     }
 }
 
-# 选项
+# Options
 options {
     default_shell "zsh"
     scroll_buffer_size 10000
