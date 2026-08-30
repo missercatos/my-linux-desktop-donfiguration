@@ -167,27 +167,14 @@ sudo pacman -S --needed --noconfirm "${TTY_PKGS[@]}" || {
 }
 
 # -------------------------------------------------------------
-# 4. AUR Helper (fallback if yay not installed)
+# 4. Check AUR Helper Status
 # -------------------------------------------------------------
-if ! command -v yay &>/dev/null; then
-    warn "yay未安装，尝试从AUR构建..."
-    
-    # Ensure base-devel is installed
-    sudo pacman -S --needed --noconfirm base-devel git
-    
-    # Build yay from AUR
-    cd /tmp
-    rm -rf yay-build
-    if git clone https://aur.archlinux.org/yay.git yay-build; then
-        cd yay-build
-        if makepkg -si --noconfirm; then
-            info "yay构建成功"
-        else
-            warn "yay构建失败，部分AUR功能不可用"
-        fi
-    else
-        warn "无法克隆yay仓库，部分AUR功能不可用"
-    fi
+if command -v yay &>/dev/null; then
+    info "yay已安装: $(yay --version)"
+else
+    warn "yay未安装，请手动安装AUR助手"
+    warn "推荐: sudo pacman -S yay 或 sudo pacman -S paru"
+    warn "AUR功能将不可用"
 fi
 
 # -------------------------------------------------------------
