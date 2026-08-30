@@ -1,158 +1,192 @@
 #!/usr/bin/env bash
 # =============================================================
-# 无图形化界面系统配置脚本
+# TUI System Configuration Script
 # 仅安装TUI相关配置，荧光绿色系主题
 # 用法: ./install-tty.sh [--update]
 # =============================================================
-set -euo pipefail
+set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USER_NAME="${SUDO_USER:-$USER}"
 
-info() { printf '\033[1;32m[tty-install]\033[0m %s\n' "$*"; }
-warn() { printf '\033[1;33m[tty-warning]\033[0m %s\n' "$*"; }
-die()  { printf '\033[1;31m[tty-error]\033[0m %s\n' "$*" >&2; exit 1; }
+# -------------------------------------------------------------
+# 语言控制（开始英文，装完字体后切中文）
+# -------------------------------------------------------------
+LANG_EN=1
+
+# 英文信息函数
+info_en() { printf '\033[1;32m[tty-install]\033[0m %s\n' "$*"; }
+warn_en() { printf '\033[1;33m[tty-warning]\033[0m %s\n' "$*"; }
+die_en()  { printf '\033[1;31m[tty-error]\033[0m %s\n' "$*" >&2; exit 1; }
+
+# 中文信息函数
+info_cn() { printf '\033[1;32m[tty安装]\033[0m %s\n' "$*"; }
+warn_cn() { printf '\033[1;33m[tty警告]\033[0m %s\n' "$*"; }
+die_cn()  { printf '\033[1;31m[tty错误]\033[0m %s\n' "$*" >&2; exit 1; }
+
+# 统一接口
+info() { [[ "$LANG_EN" == "1" ]] && info_en "$@" || info_cn "$@"; }
+warn() { [[ "$LANG_EN" == "1" ]] && warn_en "$@" || warn_cn "$@"; }
+die()  { [[ "$LANG_EN" == "1" ]] && die_en "$@" || die_cn "$@"; }
 
 # -------------------------------------------------------------
-# 0. 自动更新功能
+# 0. Auto Update
 # -------------------------------------------------------------
 if [[ "${1:-}" == "--update" ]]; then
-    info "正在从GitHub拉取最新配置..."
+    info_en "Pulling latest config from GitHub..."
     cd "$REPO_DIR"
-    git pull origin main || die "拉取失败，请检查网络连接"
-    info "配置已更新，请重新运行脚本"
+    git pull origin main || die_en "Pull failed, check network"
+    info_en "Config updated, please re-run script"
     exit 0
 fi
 
 # -------------------------------------------------------------
-# 0.1 镜像站配置（使用上海交大源 - 唯一可用）
+# 0.1 Mirror Configuration (SJTU - only working mirror)
 # -------------------------------------------------------------
 configure_mirrors() {
-    info "配置镜像站（使用上海交大源）..."
+    info_en "Configuring mirror (SJTU)..."
     
-    # 直接使用上海交大镜像（唯一可用）
     local mirror="https://mirrors.sjtug.sjtu.edu.cn"
     
-    # 备份原始镜像配置
+    # Backup original mirrorlist
     if [[ -f /etc/pacman.d/mirrorlist ]]; then
         sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
     fi
     
-    # 清理旧的镜像配置并写入新的
+    # Write new mirrorlist
     sudo tee /etc/pacman.d/mirrorlist > /dev/null << EOF
-# 上海交大镜像（唯一可用）
+# SJTU Mirror (only working mirror)
 Server = $mirror/archlinux/\$repo/os/\$arch
 EOF
     
-    # 清理archlinuxcn仓库镜像（如果存在）
+    # Fix archlinuxcn repo if exists
     if grep -q "^\[archlinuxcn\]" /etc/pacman.conf 2>/dev/null; then
-        # 备份pacman.conf
         sudo cp /etc/pacman.conf /etc/pacman.conf.bak
-        
-        # 替换archlinuxcn部分
         sudo sed -i '/\[archlinuxcn\]/,/^$/c\[archlinuxcn]\nServer = '"$mirror"'/archlinuxcn/\$arch' /etc/pacman.conf
     fi
     
-    # 更新pacman密钥
-    info "初始化pacman密钥..."
+    # Init pacman keys
+    info_en "Initializing pacman keys..."
     sudo pacman-key --init 2>/dev/null || true
     sudo pacman-key --populate archlinux 2>/dev/null || true
     
-    # 强制刷新包数据库
-    info "刷新包数据库..."
+    # Force refresh package database
+    info_en "Refreshing package database..."
     sudo pacman -Syy --noconfirm
     
-    info "镜像站已配置为: $mirror"
+    info_en "Mirror configured: $mirror"
 }
 
 # -------------------------------------------------------------
-# 1. 配置镜像站
+# 1. Configure Mirror
 # -------------------------------------------------------------
 configure_mirrors
 
 # -------------------------------------------------------------
-# 2. 安装TUI相关软件
+# 2. Install Chinese Fonts (first priority)
+# -------------------------------------------------------------
+info_en "Installing Chinese fonts..."
+sudo pacman -S --needed --noconfirm noto-fonts-cjk man-pages-zh_cn
+
+# Switch to Chinese after fonts installed
+LANG_EN=0
+info "中文字体安装完成，切换到中文显示"
+
+# -------------------------------------------------------------
+# 3. Install TUI Software
 # -------------------------------------------------------------
 TTY_PKGS=(
-    # 终端
+    # Terminal
     foot alacritty tmux zsh
-    # Shell增强
+    # Shell Enhancement
     zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting
-    # 文件管理
+    # File Manager
     yazi eza bat fzf fd ripgrep tree
-    # 系统监控
+    # System Monitor
     btop fastfetch
-    # 提示符
+    # Prompt
     starship zoxide
-    # 中文支持
-    noto-fonts-cjk man-pages-zh_cn
-    # 工具
+    # Tools
     jq sqlite openssl
-    # 开发
+    # Development
     git github-cli
-    # AI工具
+    # AI Tools
     nodejs npm python python3
+    # AUR Helper (from archlinuxcn)
+    yay
 )
 
 info "安装TUI相关软件 ..."
-sudo pacman -S --needed --noconfirm "${TTY_PKGS[@]}"
+sudo pacman -S --needed --noconfirm "${TTY_PKGS[@]}" || {
+    warn "部分软件安装失败，继续执行..."
+}
 
 # -------------------------------------------------------------
-# 3. 安装AUR工具
+# 4. AUR Helper (fallback if yay not installed)
 # -------------------------------------------------------------
-AUR_HELPER=""
-command -v yay  >/dev/null && AUR_HELPER=yay
-command -v paru >/dev/null && AUR_HELPER=paru
-if [[ -z "$AUR_HELPER" ]]; then
-    info "未找到 AUR 助手，正在安装 yay ..."
+if ! command -v yay &>/dev/null; then
+    warn "yay未安装，尝试从AUR构建..."
+    
+    # Ensure base-devel is installed
     sudo pacman -S --needed --noconfirm base-devel git
-    git clone https://aur.archlinux.org/yay.git /tmp/opencode/yay-build
-    (cd /tmp/opencode/yay-build && makepkg -si --noconfirm)
-    AUR_HELPER=yay
+    
+    # Build yay from AUR
+    cd /tmp
+    rm -rf yay-build
+    if git clone https://aur.archlinux.org/yay.git yay-build; then
+        cd yay-build
+        if makepkg -si --noconfirm; then
+            info "yay构建成功"
+        else
+            warn "yay构建失败，部分AUR功能不可用"
+        fi
+    else
+        warn "无法克隆yay仓库，部分AUR功能不可用"
+    fi
 fi
 
 # -------------------------------------------------------------
-# 4. 移植foot配置
+# 5. Deploy foot Config
 # -------------------------------------------------------------
 info "移植foot配置 ..."
 mkdir -p ~/.config/foot
 cp "$REPO_DIR/foot/.config/foot/foot.ini" ~/.config/foot/foot.ini
 
 # -------------------------------------------------------------
-# 4.1 移植alacritty配置
+# 5.1 Deploy alacritty Config
 # -------------------------------------------------------------
 info "移植alacritty配置 ..."
 mkdir -p ~/.config/alacritty
 cp "$REPO_DIR/alacritty/.config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
 
 # -------------------------------------------------------------
-# 5. 移植tmux配置
+# 6. Deploy tmux Config
 # -------------------------------------------------------------
 info "移植tmux配置 ..."
 cp "$REPO_DIR/tmux/.tmux.conf" ~/.tmux.conf
 
 # -------------------------------------------------------------
-# 6. 移植yazi配置
+# 7. Deploy yazi Config
 # -------------------------------------------------------------
 info "移植yazi配置 ..."
 mkdir -p ~/.config/yazi
 cp "$REPO_DIR/yazi/.config/yazi/theme.toml" ~/.config/yazi/theme.toml
 
 # -------------------------------------------------------------
-# 6.1 移植btop配置
+# 7.1 Deploy btop Config
 # -------------------------------------------------------------
 info "移植btop配置 ..."
 mkdir -p ~/.config/btop
 cp "$REPO_DIR/btop/.config/btop/"* ~/.config/btop/ 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 6.2 移植starship配置
+# 7.2 Deploy starship Config
 # -------------------------------------------------------------
 info "移植starship配置 ..."
 cp "$REPO_DIR/starship/.config/starship.toml.custom" ~/.config/starship.toml.custom 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 7. 移植tactical配置（独立绿色主题）
+# 8. Deploy tactical Config (independent green theme)
 # -------------------------------------------------------------
 info "移植tactical配置 ..."
 mkdir -p ~/.config/tactical/zsh
@@ -160,19 +194,19 @@ cp "$REPO_DIR/tactical/.config/tactical/starship.toml" ~/.config/tactical/starsh
 cp "$REPO_DIR/tactical/.config/tactical/zsh/.zshrc" ~/.config/tactical/zsh/.zshrc
 
 # -------------------------------------------------------------
-# 7.1 移植bash配置
+# 8.1 Deploy bash Config
 # -------------------------------------------------------------
 info "移植bash配置 ..."
 cp "$REPO_DIR/bash/.bashrc" ~/.bashrc 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 7.2 移植zsh配置
+# 8.2 Deploy zsh Config
 # -------------------------------------------------------------
 info "移植zsh配置 ..."
 cp "$REPO_DIR/zsh/.zshrc" ~/.zshrc 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 8. 安装h命令
+# 9. Install h command
 # -------------------------------------------------------------
 if [[ -f "$REPO_DIR/bin/h" ]]; then
     info "安装h命令 ..."
@@ -182,7 +216,7 @@ if [[ -f "$REPO_DIR/bin/h" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 9. 安装中文帮助
+# 10. Install Chinese Help
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/share/zhhelp" ]]; then
     info "安装中文帮助 ..."
@@ -194,7 +228,7 @@ if [[ -f "$REPO_DIR/share/zhhelp-wrapper.sh" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 10. 安装fastfetch绿色版配置
+# 11. Install fastfetch green config
 # -------------------------------------------------------------
 if [[ -f "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ]]; then
     info "安装fastfetch绿色版配置 ..."
@@ -208,14 +242,14 @@ if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 11. 安装hackingtools
+# 12. Install hackingtools
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/hackingtools" ]]; then
     info "安装hackingtools ..."
     mkdir -p ~/.local/share/hackingtools
     cp -r "$REPO_DIR/hackingtools"/* ~/.local/share/hackingtools/
     
-    # 创建符号链接到bin目录
+    # Create symlinks to bin directory
     mkdir -p ~/.local/bin
     for tool in ~/.local/share/hackingtools/bin/*; do
         if [[ -f "$tool" ]] || [[ -L "$tool" ]]; then
@@ -225,7 +259,7 @@ if [[ -d "$REPO_DIR/hackingtools" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 12. 设置默认shell为zsh
+# 13. Set default shell to zsh
 # -------------------------------------------------------------
 if [[ "$(getent passwd "$USER_NAME" | cut -d: -f7)" != "/usr/bin/zsh" ]]; then
     info "设置默认shell为zsh ..."
@@ -233,7 +267,7 @@ if [[ "$(getent passwd "$USER_NAME" | cut -d: -f7)" != "/usr/bin/zsh" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 13. 配置终端环境变量
+# 14. Configure Environment Variables
 # -------------------------------------------------------------
 info "配置终端环境变量 ..."
 mkdir -p ~/.config/environment.d
@@ -245,10 +279,9 @@ COLORTERM=truecolor
 PATH=$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH
 EOF
 
-# 添加到shell配置
+# Add to shell config
 for rc in ~/.bashrc ~/.zshrc; do
     if [[ -f "$rc" ]]; then
-        # 检查是否已添加
         if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
             echo "" >> "$rc"
             echo "# hackingtools" >> "$rc"

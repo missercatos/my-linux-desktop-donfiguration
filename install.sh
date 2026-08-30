@@ -1,113 +1,164 @@
 #!/usr/bin/env bash
 # =============================================================
+# Desktop System Configuration Script
 # 一键安装脚本：安装所需软件 + 通过 GNU Stow 移植全部配置
 # 用法: ./install.sh [--update]
 # 依赖: 已登录 sudo（脚本会请求一次密码）
 # =============================================================
-set -euo pipefail
+set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USER_NAME="${SUDO_USER:-$USER}"
 
-info() { printf '\033[1;32m[install]\033[0m %s\n' "$*"; }
-warn() { printf '\033[1;33m[warning]\033[0m %s\n' "$*"; }
-die()  { printf '\033[1;31m[error]\033[0m %s\n' "$*" >&2; exit 1; }
+# -------------------------------------------------------------
+# Language Control (English first, switch to Chinese after fonts)
+# -------------------------------------------------------------
+LANG_EN=1
 
-command -v sudo >/dev/null || die "未找到 sudo"
+# English info functions
+info_en() { printf '\033[1;32m[install]\033[0m %s\n' "$*"; }
+warn_en() { printf '\033[1;33m[warning]\033[0m %s\n' "$*"; }
+die_en()  { printf '\033[1;31m[error]\033[0m %s\n' "$*" >&2; exit 1; }
+
+# Chinese info functions
+info_cn() { printf '\033[1;32m[安装]\033[0m %s\n' "$*"; }
+warn_cn() { printf '\033[1;33m[警告]\033[0m %s\n' "$*"; }
+die_cn()  { printf '\033[1;31m[错误]\033[0m %s\n' "$*" >&2; exit 1; }
+
+# Unified interface
+info() { [[ "$LANG_EN" == "1" ]] && info_en "$@" || info_cn "$@"; }
+warn() { [[ "$LANG_EN" == "1" ]] && warn_en "$@" || warn_cn "$@"; }
+die()  { [[ "$LANG_EN" == "1" ]] && die_en "$@" || die_cn "$@"; }
+
+command -v sudo >/dev/null || die_en "sudo not found"
 
 # -------------------------------------------------------------
-# 0. 自动更新功能
+# 0. Auto Update
 # -------------------------------------------------------------
 if [[ "${1:-}" == "--update" ]]; then
-    info "正在从GitHub拉取最新配置..."
+    info_en "Pulling latest config from GitHub..."
     cd "$REPO_DIR"
-    git pull origin main || die "拉取失败，请检查网络连接"
-    info "配置已更新，请重新运行脚本"
+    git pull origin main || die_en "Pull failed, check network"
+    info_en "Config updated, please re-run script"
     exit 0
 fi
 
 # -------------------------------------------------------------
-# 0.1 镜像站配置（使用上海交大源 - 唯一可用）
+# 0.1 Mirror Configuration (SJTU - only working mirror)
 # -------------------------------------------------------------
 configure_mirrors() {
-    info "配置镜像站（使用上海交大源）..."
+    info_en "Configuring mirror (SJTU)..."
     
-    # 直接使用上海交大镜像（唯一可用）
     local mirror="https://mirrors.sjtug.sjtu.edu.cn"
     
-    # 备份原始镜像配置
+    # Backup original mirrorlist
     if [[ -f /etc/pacman.d/mirrorlist ]]; then
         sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
     fi
     
-    # 清理旧的镜像配置并写入新的
+    # Write new mirrorlist
     sudo tee /etc/pacman.d/mirrorlist > /dev/null << EOF
-# 上海交大镜像（唯一可用）
+# SJTU Mirror (only working mirror)
 Server = $mirror/archlinux/\$repo/os/\$arch
 EOF
     
-    # 清理archlinuxcn仓库镜像（如果存在）
+    # Fix archlinuxcn repo if exists
     if grep -q "^\[archlinuxcn\]" /etc/pacman.conf 2>/dev/null; then
-        # 备份pacman.conf
         sudo cp /etc/pacman.conf /etc/pacman.conf.bak
-        
-        # 替换archlinuxcn部分
         sudo sed -i '/\[archlinuxcn\]/,/^$/c\[archlinuxcn]\nServer = '"$mirror"'/archlinuxcn/\$arch' /etc/pacman.conf
     fi
     
-    # 更新pacman密钥
-    info "初始化pacman密钥..."
+    # Init pacman keys
+    info_en "Initializing pacman keys..."
     sudo pacman-key --init 2>/dev/null || true
     sudo pacman-key --populate archlinux 2>/dev/null || true
     
-    # 强制刷新包数据库
-    info "刷新包数据库..."
+    # Force refresh package database
+    info_en "Refreshing package database..."
     sudo pacman -Syy --noconfirm
     
-    info "镜像站已配置为: $mirror"
+    info_en "Mirror configured: $mirror"
 }
 
 # -------------------------------------------------------------
-# 1. 配置镜像站
+# 1. Configure Mirror
 # -------------------------------------------------------------
 configure_mirrors
 
 # -------------------------------------------------------------
-# 2. 安装官方/archlinuxcn 仓库软件
+# 2. Install Chinese Fonts (first priority)
+# -------------------------------------------------------------
+info_en "Installing Chinese fonts..."
+sudo pacman -S --needed --noconfirm noto-fonts-cjk man-pages-zh_cn
+
+# Switch to Chinese after fonts installed
+LANG_EN=0
+info "中文字体安装完成，切换到中文显示"
+
+# -------------------------------------------------------------
+# 3. Install Official/archlinuxcn Packages
 # -------------------------------------------------------------
 OFFICIAL_PKGS=(
-    # 桌面栈
+    # Desktop Stack
     niri kitty fish neovim stow dms-shell dms-shell-niri
     noctalia-qs base-devel
     starship fastfetch cava btop yazi fuzzel foot alacritty
     eza bat zoxide tmux fzf ripgrep fd
-    # 工具
+    # Tools
     git gnupg openssh curl wget rsync gzip xz zip unzip 7zip
     imagemagick ffmpeg jq sqlite openssl gdb tldr
     coreutils findutils sed grep procps-ng util-linux iproute2
     nodejs yt-dlp docker docker-compose mpv wl-clipboard wireplumber networkmanager
-    # Kitty终端
+    # Kitty Terminal
     kitty-shell-integration kitty-terminfo
-    # Git扩展
+    # Git Extensions
     git-lfs
-    # CTF/安全工具
+    # CTF/Security Tools
     binwalk gdb radare2 rizin ghidra jadx
     wireshark-cli socat smbclient strace ltrace
-    # Python CTF 库
+    # Python CTF Libraries
     python-pwntools python-capstone python-unicorn python-pycryptodomex ropgadget
     python-pyelftools python-pyserial
-    # zsh 备选
+    # zsh Alternative
     zsh zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete zsh-completions
-    # 中文 man 手册
+    # Chinese man pages
     man-pages-zh_cn
-    # 显示管理器
+    # Display Manager
     sddm ly
+    # AUR Helper (from archlinuxcn)
+    yay
 )
 info "安装官方/archlinuxcn 仓库软件 ..."
-sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
+sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}" || {
+    warn "部分软件安装失败，继续执行..."
+}
 
 # -------------------------------------------------------------
-# 3. AUR 软件（dms 相关）
+# 4. AUR Helper (fallback if yay not installed)
+# -------------------------------------------------------------
+if ! command -v yay &>/dev/null; then
+    warn "yay未安装，尝试从AUR构建..."
+    
+    # Ensure base-devel is installed
+    sudo pacman -S --needed --noconfirm base-devel git
+    
+    # Build yay from AUR
+    cd /tmp
+    rm -rf yay-build
+    if git clone https://aur.archlinux.org/yay.git yay-build; then
+        cd yay-build
+        if makepkg -si --noconfirm; then
+            info "yay构建成功"
+        else
+            warn "yay构建失败，部分AUR功能不可用"
+        fi
+    else
+        warn "无法克隆yay仓库，部分AUR功能不可用"
+    fi
+fi
+
+# -------------------------------------------------------------
+# 4.1 Install AUR Packages
 # -------------------------------------------------------------
 AUR_PKGS=(
     niri-sidebar-git
@@ -117,26 +168,22 @@ AUR_PKGS=(
     github-desktop-bin
 )
 
-AUR_HELPER=""
-command -v yay  >/dev/null && AUR_HELPER=yay
-command -v paru >/dev/null && AUR_HELPER=paru
-if [[ -z "$AUR_HELPER" ]]; then
-    info "未找到 AUR 助手，正在安装 yay ..."
-    sudo pacman -S --needed --noconfirm base-devel git
-    git clone https://aur.archlinux.org/yay.git /tmp/opencode/yay-build
-    (cd /tmp/opencode/yay-build && makepkg -si --noconfirm)
-    AUR_HELPER=yay
+if command -v yay &>/dev/null; then
+    info "通过 yay 安装 AUR 软件 ..."
+    yay -S --needed --noconfirm "${AUR_PKGS[@]}" || {
+        warn "部分AUR软件安装失败，继续执行..."
+    }
+else
+    warn "yay不可用，跳过AUR软件安装"
 fi
-info "通过 $AUR_HELPER 安装 AUR 软件 ..."
-"$AUR_HELPER" -S --needed --noconfirm "${AUR_PKGS[@]}"
 
 # -------------------------------------------------------------
-# 3.1 修复 qs 与 qt6-base 版本不匹配
+# 4.2 Fix qs and qt6-base version mismatch
 # -------------------------------------------------------------
 if command -v qs >/dev/null && qs --version 2>&1 | grep -q "symbol lookup error"; then
-    warn "检测到 qs 与 qt6-base 版本不匹配，从 AUR 重建 quickshell-git（耗时较长）..."
+    warn "检测到 qs 与 qt6-base 版本不匹配，从 AUR 重建 quickshell-git..."
     sudo pacman -Rdd --noconfirm noctalia-qs 2>/dev/null || true
-    if "$AUR_HELPER" -S --noconfirm --aur quickshell-git; then
+    if command -v yay &>/dev/null && yay -S --noconfirm --aur quickshell-git; then
         info "quickshell-git 重建完成"
     else
         warn "自动重建失败，请手动执行：yay -S --aur quickshell-git"
@@ -144,18 +191,18 @@ if command -v qs >/dev/null && qs --version 2>&1 | grep -q "symbol lookup error"
 fi
 
 # -------------------------------------------------------------
-# 4. 配置显示管理器
+# 5. Configure Display Manager
 # -------------------------------------------------------------
 info "配置显示管理器..."
 
-# 启用SDDM（默认）
+# Enable SDDM (default)
 sudo systemctl enable sddm.service 2>/dev/null || true
 
-# 安装ly但不启用（作为备选）
+# Install ly but disable (as alternative)
 sudo systemctl disable ly.service 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 5. Stow 移植配置
+# 6. Stow Deploy Configs
 # -------------------------------------------------------------
 cd "$REPO_DIR"
 info "通过 GNU Stow 移植配置到 \$HOME ..."
@@ -165,47 +212,49 @@ for pkg in */; do
         .git|sddm|dms-sysmon|transparent-blur|applications|icons) continue ;;
     esac
     if [[ -d "$pkg" ]]; then
-        stow --restow "$pkg"
+        stow --restow "$pkg" 2>/dev/null || {
+            warn "Stow移植 $pkg 失败，继续执行..."
+        }
     fi
 done
 
-# 特殊项: /etc 下的配置
+# Special: /etc configs
 if [[ -f sddm/etc/sddm.conf ]]; then
     info "移植 sddm 配置到 /etc ..."
-    sudo stow --target=/ --restow sddm
+    sudo stow --target=/ --restow sddm 2>/dev/null || true
 fi
 
-# 特殊项: ~/.xprofile 若为 root 所有则修正归属
+# Fix ~/.xprofile ownership if needed
 if [[ -e "$HOME/.xprofile" && "$(stat -c %U "$HOME/.xprofile")" = "root" ]]; then
     info "修正 ~/.xprofile 归属 ..."
     sudo chown "$USER_NAME":"$USER_NAME" "$HOME/.xprofile"
 fi
 
 # -------------------------------------------------------------
-# 6. 配置桌面环境
+# 7. Configure Desktop Environments
 # -------------------------------------------------------------
 info "配置桌面环境..."
 
-# 确保niri配置目录存在
+# Ensure niri config directory exists
 mkdir -p ~/.config/niri
 if [[ -d "$REPO_DIR/niri/.config/niri" ]]; then
     cp -r "$REPO_DIR/niri/.config/niri/"* ~/.config/niri/ 2>/dev/null || true
 fi
 
-# 确保hyprland配置目录存在
+# Ensure hyprland config directory exists
 mkdir -p ~/.config/hypr
 if [[ -d "$REPO_DIR/hyprland/.config/hypr" ]]; then
     cp -r "$REPO_DIR/hyprland/.config/hypr/"* ~/.config/hypr/ 2>/dev/null || true
 fi
 
-# 确保plasma配置目录存在
+# Ensure plasma config directory exists
 mkdir -p ~/.config
 if [[ -d "$REPO_DIR/plasma/.config" ]]; then
     cp -r "$REPO_DIR/plasma/.config/"* ~/.config/ 2>/dev/null || true
 fi
 
 # -------------------------------------------------------------
-# 7. 设置默认 shell 为 fish
+# 8. Set default shell to fish
 # -------------------------------------------------------------
 if [[ "$(getent passwd "$USER_NAME" | cut -d: -f7)" != "/usr/bin/fish" ]]; then
     info "设置默认 shell 为 fish ..."
@@ -213,7 +262,7 @@ if [[ "$(getent passwd "$USER_NAME" | cut -d: -f7)" != "/usr/bin/fish" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 8. 收尾
+# 9. Finalize
 # -------------------------------------------------------------
 if command -v niri >/dev/null && pgrep -x niri >/dev/null; then
     info "niri 正在运行，重载配置 ..."
@@ -221,7 +270,7 @@ if command -v niri >/dev/null && pgrep -x niri >/dev/null; then
 fi
 
 # -------------------------------------------------------------
-# 9. 安装 h 命令到 ~/.local/bin
+# 10. Install h command
 # -------------------------------------------------------------
 if [[ -f "$REPO_DIR/bin/h" ]]; then
     info "安装 h 命令到 ~/.local/bin ..."
@@ -231,7 +280,7 @@ if [[ -f "$REPO_DIR/bin/h" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 10. 安装中文帮助包装 (bash/zsh)
+# 11. Install Chinese Help
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/share/zhhelp" ]]; then
     info "安装中文帮助文件到 ~/.local/share/zhhelp ..."
@@ -244,7 +293,7 @@ if [[ -f "$REPO_DIR/share/zhhelp-wrapper.sh" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 11. 设置中文 man 手册路径
+# 12. Configure Chinese man pages
 # -------------------------------------------------------------
 MAN_ZH_DIR="$REPO_DIR/share/man-zh"
 if [[ -d "$MAN_ZH_DIR" ]]; then
@@ -254,7 +303,7 @@ if [[ -d "$MAN_ZH_DIR" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 12. 安装fastfetch绿色版配置
+# 13. Install fastfetch green config
 # -------------------------------------------------------------
 if [[ -f "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ]]; then
     info "安装fastfetch绿色版配置 ..."
@@ -268,14 +317,14 @@ if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 13. 安装hackingtools
+# 14. Install hackingtools
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/hackingtools" ]]; then
     info "安装hackingtools ..."
     mkdir -p "$HOME/.local/share/hackingtools"
     cp -r "$REPO_DIR/hackingtools"/* "$HOME/.local/share/hackingtools/"
     
-    # 创建符号链接到bin目录
+    # Create symlinks to bin directory
     mkdir -p "$HOME/.local/bin"
     for tool in "$HOME/.local/share/hackingtools/bin/"*; do
         if [[ -f "$tool" ]] || [[ -L "$tool" ]]; then
@@ -285,20 +334,19 @@ if [[ -d "$REPO_DIR/hackingtools" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 14. 配置环境变量
+# 15. Configure Environment Variables
 # -------------------------------------------------------------
 info "配置环境变量 ..."
 mkdir -p ~/.config/environment.d
 cat > ~/.config/environment.d/desktop.conf << 'EOF'
-# 桌面环境配置
+# Desktop Environment Config
 COLORTERM=truecolor
 PATH=$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH
 EOF
 
-# 添加到shell配置
+# Add to shell config
 for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
     if [[ -f "$rc" ]]; then
-        # 检查是否已添加
         if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
             if [[ "$rc" == *"fish"* ]]; then
                 echo "" >> "$rc"
@@ -313,7 +361,7 @@ for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
     fi
 done
 
-info "全部完成。默认 shell 为 fish，man 手册为中文（MANPATH 已配置）。"
+info "全部完成。默认 shell 为 fish，man 手册为中文。"
 info "h 命令已安装，输入 h 查看工具速查手册。"
 info "hackingtools 已安装，可用工具: $(ls "$HOME/.local/share/hackingtools/bin" 2>/dev/null | wc -l) 个"
 info ""
