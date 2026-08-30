@@ -315,14 +315,28 @@ if command -v niri >/dev/null && pgrep -x niri >/dev/null; then
 fi
 
 # -------------------------------------------------------------
-# 10. Install h command
+# 10. Install all bin scripts
 # -------------------------------------------------------------
-if [[ -f "$REPO_DIR/bin/h" ]]; then
-    info "安装 h 命令到 ~/.local/bin ..."
+if [[ -d "$REPO_DIR/bin" ]]; then
+    info "安装bin目录脚本 ..."
     mkdir -p "$HOME/.local/bin"
-    cp "$REPO_DIR/bin/h" "$HOME/.local/bin/h"
-    chmod +x "$HOME/.local/bin/h"
+    for script in "$REPO_DIR/bin/"*; do
+        if [[ -f "$script" ]] && [[ "$(basename "$script")" != ".local" ]]; then
+            cp "$script" "$HOME/.local/bin/"
+            chmod +x "$HOME/.local/bin/$(basename "$script")"
+        fi
+    done
 fi
+
+# Install root-level scripts (ff, etc)
+for script in ff; do
+    if [[ -f "$REPO_DIR/$script" ]]; then
+        info "安装${script}脚本 ..."
+        mkdir -p "$HOME/.local/bin"
+        cp "$REPO_DIR/$script" "$HOME/.local/bin/"
+        chmod +x "$HOME/.local/bin/$script"
+    fi
+done
 
 # -------------------------------------------------------------
 # 11. Install Chinese Help
@@ -386,21 +400,31 @@ mkdir -p ~/.config/environment.d
 cat > ~/.config/environment.d/desktop.conf << 'EOF'
 # Desktop Environment Config
 COLORTERM=truecolor
-PATH=$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH
 EOF
 
 # Add to shell config
 for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
     if [[ -f "$rc" ]]; then
-        if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
+        # Add STARSHIP_CONFIG if not present (for TTY compatibility)
+        if ! grep -q "STARSHIP_CONFIG" "$rc" 2>/dev/null; then
             if [[ "$rc" == *"fish"* ]]; then
                 echo "" >> "$rc"
-                echo "# hackingtools" >> "$rc"
-                echo 'set -gx PATH $HOME/.local/share/hackingtools/bin $PATH' >> "$rc"
+                echo "# TTY Environment" >> "$rc"
+                echo 'set -gx STARSHIP_CONFIG "$HOME/.config/tactical/starship.toml"' >> "$rc"
+                echo 'set -gx ZDOTDIR "$HOME/.config/tactical/zsh"' >> "$rc"
             else
                 echo "" >> "$rc"
-                echo "# hackingtools" >> "$rc"
-                echo 'export PATH="$HOME/.local/share/hackingtools/bin:$PATH"' >> "$rc"
+                echo "# TTY Environment" >> "$rc"
+                echo 'export STARSHIP_CONFIG="$HOME/.config/tactical/starship.toml"' >> "$rc"
+                echo 'export ZDOTDIR="$HOME/.config/tactical/zsh"' >> "$rc"
+            fi
+        fi
+        # Add hackingtools and local bin to PATH if not present
+        if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
+            if [[ "$rc" == *"fish"* ]]; then
+                echo 'set -gx PATH $HOME/.local/bin $HOME/.local/share/hackingtools/bin $PATH' >> "$rc"
+            else
+                echo 'export PATH="$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH"' >> "$rc"
             fi
         fi
     fi

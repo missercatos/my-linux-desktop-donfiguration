@@ -251,14 +251,28 @@ info "移植zsh配置 ..."
 cp "$REPO_DIR/zsh/.zshrc" ~/.zshrc 2>/dev/null || true
 
 # -------------------------------------------------------------
-# 9. Install h command
+# 9. Install all bin scripts
 # -------------------------------------------------------------
-if [[ -f "$REPO_DIR/bin/h" ]]; then
-    info "安装h命令 ..."
+if [[ -d "$REPO_DIR/bin" ]]; then
+    info "安装bin目录脚本 ..."
     mkdir -p ~/.local/bin
-    cp "$REPO_DIR/bin/h" ~/.local/bin/h
-    chmod +x ~/.local/bin/h
+    for script in "$REPO_DIR/bin/"*; do
+        if [[ -f "$script" ]] && [[ "$(basename "$script")" != ".local" ]]; then
+            cp "$script" ~/.local/bin/
+            chmod +x ~/.local/bin/"$(basename "$script")"
+        fi
+    done
 fi
+
+# Install root-level scripts (ff, etc)
+for script in ff; do
+    if [[ -f "$REPO_DIR/$script" ]]; then
+        info "安装${script}脚本 ..."
+        mkdir -p ~/.local/bin
+        cp "$REPO_DIR/$script" ~/.local/bin/
+        chmod +x ~/.local/bin/"$script"
+    fi
+done
 
 # -------------------------------------------------------------
 # 10. Install Chinese Help
@@ -321,16 +335,21 @@ cat > ~/.config/environment.d/tty.conf << 'EOF'
 STARSHIP_CONFIG=$HOME/.config/tactical/starship.toml
 ZDOTDIR=$HOME/.config/tactical/zsh
 COLORTERM=truecolor
-PATH=$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH
 EOF
 
 # Add to shell config
 for rc in ~/.bashrc ~/.zshrc; do
     if [[ -f "$rc" ]]; then
-        if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
+        # Add STARSHIP_CONFIG if not present
+        if ! grep -q "STARSHIP_CONFIG" "$rc" 2>/dev/null; then
             echo "" >> "$rc"
-            echo "# hackingtools" >> "$rc"
-            echo 'export PATH="$HOME/.local/share/hackingtools/bin:$PATH"' >> "$rc"
+            echo "# TTY Environment" >> "$rc"
+            echo 'export STARSHIP_CONFIG="$HOME/.config/tactical/starship.toml"' >> "$rc"
+            echo 'export ZDOTDIR="$HOME/.config/tactical/zsh"' >> "$rc"
+        fi
+        # Add hackingtools to PATH if not present
+        if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
+            echo 'export PATH="$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH"' >> "$rc"
         fi
     fi
 done
@@ -339,4 +358,3 @@ info "全部完成！"
 info "请重新登录或执行以下命令生效："
 info "  source ~/.config/tactical/zsh/.zshrc"
 info "  tmux source-file ~/.tmux.conf"
-info "  export PATH=\"\$HOME/.local/share/hackingtools/bin:\$PATH\""
