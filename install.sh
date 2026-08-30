@@ -414,6 +414,14 @@ for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
                 echo 'export PATH="$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH"' >> "$rc"
             fi
         fi
+        # Add fastfetch alias if not present (bash/zsh only)
+        if [[ "$rc" != *"fish"* ]] && ! grep -q "fastfetch-switch.sh" "$rc" 2>/dev/null; then
+            echo "" >> "$rc"
+            echo "# fastfetch自动检测TTY配置" >> "$rc"
+            echo 'if [[ -f ~/.local/bin/fastfetch-switch.sh ]]; then' >> "$rc"
+            echo "    alias fastfetch='~/.local/bin/fastfetch-switch.sh auto'" >> "$rc"
+            echo 'fi' >> "$rc"
+        fi
     fi
 done
 

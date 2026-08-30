@@ -209,7 +209,17 @@ cp "$REPO_DIR/yazi/.config/yazi/theme.toml" ~/.config/yazi/theme.toml
 # -------------------------------------------------------------
 info "移植btop配置 ..."
 mkdir -p ~/.config/btop
+mkdir -p ~/.config/btop/themes
 cp "$REPO_DIR/btop/.config/btop/"* ~/.config/btop/ 2>/dev/null || true
+
+# Deploy btop TTY green theme
+if [[ -f "$REPO_DIR/btop/.config/btop/themes/green-tty.theme" ]]; then
+    info "部署btop TTY绿色主题 ..."
+    cp "$REPO_DIR/btop/.config/btop/themes/green-tty.theme" ~/.config/btop/themes/green-tty.theme
+fi
+if [[ -f "$REPO_DIR/btop/.config/btop/btop-tty.conf" ]]; then
+    cp "$REPO_DIR/btop/.config/btop/btop-tty.conf" ~/.config/btop/btop-tty.conf
+fi
 
 # -------------------------------------------------------------
 # 7.2 Deploy starship Config
@@ -224,6 +234,17 @@ info "移植tactical配置 ..."
 mkdir -p ~/.config/tactical/zsh
 cp "$REPO_DIR/tactical/.config/tactical/starship.toml" ~/.config/tactical/starship.toml
 cp "$REPO_DIR/tactical/.config/tactical/zsh/.zshrc" ~/.config/tactical/zsh/.zshrc
+
+# Deploy neovim TTY green theme
+if [[ -d "$REPO_DIR/nvim/.config/nvim" ]]; then
+    info "部署neovim TTY绿色主题 ..."
+    mkdir -p ~/.config/nvim/lua/config
+    cp "$REPO_DIR/nvim/.config/nvim/lua/config/tty-theme.lua" ~/.config/nvim/lua/config/tty-theme.lua 2>/dev/null || true
+    # Update init.lua to include TTY detection
+    if [[ -f "$REPO_DIR/nvim/.config/nvim/init.lua" ]]; then
+        cp "$REPO_DIR/nvim/.config/nvim/init.lua" ~/.config/nvim/init.lua
+    fi
+fi
 
 # -------------------------------------------------------------
 # 8.1 Deploy bash Config
@@ -337,6 +358,14 @@ for rc in ~/.bashrc ~/.zshrc; do
         # Add hackingtools to PATH if not present
         if ! grep -q "hackingtools" "$rc" 2>/dev/null; then
             echo 'export PATH="$HOME/.local/bin:$HOME/.local/share/hackingtools/bin:$PATH"' >> "$rc"
+        fi
+        # Add fastfetch alias if not present
+        if ! grep -q "fastfetch-switch.sh" "$rc" 2>/dev/null; then
+            echo "" >> "$rc"
+            echo "# fastfetch自动检测TTY配置" >> "$rc"
+            echo 'if [[ -f ~/.local/bin/fastfetch-switch.sh ]]; then' >> "$rc"
+            echo "    alias fastfetch='~/.local/bin/fastfetch-switch.sh auto'" >> "$rc"
+            echo 'fi' >> "$rc"
         fi
     fi
 done
