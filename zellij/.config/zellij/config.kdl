@@ -1,0 +1,88 @@
+# zellij配置 - 荧光绿色系
+# TTY独立配置
+
+# 主题
+theme "green-tty"
+
+# 默认布局
+default_layout "compact"
+
+# 鼠标支持
+mouse_mode true
+
+# 窗口边框
+pane_frames {
+    hide_session_name false
+}
+
+# 状态栏配置
+status_bar {
+    left {
+        pane {
+            command "bash"
+            args "-c" "while true; do echo -ne \"\033[32m$(date '+%H:%M:%S')\033[0m\"; sleep 1; done"
+        }
+    }
+    right {
+        pane {
+            command "bash"
+            args "-c" "while true; do BATTERY=$(acpi -b 2>/dev/null | grep -oP '\\d+%' || echo 'N/A'); echo -ne \"\033[32m🔋 ${BATTERY}\033[0m\"; sleep 1; done"
+        }
+    }
+}
+
+# 键绑定
+keybinds {
+    unbind "Ctrl b"
+    
+    # 窗口管理
+    bind "Ctrl a" { SwitchToMode "Session"; }
+    bind "Ctrl n" { NewTab; }
+    bind "Ctrl h" { GoToPreviousTab; }
+    bind "Ctrl l" { GoToNextTab; }
+    bind "Ctrl x" { CloseTab; }
+    
+    # 面板管理
+    bind "Ctrl d" { Detach; }
+    bind "Ctrl z" { ToggleFloatingPanes; }
+    
+    # 分屏
+    bind "Alt d" { NewPane "Down"; }
+    bind "Alt r" { NewPane "Right"; }
+    
+    # Session模式
+    unbind "Ctrl o"
+    bind "Ctrl s" { SwitchToMode "Scroll"; }
+    
+    # 快捷操作
+    bind "Alt n" { NewTab; "name"; }
+    bind "Alt h" { GoToPreviousTab; }
+    bind "Alt l" { GoToNextTab; }
+    bind "Alt x" { CloseTab; }
+    
+    # 会话管理
+    bind "Ctrl q" { Quit; }
+}
+
+# 插件
+plugins {
+    compact-bar location="zellij:compact-bar"
+    status-bar location="zellij:status-bar"
+}
+
+# 布局
+layout {
+    pane borderless=true
+    pane split_direction="vertical" {
+        pane borderless=true
+    }
+}
+
+# 选项
+options {
+    default_shell "zsh"
+    scroll_buffer_size 10000
+    copy_on_select true
+    live_alt_stack true
+    scrollback_lines_to_skip 50
+}

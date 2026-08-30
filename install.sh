@@ -148,7 +148,7 @@ OFFICIAL_PKGS=(
     niri kitty fish neovim stow dms-shell dms-shell-niri
     noctalia-qs base-devel
     starship fastfetch cava btop yazi fuzzel foot alacritty
-    eza bat zoxide tmux fzf ripgrep fd
+    eza bat zoxide tmux zellij fzf ripgrep fd
     # Tools
     git gnupg openssh curl wget rsync gzip xz zip unzip 7zip
     imagemagick ffmpeg jq sqlite openssl gdb tldr

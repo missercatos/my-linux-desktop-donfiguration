@@ -142,7 +142,7 @@ info "中文字体安装完成，切换到中文显示"
 # -------------------------------------------------------------
 TTY_PKGS=(
     # Terminal
-    foot alacritty tmux zsh
+    foot alacritty tmux zsh zellij
     # Shell Enhancement
     zsh-autocomplete zsh-autosuggestions zsh-syntax-highlighting
     # File Manager
@@ -196,6 +196,23 @@ cp "$REPO_DIR/alacritty/.config/alacritty/alacritty.toml" ~/.config/alacritty/al
 # -------------------------------------------------------------
 info "移植tmux配置 ..."
 cp "$REPO_DIR/tmux/.tmux.conf" ~/.tmux.conf
+
+# -------------------------------------------------------------
+# 6.1 Deploy zellij Config
+# -------------------------------------------------------------
+info "移植zellij配置 ..."
+mkdir -p ~/.config/zellij
+mkdir -p ~/.config/zellij/themes
+mkdir -p ~/.config/zellij/layouts
+if [[ -f "$REPO_DIR/zellij/.config/zellij/config.kdl" ]]; then
+    cp "$REPO_DIR/zellij/.config/zellij/config.kdl" ~/.config/zellij/config.kdl
+fi
+if [[ -f "$REPO_DIR/zellij/.config/zellij/themes/green-tty.kdl" ]]; then
+    cp "$REPO_DIR/zellij/.config/zellij/themes/green-tty.kdl" ~/.config/zellij/themes/green-tty.kdl
+fi
+if [[ -f "$REPO_DIR/zellij/.config/zellij/layouts/green-tty.kdl" ]]; then
+    cp "$REPO_DIR/zellij/.config/zellij/layouts/green-tty.kdl" ~/.config/zellij/layouts/green-tty.kdl
+fi
 
 # -------------------------------------------------------------
 # 7. Deploy yazi Config

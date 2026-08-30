@@ -1,0 +1,25 @@
+# zellij自定义布局 - 带时钟和电量显示
+# 使用浮动面板显示时间
+
+layout {
+    pane borderless=true {
+        command "zsh"
+    }
+    pane split_direction="vertical" borderless=true {
+        pane borderless=true {
+            command "zsh"
+        }
+    }
+    
+    # 浮动面板 - 时钟和电量
+    floating_panes {
+        pane {
+            command "bash"
+            args "-c" "while true; do echo -ne \"\\033[32m$(date '+%Y-%m-%d %H:%M:%S')\\033[0m | \\033[32m$(acpi -b 2>/dev/null | grep -oP '\\d+%' || echo 'N/A')\\033[0m\"; sleep 1; done"
+            height 1
+            width 40
+            x "100%-42"
+            y 0
+        }
+    }
+}
