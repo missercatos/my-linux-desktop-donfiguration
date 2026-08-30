@@ -25,41 +25,42 @@ if [[ "${1:-}" == "--update" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 0.1 镜像站配置（自动检测地理位置）
+# 0.1 镜像站配置（使用上海交大源 - 唯一可用）
 # -------------------------------------------------------------
 configure_mirrors() {
-    info "配置镜像站..."
+    info "配置镜像站（使用上海交大源）..."
     
-    # 获取IP并检测地理位置
-    local ip=$(curl -s --connect-timeout 5 https://api.ipify.org 2>/dev/null || echo "")
-    local mirror=""
-    
-    if [[ -n "$ip" ]]; then
-        # 根据IP前缀判断区域（简化版）
-        local prefix=$(echo "$ip" | cut -d'.' -f1)
-        if [[ "$prefix" == "114" ]] || [[ "$prefix" == "180" ]] || [[ "$prefix" == "202" ]]; then
-            # 中国IP段，使用中科大镜像
-            mirror="https://mirrors.ustc.edu.cn"
-        else
-            # 默认使用上海交大镜像
-            mirror="https://mirrors.sjtug.sjtu.edu.cn"
-        fi
-    else
-        # 无法获取IP，默认使用中科大
-        mirror="https://mirrors.ustc.edu.cn"
-    fi
+    # 直接使用上海交大镜像（唯一可用）
+    local mirror="https://mirrors.sjtug.sjtu.edu.cn"
     
     # 备份原始镜像配置
     if [[ -f /etc/pacman.d/mirrorlist ]]; then
         sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
     fi
     
-    # 写入新镜像配置
+    # 清理旧的镜像配置并写入新的
     sudo tee /etc/pacman.d/mirrorlist > /dev/null << EOF
-# 自动配置的镜像站
-Server = $mirror/archlinux/\$arch
-Server = $mirror/archlinux/\$arch/os
+# 上海交大镜像（唯一可用）
+Server = $mirror/archlinux/\$repo/os/\$arch
 EOF
+    
+    # 清理archlinuxcn仓库镜像（如果存在）
+    if grep -q "^\[archlinuxcn\]" /etc/pacman.conf 2>/dev/null; then
+        # 备份pacman.conf
+        sudo cp /etc/pacman.conf /etc/pacman.conf.bak
+        
+        # 替换archlinuxcn部分
+        sudo sed -i '/\[archlinuxcn\]/,/^$/c\[archlinuxcn]\nServer = '"$mirror"'/archlinuxcn/\$arch' /etc/pacman.conf
+    fi
+    
+    # 更新pacman密钥
+    info "初始化pacman密钥..."
+    sudo pacman-key --init 2>/dev/null || true
+    sudo pacman-key --populate archlinux 2>/dev/null || true
+    
+    # 强制刷新包数据库
+    info "刷新包数据库..."
+    sudo pacman -Syy --noconfirm
     
     info "镜像站已配置为: $mirror"
 }
