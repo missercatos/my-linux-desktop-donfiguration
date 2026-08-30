@@ -44,7 +44,51 @@ if [[ "${1:-}" == "--update" ]]; then
 fi
 
 # -------------------------------------------------------------
-# 0.1 Mirror Configuration (SJTU - only working mirror)
+# 0.1 Pacman Auto Repair
+# -------------------------------------------------------------
+repair_pacman() {
+    info_en "Checking and repairing pacman..."
+    
+    # 1. Check and repair keyring
+    if [[ -d /etc/pacman.d/gnupg ]]; then
+        # Test if keyring is valid
+        if ! sudo pacman-key --list-keys &>/dev/null; then
+            warn_en "Keyring corrupted, reinitializing..."
+            sudo rm -rf /etc/pacman.d/gnupg
+            sudo pacman-key --init
+        fi
+    else
+        info_en "Initializing pacman keyring..."
+        sudo pacman-key --init
+    fi
+    
+    # 2. Populate archlinux keyring
+    sudo pacman-key --populate archlinux 2>/dev/null || true
+    
+    # 3. Import archlinuxcn key if repo exists
+    if grep -q "^\[archlinuxcn\]" /etc/pacman.conf 2>/dev/null; then
+        info_en "Importing archlinuxcn key..."
+        sudo pacman-key --recv-keys 74F4207F0D0BC945E4AB5F78FE748387E4596636 2>/dev/null || true
+        sudo pacman-key --lsign-key 74F4207F0D0BC945E4AB5F78FE748387E4596636 2>/dev/null || true
+    fi
+    
+    # 4. Clean and rebuild package database
+    info_en "Rebuilding package database..."
+    sudo rm -f /var/lib/pacman/sync/*.db 2>/dev/null || true
+    sudo pacman -Syy --noconfirm
+    
+    # 5. Verify SigLevel in pacman.conf
+    if ! grep -q "^SigLevel.*=.*Required DatabaseOptional" /etc/pacman.conf 2>/dev/null; then
+        warn_en "Fixing SigLevel in pacman.conf..."
+        sudo sed -i 's/^#SigLevel\s*=/SigLevel =/' /etc/pacman.conf
+        sudo sed -i 's/^SigLevel\s*=\s*$/SigLevel = Required DatabaseOptional/' /etc/pacman.conf
+    fi
+    
+    info_en "Pacman repair completed"
+}
+
+# -------------------------------------------------------------
+# 0.2 Mirror Configuration (SJTU - only working mirror)
 # -------------------------------------------------------------
 configure_mirrors() {
     info_en "Configuring mirror (SJTU)..."
@@ -81,8 +125,9 @@ EOF
 }
 
 # -------------------------------------------------------------
-# 1. Configure Mirror
+# 1. Repair Pacman and Configure Mirror
 # -------------------------------------------------------------
+repair_pacman
 configure_mirrors
 
 # -------------------------------------------------------------
