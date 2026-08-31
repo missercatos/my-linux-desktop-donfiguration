@@ -1,27 +1,28 @@
-# tactical/starship.toml - Dynamic config based on cava theme
+# tactical/starship.toml
+# Dynamic config based on DMS theme (milkTheme)
 
 format = """
-┌──[$username](bold fg:#ac3232)-[$hostname](bold fg:#e6d4d8 dimmed)-[$directory](bold fg:#52263e)-[$time](bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
-└─<$character"""
+[┌──](fg:#52263e)[$username](bold fg:#d97706)[─](fg:#ac3232)[$hostname](bold fg:#3b82f6)[─](fg:#ac3232)[$directory](bold fg:#e6d4d8)[─](fg:#ac3232)[$time](bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+[└─](fg:#ac3232)$character"""
 
 add_newline = true
 
 [username]
-style_user = "bold fg:#e6d4d8"
+style_user = "bold fg:#d97706"
 style_root = "bold fg:#ff0000"
 show_always = true
 format = "[$user]($style)"
 
 [hostname]
-style = "bold fg:#e6d4d8 dimmed"
+style = "bold fg:#3b82f6"
 ssh_only = false
 format = "[@$hostname]($style)"
 
 [directory]
-style = "bold fg:#52263e"
+style = "bold fg:#e6d4d8"
 truncation_length = 5
 truncate_to_repo = true
-format = "[$path]($style) "
+format = "[$path]($style)"
 
 [time]
 disabled = false
@@ -37,160 +38,93 @@ format = "[$symbol$branch]($style) "
 style = "bold fg:#e6d4d8"
 format = '[$all_status$ahead_behind]($style) '
 
-# Language modules with official brand colors
 [c]
-disabled = false
-symbol = ""
+symbol = "C"
 style = "bold fg:#A8B9CC"
 format = "[$symbol$version]($style) "
-
 [cpp]
-disabled = false
-symbol = ""
+symbol = "C++"
 style = "bold fg:#00599C"
 format = "[$symbol$version]($style) "
-
 [dart]
-disabled = false
-symbol = ""
+symbol = "▲"
 style = "bold fg:#0175C2"
 format = "[$symbol$version]($style) "
-
 [deno]
-disabled = false
-symbol = ""
+symbol = "D"
 style = "bold fg:#010101"
 format = "[$symbol$version]($style) "
-
 [elixir]
-disabled = false
-symbol = ""
+symbol = "☘"
 style = "bold fg:#6E4A7E"
 format = "[$symbol$version]($style) "
-
 [golang]
-disabled = false
-symbol = ""
+symbol = "Go"
 style = "bold fg:#00ADD8"
 format = "[$symbol$version]($style) "
-
 [haskell]
-disabled = false
-symbol = ""
+symbol = "λ"
 style = "bold fg:#5e5086"
 format = "[$symbol$version]($style) "
-
 [java]
-disabled = false
-symbol = ""
+symbol = "J"
 style = "bold fg:#ED8B00"
 format = "[$symbol$version]($style) "
-
 [julia]
-disabled = false
-symbol = ""
+symbol = "≈"
 style = "bold fg:#9558B2"
 format = "[$symbol$version]($style) "
-
 [kotlin]
-disabled = false
-symbol = ""
+symbol = "K"
 style = "bold fg:#7F52FF"
 format = "[$symbol$version]($style) "
-
 [lua]
-disabled = false
-symbol = ""
+symbol = "☕"
 style = "bold fg:#000080"
 format = "[$symbol$version]($style) "
-
 [nodejs]
-disabled = false
-symbol = ""
+symbol = "✔"
 style = "bold fg:#339933"
 format = "[$symbol$version]($style) "
-
 [perl]
-disabled = false
-symbol = ""
+symbol = "P"
 style = "bold fg:#39457E"
 format = "[$symbol$version]($style) "
-
 [php]
-disabled = false
-symbol = ""
+symbol = "P"
 style = "bold fg:#777BB4"
 format = "[$symbol$version]($style) "
-
 [python]
-disabled = false
-symbol = ""
+symbol = "π"
 style = "bold fg:#FFD43B"
 format = "[$symbol$version]($style) "
-
 [rlang]
-disabled = false
-symbol = ""
+symbol = "R"
 style = "bold fg:#276DC3"
 format = "[$symbol$version]($style) "
-
 [ruby]
-disabled = false
-symbol = ""
+symbol = "Rb"
 style = "bold fg:#CC342D"
 format = "[$symbol$version]($style) "
-
 [rust]
-disabled = false
-symbol = ""
+symbol = "Rs"
 style = "bold fg:#D34516"
 format = "[$symbol$version]($style) "
-
 [scala]
-disabled = false
-symbol = ""
+symbol = "Sc"
 style = "bold fg:#DC322F"
 format = "[$symbol$version]($style) "
-
 [swift]
-disabled = false
-symbol = ""
+symbol = "✶"
 style = "bold fg:#FA7343"
 format = "[$symbol$version]($style) "
-
 [zig]
-disabled = false
-symbol = ""
+symbol = "Z"
 style = "bold fg:#F7A41D"
 format = "[$symbol$version]($style) "
-
-# Custom module for spinner animation
-[custom.spinner]
-command = """
-if [ -f /tmp/starship-spinner ]; then
-    frame=$(cat /tmp/starship-spinner)
-    case $frame in
-        0) echo "⠋" ;;
-        1) echo "⠙" ;;
-        2) echo "⠹" ;;
-        3) echo "⠸" ;;
-        4) echo "⠼" ;;
-        5) echo "⠴" ;;
-        6) echo "⠦" ;;
-        7) echo "⠧" ;;
-        8) echo "⠇" ;;
-        9) echo "⠏" ;;
-        *) echo "⠋" ;;
-    esac
-else
-    echo ""
-fi
-"""
-format = "[$output](bold fg:#ac3232)"
-when = true
 
 [character]
 success_symbol = "[❯](bold fg:#339933)"
 error_symbol = "[❯](bold fg:#ff0000)"
-vimcmd_symbol = "[❮](bold fg:#FFD43B)"
+vimcmd_symbol = "[❮](bold fg:#d97706)"
 format = "$symbol "
