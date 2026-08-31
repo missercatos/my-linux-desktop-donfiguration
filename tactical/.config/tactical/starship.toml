@@ -38,111 +38,112 @@ format = "[$symbol$branch]($style) "
 style = "bold fg:#e6d4d8"
 format = '[$all_status$ahead_behind]($style) '
 
+# Language modules with Nerd Font symbols
 [c]
 disabled = false
-symbol = "C:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [cpp]
 disabled = false
-symbol = "C++:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [dart]
-symbol = "Dart:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [deno]
-symbol = "Deno:"
-style = "bold"
+symbol = " "
+style = "bold fg:#e6d4d8"
 format = "[$symbol$version]($style) "
 
 [elixir]
-symbol = "Elixir:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [golang]
-symbol = "Go:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [haskell]
-symbol = "Haskell:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [java]
-symbol = "Java:"
-style = "bold"
+symbol = " "
+style = "bold fg:#e6d4d8"
 format = "[$symbol$version]($style) "
 
 [julia]
-symbol = "Julia:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [kotlin]
-symbol = "Kotlin:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [lua]
-symbol = "Lua:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [nodejs]
-symbol = "Node:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [perl]
-symbol = "Perl:"
-style = "bold"
+symbol = " "
+style = "bold fg:#e6d4d8"
 format = "[$symbol$version]($style) "
 
 [php]
-symbol = "PHP:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [python]
-symbol = "Python:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [rlang]
-symbol = "R:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [ruby]
-symbol = "Ruby:"
-style = "bold"
+symbol = " "
+style = "bold fg:#e6d4d8"
 format = "[$symbol$version]($style) "
 
 [rust]
-symbol = "Rust:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [scala]
-symbol = "Scala:"
-style = "bold"
+symbol = " "
+style = "bold fg:#52263e"
 format = "[$symbol$version]($style) "
 
 [swift]
-symbol = "Swift:"
-style = "bold"
+symbol = " "
+style = "bold fg:#e6d4d8"
 format = "[$symbol$version]($style) "
 
 [zig]
-symbol = "Zig:"
-style = "bold"
+symbol = " "
+style = "bold fg:#ac3232"
 format = "[$symbol$version]($style) "
 
 [character]
