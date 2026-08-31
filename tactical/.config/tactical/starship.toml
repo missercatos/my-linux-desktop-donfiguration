@@ -1,8 +1,9 @@
 # tactical/starship.toml
+# Auto-generated with cava colors: #52263e -> #ac3232 -> #e6d4d8
 
 format = """
-┌───$username$hostname$directory $time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
-└─$character"""
+[┌──](fg:#52263e)[$username]($style)[─](fg:#ac3232)[$hostname]($style)[─](fg:#e6d4d8)[$directory]($style) $time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+[└─](fg:#ac3232)$character"""
 
 continuation_prompt = ". "
 
@@ -28,92 +29,70 @@ format = "at $time "
 [git_status]
 
 [c]
-disabled = false
-symbol = "C:"
-format = "$symbol$version "
-
+symbol = "C"
+format = "[$symbol $version]($style) "
 [cpp]
-disabled = false
-symbol = "C++:"
-format = "$symbol$version "
-
+symbol = "C++"
+format = "[$symbol $version]($style) "
 [dart]
-symbol = "Dart:"
-format = "$symbol$version "
-
+symbol = "▲"
+format = "[$symbol $version]($style) "
 [deno]
-symbol = "Deno:"
-format = "$symbol$version "
-
+symbol = "D"
+format = "[$symbol $version]($style) "
 [elixir]
-symbol = "Elixir:"
-format = "$symbol$version "
-
+symbol = "☘"
+format = "[$symbol $version]($style) "
 [golang]
-symbol = "Go:"
-format = "$symbol$version "
-
+symbol = "Go"
+format = "[$symbol $version]($style) "
 [haskell]
-symbol = "Haskell:"
-format = "$symbol$version "
-
+symbol = "λ"
+format = "[$symbol $version]($style) "
 [java]
-symbol = "Java:"
-format = "$symbol$version "
-
+symbol = "J"
+format = "[$symbol $version]($style) "
 [julia]
-symbol = "Julia:"
-format = "$symbol$version "
-
+symbol = "≈"
+format = "[$symbol $version]($style) "
 [kotlin]
-symbol = "Kotlin:"
-format = "$symbol$version "
-
+symbol = "K"
+format = "[$symbol $version]($style) "
 [lua]
-symbol = "Lua:"
-format = "$symbol$version "
-
+symbol = "☕"
+format = "[$symbol $version]($style) "
 [nodejs]
-symbol = "Node:"
-format = "$symbol$version "
-
+symbol = "✔"
+format = "[$symbol $version]($style) "
 [perl]
-symbol = "Perl:"
-format = "$symbol$version "
-
+symbol = "P"
+format = "[$symbol $version]($style) "
 [php]
-symbol = "PHP:"
-format = "$symbol$version "
-
+symbol = "P"
+format = "[$symbol $version]($style) "
 [python]
-symbol = "Python:"
-format = "$symbol$version "
-
+symbol = "π"
+format = "[$symbol $version]($style) "
 [rlang]
-symbol = "R:"
-format = "$symbol$version "
-
+symbol = "R"
+format = "[$symbol $version]($style) "
 [ruby]
-symbol = "Ruby:"
-format = "$symbol$version "
-
+symbol = "Rb"
+format = "[$symbol $version]($style) "
 [rust]
-symbol = "Rust:"
-format = "$symbol$version "
-
+symbol = "Rs"
+format = "[$symbol $version]($style) "
 [scala]
-symbol = "Scala:"
-format = "$symbol$version "
-
+symbol = "Sc"
+format = "[$symbol $version]($style) "
 [swift]
-symbol = "Swift:"
-format = "$symbol$version "
-
+symbol = "✶"
+format = "[$symbol $version]($style) "
 [zig]
-symbol = "Zig:"
-format = "$symbol$version "
+symbol = "Z"
+format = "[$symbol $version]($style) "
 
 [character]
-success_symbol = ">"
-error_symbol = ">"
+success_symbol = "[▶](fg:#ac3232 bold)"
+error_symbol = "[▶](fg:#ff0000 bold)"
 format = "$symbol "
