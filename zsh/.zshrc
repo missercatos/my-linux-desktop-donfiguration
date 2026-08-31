@@ -1,3 +1,7 @@
+# TTY Environment
+export STARSHIP_CONFIG="$HOME/.config/tactical/starship.toml"
+export ZDOTDIR="$HOME/.config/tactical/zsh"
+
 bindkey -v
 
 function _zsh_cursor {
@@ -88,3 +92,16 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#444444'
 source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# ── 中文帮助包装 (拦截 -h 显示中文) ──
+[[ -f ~/.local/share/zhhelp-wrapper.sh ]] && source ~/.local/share/zhhelp-wrapper.sh
+
+# fastfetch自动检测TTY配置
+if [[ -f ~/.local/bin/fastfetch-switch.sh ]]; then
+    alias fastfetch='~/.local/bin/fastfetch-switch.sh auto'
+fi
+
+# Auto-generate starship config based on cava theme
+if [[ -f ~/.local/bin/generate-starship-config ]]; then
+    ~/.local/bin/generate-starship-config >/dev/null 2>&1
+fi
