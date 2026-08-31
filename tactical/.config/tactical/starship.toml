@@ -1,98 +1,169 @@
-# tactical/starship.toml
-# Auto-generated with cava colors: #52263e -> #ac3232 -> #e6d4d8
+# tactical/starship.toml - Dynamic config based on cava theme
 
 format = """
-[┌──](fg:#52263e)[$username]($style)[─](fg:#ac3232)[$hostname]($style)[─](fg:#e6d4d8)[$directory]($style) $time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
-[└─](fg:#ac3232)$character"""
+┌──[$username](bold fg:#ac3232)-[$hostname](bold fg:#e6d4d8 dimmed)-[$directory](bold fg:#52263e)-[$time](bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+└─<$character"""
 
-continuation_prompt = ". "
+add_newline = true
 
 [username]
+style_user = "bold fg:#e6d4d8"
+style_root = "bold fg:#ff0000"
 show_always = true
-format = "$user"
+format = "[$user]($style)"
 
 [hostname]
+style = "bold fg:#e6d4d8 dimmed"
 ssh_only = false
-format = "@$hostname"
+format = "[@$hostname]($style)"
 
 [directory]
+style = "bold fg:#52263e"
 truncation_length = 5
 truncate_to_repo = true
+format = "[$path]($style) "
 
 [time]
 disabled = false
 time_format = "%H:%M"
-format = "at $time "
+style = "bold fg:#e6d4d8"
+format = "at [$time]($style) "
 
 [git_branch]
+style = "bold fg:#ac3232"
+format = "[$symbol$branch]($style) "
 
 [git_status]
+style = "bold fg:#e6d4d8"
+format = '[$all_status$ahead_behind]($style) '
 
 [c]
-symbol = "C"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
+
 [cpp]
-symbol = "C++"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [dart]
-symbol = "▲"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [deno]
-symbol = "D"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#e6d4d8"
+format = "[$symbol$version]($style) "
+
 [elixir]
-symbol = "☘"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [golang]
-symbol = "Go"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
+
 [haskell]
-symbol = "λ"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [java]
-symbol = "J"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#e6d4d8"
+format = "[$symbol$version]($style) "
+
 [julia]
-symbol = "≈"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [kotlin]
-symbol = "K"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
+
 [lua]
-symbol = "☕"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [nodejs]
-symbol = "✔"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
+
 [perl]
-symbol = "P"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#e6d4d8"
+format = "[$symbol$version]($style) "
+
 [php]
-symbol = "P"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [python]
-symbol = "π"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
+
 [rlang]
-symbol = "R"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [ruby]
-symbol = "Rb"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#e6d4d8"
+format = "[$symbol$version]($style) "
+
 [rust]
-symbol = "Rs"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
+
 [scala]
-symbol = "Sc"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#52263e"
+format = "[$symbol$version]($style) "
+
 [swift]
-symbol = "✶"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#e6d4d8"
+format = "[$symbol$version]($style) "
+
 [zig]
-symbol = "Z"
-format = "[$symbol $version]($style) "
+disabled = false
+symbol = ""
+style = "bold fg:#ac3232"
+format = "[$symbol$version]($style) "
 
 [character]
-success_symbol = "[▶](fg:#ac3232 bold)"
-error_symbol = "[▶](fg:#ff0000 bold)"
+success_symbol = "[>](bold fg:#ac3232)"
+error_symbol = "[>](bold fg:#ff0000)"
 format = "$symbol "
