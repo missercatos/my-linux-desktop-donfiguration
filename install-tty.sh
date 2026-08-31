@@ -225,7 +225,9 @@ cp "$REPO_DIR/starship/.config/starship.toml.custom" ~/.config/starship.toml.cus
 # -------------------------------------------------------------
 info "Deploying tactical config..."
 mkdir -p ~/.config/tactical/zsh
+mkdir -p ~/.config/tactical/tty
 cp "$REPO_DIR/tactical/.config/tactical/starship.toml" ~/.config/tactical/starship.toml
+cp "$REPO_DIR/tactical/.config/tactical/tty/starship.toml" ~/.config/tactical/tty/starship.toml 2>/dev/null || true
 cp "$REPO_DIR/tactical/.config/tactical/zsh/.zshrc" ~/.config/tactical/zsh/.zshrc
 
 # Deploy neovim TTY green theme
@@ -320,7 +322,8 @@ info "Configuring environment variables..."
 mkdir -p ~/.config/environment.d
 cat > ~/.config/environment.d/tty.conf << 'EOF'
 # TTY config - fluorescent green theme
-STARSHIP_CONFIG=$HOME/.config/tactical/starship.toml
+# Use ASCII-only starship config for pure TTY
+STARSHIP_CONFIG=$HOME/.config/tactical/tty/starship.toml
 ZDOTDIR=$HOME/.config/tactical/zsh
 COLORTERM=truecolor
 EOF
@@ -332,7 +335,7 @@ for rc in ~/.bashrc ~/.zshrc; do
         if ! grep -q "STARSHIP_CONFIG" "$rc" 2>/dev/null; then
             echo "" >> "$rc"
             echo "# TTY Environment" >> "$rc"
-            echo 'export STARSHIP_CONFIG="$HOME/.config/tactical/starship.toml"' >> "$rc"
+            echo 'export STARSHIP_CONFIG="$HOME/.config/tactical/tty/starship.toml"' >> "$rc"
             echo 'export ZDOTDIR="$HOME/.config/tactical/zsh"' >> "$rc"
         fi
         # Add hackingtools to PATH if not present
