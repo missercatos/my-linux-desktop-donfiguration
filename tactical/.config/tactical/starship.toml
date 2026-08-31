@@ -1,8 +1,9 @@
 # tactical/starship.toml - Independent fluorescent green starship config
 # For foot/tmux/tty only, independent of DMS/kitty
+# Includes language symbols and versions
 
 format = """
-┌──[$username](bold fg:green)-[$hostname](bold fg:dim)-[$directory](bold fg:green)-[$time](bold fg:gray) $git_branch$git_status
+┌──[$username](bold fg:green)-[$hostname](bold fg:dim)-[$directory](bold fg:green)-[$time](bold fg:gray) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
 └─<$character"""
 
 add_newline = true
@@ -48,6 +49,113 @@ format = "[$symbol$branch]($style) "
 [git_status]
 style = "bold fg:amber"
 format = '[$all_status$ahead_behind]($style) '
+
+[c]
+disabled = false
+symbol = " "
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[cpp]
+disabled = false
+symbol = " "
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[dart]
+symbol = " "
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[deno]
+symbol = " "
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[elixir]
+symbol = " "
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[golang]
+symbol = " "
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[haskell]
+symbol = " "
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[java]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[julia]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[kotlin]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[lua]
+symbol = " "
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[nodejs]
+symbol = " "
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[perl]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[php]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[python]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[rlang]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[ruby]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[rust]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[scala]
+symbol = " "
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[swift]
+symbol = " "
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[zig]
+symbol = " "
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
 
 [character]
 success_symbol = "[❯](bold fg:green)"

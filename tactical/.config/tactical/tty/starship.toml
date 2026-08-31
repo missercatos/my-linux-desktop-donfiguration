@@ -1,8 +1,9 @@
 # tactical/starship.toml - TTY ASCII-only version
 # For pure TTY (no graphical terminal emulator)
+# Includes language symbols and versions
 
 format = """
-[$username](bold fg:green)@[$hostname](bold fg:dim):[$directory](bold fg:green) [$time](bold fg:gray) $git_branch$git_status
+[$username](bold fg:green)@[$hostname](bold fg:dim):[$directory](bold fg:green) [$time](bold fg:gray) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
 > """
 
 add_newline = true
@@ -48,6 +49,113 @@ format = "[$symbol$branch]($style) "
 [git_status]
 style = "bold fg:amber"
 format = '[$all_status$ahead_behind]($style) '
+
+[c]
+disabled = false
+symbol = "C:"
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[cpp]
+disabled = false
+symbol = "C++:"
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[dart]
+symbol = "Dart:"
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[deno]
+symbol = "Deno:"
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[elixir]
+symbol = "Elixir:"
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[golang]
+symbol = "Go:"
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[haskell]
+symbol = "Haskell:"
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[java]
+symbol = "Java:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[julia]
+symbol = "Julia:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[kotlin]
+symbol = "Kotlin:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[lua]
+symbol = "Lua:"
+style = "bold fg:dim"
+format = "[$symbol$version]($style) "
+
+[nodejs]
+symbol = "Node:"
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[perl]
+symbol = "Perl:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[php]
+symbol = "PHP:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[python]
+symbol = "Python:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[rlang]
+symbol = "R:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[ruby]
+symbol = "Ruby:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[rust]
+symbol = "Rust:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[scala]
+symbol = "Scala:"
+style = "bold fg:bright"
+format = "[$symbol$version]($style) "
+
+[swift]
+symbol = "Swift:"
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
+
+[zig]
+symbol = "Zig:"
+style = "bold fg:green"
+format = "[$symbol$version]($style) "
 
 [character]
 success_symbol = "[>](bold fg:green)"
