@@ -8,13 +8,13 @@ args = ["-l"]
 
 [font]
 size = 10
-normal = { family = "JetBrains Maple Mono", style = "Regular" }
-bold = { family = "JetBrains Maple Mono", style = "Bold" }
-italic = { family = "JetBrains Maple Mono", style = "Italic" }
-bold_italic = { family = "JetBrains Maple Mono", style = "Bold Italic" }
-# CJK字体fallback
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+# CJK font fallback
 [font.normal]
-family = "JetBrains Maple Mono"
+family = "JetBrainsMono Nerd Font"
 
 [colors.primary]
 background = "#000000"

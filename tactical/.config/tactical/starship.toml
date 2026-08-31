@@ -1,6 +1,6 @@
-# tactical/starship.toml - Independent fluorescent green starship config
+# tactical/starship.toml - Independent starship config
 # For foot/tmux/tty only, independent of DMS/kitty
-# Language symbols use official brand colors, theme colors follow DMS
+# Colors based on cava theme, language symbols use official brand colors
 
 format = """
 ┌──[$username](bold fg:color_primary)-[$hostname](bold fg:color_on_surface dimmed)-[$directory](bold fg:color_secondary)-[$time](bold fg:color_on_surface) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
@@ -10,6 +10,7 @@ add_newline = true
 
 palette = 'colors'
 
+# Colors based on cava theme (your-theme)
 [palettes.colors]
 color_primary = '#7aa2f7'
 color_secondary = '#73daca'
