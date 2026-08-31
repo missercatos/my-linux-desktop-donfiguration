@@ -19,6 +19,9 @@ bindkey -M viins 'kj' vi-cmd-mode
 # ── Starship提示符 ──
 eval "$(starship init zsh)"
 
+# ── 旋转动画钩子 ──
+[[ -f ~/.local/bin/spinner-hook.sh ]] && source ~/.local/bin/spinner-hook.sh
+
 # ── 历史记录 ──
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
