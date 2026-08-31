@@ -1,9 +1,8 @@
-# tactical/starship.toml
-# Dynamic config based on DMS theme (milkTheme)
+# tactical/starship.toml - Dynamic config based on DMS theme
 
 format = """
-[┌──](fg:#52263e)[$username](bold fg:#d97706)[─](fg:#ac3232)[$hostname](bold fg:#3b82f6)[─](fg:#ac3232)[$directory](bold fg:#e6d4d8)[─](fg:#ac3232)[$time](bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
-[└─](fg:#ac3232)$character"""
+\ue000\ue001[$username](bold fg:#d97706)[─](fg:#ac3232)[$hostname](bold fg:#3b82f6)[─](fg:#ac3232)[$directory](bold fg:#e6d4d8)[─](fg:#ac3232)($time)(bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+\ue002$character"""
 
 add_newline = true
 
@@ -22,13 +21,26 @@ format = "[@$hostname]($style)"
 style = "bold fg:#e6d4d8"
 truncation_length = 5
 truncate_to_repo = true
-format = "[$path]($style)"
+read_only = "🔒"
+format = "[$path]($style) "
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Videos" = "󰈈 "
+"Developer" = "󰲋 "
+"Desktop" = "󰃨 "
+"Public" = " "
+"Templates" = " "
+".config" = "󱁿 "
 
 [time]
 disabled = false
 time_format = "%H:%M"
 style = "bold fg:#e6d4d8"
-format = "at [$time]($style) "
+format = "at ($time)($style) "
 
 [git_branch]
 style = "bold fg:#ac3232"
@@ -38,90 +50,157 @@ format = "[$symbol$branch]($style) "
 style = "bold fg:#e6d4d8"
 format = '[$all_status$ahead_behind]($style) '
 
+# Language modules with official brand colors
 [c]
-symbol = "C"
+disabled = false
+symbol = ""
 style = "bold fg:#A8B9CC"
 format = "[$symbol$version]($style) "
+
 [cpp]
-symbol = "C++"
+disabled = false
+symbol = ""
 style = "bold fg:#00599C"
 format = "[$symbol$version]($style) "
+
 [dart]
-symbol = "▲"
+disabled = false
+symbol = ""
 style = "bold fg:#0175C2"
 format = "[$symbol$version]($style) "
+
 [deno]
-symbol = "D"
+disabled = false
+symbol = ""
 style = "bold fg:#010101"
 format = "[$symbol$version]($style) "
+
 [elixir]
-symbol = "☘"
+disabled = false
+symbol = ""
 style = "bold fg:#6E4A7E"
 format = "[$symbol$version]($style) "
+
 [golang]
-symbol = "Go"
+disabled = false
+symbol = ""
 style = "bold fg:#00ADD8"
 format = "[$symbol$version]($style) "
+
 [haskell]
-symbol = "λ"
+disabled = false
+symbol = ""
 style = "bold fg:#5e5086"
 format = "[$symbol$version]($style) "
+
 [java]
-symbol = "J"
+disabled = false
+symbol = ""
 style = "bold fg:#ED8B00"
 format = "[$symbol$version]($style) "
+
 [julia]
-symbol = "≈"
+disabled = false
+symbol = ""
 style = "bold fg:#9558B2"
 format = "[$symbol$version]($style) "
+
 [kotlin]
-symbol = "K"
+disabled = false
+symbol = ""
 style = "bold fg:#7F52FF"
 format = "[$symbol$version]($style) "
+
 [lua]
-symbol = "☕"
+disabled = false
+symbol = ""
 style = "bold fg:#000080"
 format = "[$symbol$version]($style) "
+
 [nodejs]
-symbol = "✔"
+disabled = false
+symbol = ""
 style = "bold fg:#339933"
 format = "[$symbol$version]($style) "
+
 [perl]
-symbol = "P"
+disabled = false
+symbol = ""
 style = "bold fg:#39457E"
 format = "[$symbol$version]($style) "
+
 [php]
-symbol = "P"
+disabled = false
+symbol = ""
 style = "bold fg:#777BB4"
 format = "[$symbol$version]($style) "
+
 [python]
-symbol = "π"
+disabled = false
+symbol = ""
 style = "bold fg:#FFD43B"
 format = "[$symbol$version]($style) "
+
 [rlang]
-symbol = "R"
+disabled = false
+symbol = ""
 style = "bold fg:#276DC3"
 format = "[$symbol$version]($style) "
+
 [ruby]
-symbol = "Rb"
+disabled = false
+symbol = ""
 style = "bold fg:#CC342D"
 format = "[$symbol$version]($style) "
+
 [rust]
-symbol = "Rs"
+disabled = false
+symbol = ""
 style = "bold fg:#D34516"
 format = "[$symbol$version]($style) "
+
 [scala]
-symbol = "Sc"
+disabled = false
+symbol = ""
 style = "bold fg:#DC322F"
 format = "[$symbol$version]($style) "
+
 [swift]
-symbol = "✶"
+disabled = false
+symbol = ""
 style = "bold fg:#FA7343"
 format = "[$symbol$version]($style) "
+
 [zig]
-symbol = "Z"
+disabled = false
+symbol = ""
 style = "bold fg:#F7A41D"
 format = "[$symbol$version]($style) "
+
+# Custom module for spinner animation
+[custom.spinner]
+command = """
+if [ -f /tmp/starship-spinner ]; then
+    frame=$(cat /tmp/starship-spinner)
+    case $frame in
+        0) echo "⠋" ;;
+        1) echo "⠙" ;;
+        2) echo "⠹" ;;
+        3) echo "⠸" ;;
+        4) echo "⠼" ;;
+        5) echo "⠴" ;;
+        6) echo "⠦" ;;
+        7) echo "⠧" ;;
+        8) echo "⠇" ;;
+        9) echo "⠏" ;;
+        *) echo "⠋" ;;
+    esac
+else
+    echo ""
+fi
+"""
+format = "[$output](bold fg:#ac3232)"
+when = true
 
 [character]
 success_symbol = "[❯](bold fg:#339933)"

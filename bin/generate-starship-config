@@ -59,7 +59,7 @@ config = f"""# tactical/starship.toml
 # Dynamic config based on DMS theme (milkTheme)
 
 format = \"\"\"
-[{pipe_tl}{pipe_h}{pipe_h}](fg:{dms_colors['primaryContainer']})[$username](bold fg:{dms_colors['warning']})[─](fg:{dms_colors['primary']})[$hostname](bold fg:{dms_colors['info']})[─](fg:{dms_colors['primary']})[$directory](bold fg:{dms_colors['surfaceText']})[─](fg:{dms_colors['primary']})[$time](bold fg:{dms_colors['surfaceText']}) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+[{pipe_tl}{pipe_h}{pipe_h}](fg:{dms_colors['primary']})[$username](bold fg:{dms_colors['warning']})[─](fg:{dms_colors['primary']})[$hostname](bold fg:{dms_colors['info']})[─](fg:{dms_colors['primary']})[$directory](bold fg:{dms_colors['surfaceText']})[─](fg:{dms_colors['primary']})($time)(bold fg:{dms_colors['surfaceText']}) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
 [{pipe_bl}{pipe_h}](fg:{dms_colors['primary']})$character\"\"\"
 
 add_newline = true
@@ -79,13 +79,26 @@ format = "[@$hostname]($style)"
 style = "bold fg:{dms_colors['surfaceText']}"
 truncation_length = 5
 truncate_to_repo = true
-format = "[$path]($style)"
+read_only = "🔒"
+format = "[$path]($style) "
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Videos" = "󰈈 "
+"Developer" = "󰲋 "
+"Desktop" = "󰃨 "
+"Public" = " "
+"Templates" = " "
+".config" = "󱁿 "
 
 [time]
 disabled = false
 time_format = "%H:%M"
 style = "bold fg:{dms_colors['surfaceText']}"
-format = "at [$time]($style) "
+format = "at ($time)($style) "
 
 [git_branch]
 style = "bold fg:{dms_colors['primary']}"
