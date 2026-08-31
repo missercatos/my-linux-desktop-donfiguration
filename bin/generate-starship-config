@@ -4,120 +4,122 @@
 python3 << 'PYEOF'
 import os
 
-# DMS milkTheme colors (from DankMaterialShell/themes/milkTheme/theme.json)
-dms_colors = {
-    "primary": "#ac3232",
-    "primaryContainer": "#52263e",
-    "surfaceText": "#e6d4d8",
-    "outline": "#ac3232",
-    "error": "#ac3232",
-    "warning": "#d97706",
-    "info": "#3b82f6",
-}
+pipe_tl = "\u250c"
+pipe_h  = "\u2500"
+pipe_bl = "\u2514"
+rarr = "\u276f"
+larr = "\u276e"
 
-# Unicode chars
-pipe_tl = "\u250c"  # ┌
-pipe_h  = "\u2500"  # ─
-pipe_bl = "\u2514"  # └
-
-# Language modules with official brand colors
+# Text labels with official brand colors
 langs = [
     ("c", "C", "#A8B9CC"),
     ("cpp", "C++", "#00599C"),
-    ("dart", "\u25B2", "#0175C2"),
-    ("deno", "D", "#010101"),
-    ("elixir", "\u2618", "#6E4A7E"),
+    ("dart", "Dt", "#0175C2"),
+    ("deno", "Dn", "#010101"),
+    ("elixir", "Ex", "#6E4A7E"),
     ("golang", "Go", "#00ADD8"),
-    ("haskell", "\u03BB", "#5e5086"),
-    ("java", "J", "#ED8B00"),
-    ("julia", "\u2248", "#9558B2"),
-    ("kotlin", "K", "#7F52FF"),
-    ("lua", "\u2615", "#000080"),
-    ("nodejs", "\u2714", "#339933"),
-    ("perl", "P", "#39457E"),
-    ("php", "P", "#777BB4"),
-    ("python", "\u03C0", "#FFD43B"),
+    ("haskell", "Hs", "#5e5086"),
+    ("java", "Jv", "#ED8B00"),
+    ("julia", "Jl", "#9558B2"),
+    ("kotlin", "Kt", "#7F52FF"),
+    ("lua", "Lu", "#000080"),
+    ("nodejs", "Js", "#339933"),
+    ("perl", "Pl", "#39457E"),
+    ("php", "Ph", "#777BB4"),
+    ("python", "Py", "#FFD43B"),
     ("rlang", "R", "#276DC3"),
     ("ruby", "Rb", "#CC342D"),
     ("rust", "Rs", "#D34516"),
     ("scala", "Sc", "#DC322F"),
-    ("swift", "\u2736", "#FA7343"),
-    ("zig", "Z", "#F7A41D"),
+    ("swift", "Sw", "#FA7343"),
+    ("zig", "Zg", "#F7A41D"),
 ]
 
-# Build language format strings
-lang_configs = []
-for mod, logo, color in langs:
-    lang_configs.append(f"""[{mod}]
-symbol = "{logo}"
+docs_sym = "\U000f0919"
+dl_sym = "\U000f01a4"
+music_sym = "\U000f07da"
+pics_sym = "\U000f03b5"
+vids_sym = "\U000f0888"
+dev_sym = "\U000f08cb"
+desk_sym = "\U000f0e68"
+pub_sym = "\U000f07e2"
+tmpl_sym = "\U000f0c40"
+cfg_sym = "\U000f0c7f"
+
+lang_configs = ""
+for mod, label, color in langs:
+    lang_configs += f"""[{mod}]
+symbol = "{label}"
 style = "bold fg:{color}"
 format = "[$symbol$version]($style) "
-""")
 
-# Build the full config
-config = f"""# tactical/starship.toml
+"""
+
+lb = "\\\\["  
+rb = "\\\\]"
+
+content = f"""# tactical/starship.toml
 # Dynamic config based on DMS theme (milkTheme)
 
 format = \"\"\"
-[{pipe_tl}{pipe_h}{pipe_h}](fg:{dms_colors['primary']})[$username](bold fg:{dms_colors['warning']})[─](fg:{dms_colors['primary']})[$hostname](bold fg:{dms_colors['info']})[─](fg:{dms_colors['primary']})[$directory](bold fg:{dms_colors['surfaceText']})[─](fg:{dms_colors['primary']})($time)(bold fg:{dms_colors['surfaceText']}) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
-[{pipe_bl}{pipe_h}](fg:{dms_colors['primary']})$character\"\"\"
+{pipe_tl}{pipe_h}{pipe_h}{lb}$username{rb}(bold fg:#d97706){pipe_h}{lb}$hostname{rb}(bold fg:#3b82f6){pipe_h}{lb}$directory{rb}(bold fg:#e6d4d8){pipe_h}($time)(bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+{pipe_bl}{pipe_h}$character\"\"\"
 
 add_newline = true
 
 [username]
-style_user = "bold fg:{dms_colors['warning']}"
+style_user = "bold fg:#d97706"
 style_root = "bold fg:#ff0000"
 show_always = true
-format = "[$user]($style)"
+format = "$user"
 
 [hostname]
-style = "bold fg:{dms_colors['info']}"
+style = "bold fg:#3b82f6"
 ssh_only = false
-format = "[@$hostname]($style)"
+format = "@$hostname"
 
 [directory]
-style = "bold fg:{dms_colors['surfaceText']}"
+style = "bold fg:#e6d4d8"
 truncation_length = 5
 truncate_to_repo = true
-read_only = "🔒"
-format = "[$path]($style) "
+format = "$path "
 
 [directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"Videos" = "󰈈 "
-"Developer" = "󰲋 "
-"Desktop" = "󰃨 "
-"Public" = " "
-"Templates" = " "
-".config" = "󱁿 "
+"Documents" = "{docs_sym} "
+"Downloads" = "{dl_sym} "
+"Music" = "{music_sym} "
+"Pictures" = "{pics_sym} "
+"Videos" = "{vids_sym} "
+"Developer" = "{dev_sym} "
+"Desktop" = "{desk_sym} "
+"Public" = "{pub_sym} "
+"Templates" = "{tmpl_sym} "
+".config" = "{cfg_sym} "
 
 [time]
 disabled = false
 time_format = "%H:%M"
-style = "bold fg:{dms_colors['surfaceText']}"
+style = "bold fg:#e6d4d8"
 format = "at ($time)($style) "
 
 [git_branch]
-style = "bold fg:{dms_colors['primary']}"
+style = "bold fg:#ac3232"
 format = "[$symbol$branch]($style) "
 
 [git_status]
-style = "bold fg:{dms_colors['surfaceText']}"
-format = '[$all_status$ahead_behind]($style) '
+style = "bold fg:#e6d4d8"
+format = "[$all_status$ahead_behind]($style) "
 
-{"".join(lang_configs)}
+{lang_configs}
 [character]
-success_symbol = "[❯](bold fg:#339933)"
-error_symbol = "[❯](bold fg:#ff0000)"
-vimcmd_symbol = "[❮](bold fg:{dms_colors['warning']})"
+success_symbol = "[{rarr}](bold fg:#339933)"
+error_symbol = "[{rarr}](bold fg:#ff0000)"
+vimcmd_symbol = "[{larr}](bold fg:#d97706)"
 format = "$symbol "
 """
 
 with open(os.path.expanduser("~/.config/tactical/starship.toml"), "w") as f:
-    f.write(config)
+    f.write(content)
 
 print("Generated with DMS theme colors")
 PYEOF

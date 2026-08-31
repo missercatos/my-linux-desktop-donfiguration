@@ -170,23 +170,40 @@ OFFICIAL_PKGS=(
     man-pages-zh_cn
     # Display Manager
     sddm ly
-    # AUR Helper (from archlinuxcn)
-    yay
 )
-info "安装官方/archlinuxcn 仓库软件 ..."
+info "安装官方仓库软件 ..."
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}" || {
     warn "部分软件安装失败，继续执行..."
 }
 
 # -------------------------------------------------------------
-# 4. Check AUR Helper Status
+# 3.1 Install yay from archlinuxcn
 # -------------------------------------------------------------
+if ! command -v yay &>/dev/null; then
+    info "安装 yay (AUR helper) ..."
+    # Ensure archlinuxcn repo exists
+    if ! grep -q "^\[archlinuxcn\]" /etc/pacman.conf 2>/dev/null; then
+        info "添加 archlinuxcn 仓库 ..."
+        sudo tee -a /etc/pacman.conf > /dev/null << 'CNF'
+
+[archlinuxcn]
+Server = https://mirrors.sjtug.sjtu.edu.cn/archlinuxcn/$arch
+CNF
+        sudo pacman -Syy --noconfirm 2>/dev/null || true
+    fi
+    # Import archlinuxcn key
+    sudo pacman-key --recv-keys 74F4207F0D0BC945E4AB5F78FE748387E4596636 2>/dev/null || true
+    sudo pacman-key --lsign-key 74F4207F0D0BC945E4AB5F78FE748387E4596636 2>/dev/null || true
+    sudo pacman -Syy --noconfirm 2>/dev/null || true
+    sudo pacman -S --needed --noconfirm yay || {
+        warn "yay 安装失败，跳过 AUR 软件安装"
+    }
+fi
+
 if command -v yay &>/dev/null; then
     info "yay已安装: $(yay --version)"
 else
-    warn "yay未安装，请手动安装AUR助手"
-    warn "推荐: sudo pacman -S yay 或 sudo pacman -S paru"
-    warn "AUR功能将不可用"
+    warn "yay未安装，AUR功能将不可用"
 fi
 
 # -------------------------------------------------------------
