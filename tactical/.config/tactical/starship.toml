@@ -1,163 +1,192 @@
 # tactical/starship.toml
-# Dynamic config based on DMS theme (milkTheme)
+# Unified config for all terminals - Kali Linux style
 
 format = """
-┌──\\[$username\\](bold fg:#d97706)─\\[$hostname\\](bold fg:#3b82f6)─\\[$directory\\](bold fg:#e6d4d8)─($time)(bold fg:#e6d4d8) $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+┌──(\\[$username\\]@\\[$hostname\\])─\\[$directory\\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
 └─$character"""
 
 add_newline = true
 
 [username]
-style_user = "bold fg:#d97706"
-style_root = "bold fg:#ff0000"
 show_always = true
-format = "$user"
+format = "[$user]($style)"
+style_user = "bold #d97706"
+style_root = "bold #ff0000"
 
 [hostname]
-style = "bold fg:#3b82f6"
+format = "[$hostname]($style)"
+style = "bold #3b82f6"
 ssh_only = false
-format = "@$hostname"
+trim_at = ""
 
 [directory]
-style = "bold fg:#e6d4d8"
-truncation_length = 5
-truncate_to_repo = true
-format = "$path "
+format = "[$path]($style)[$read_only]($style)"
+style = "bold #e6d4d8"
+truncation_length = 3
+truncation_symbol = ""
+read_only = ""
 
 [directory.substitutions]
-"Documents" = "󰤙 "
-"Downloads" = "󰆤 "
-"Music" = "󰟚 "
-"Pictures" = "󰎵 "
-"Videos" = "󰢈 "
-"Developer" = "󰣋 "
-"Desktop" = "󰹨 "
-"Public" = "󰟢 "
-"Templates" = "󰱀 "
-".config" = "󰱿 "
+"Documents" = ""
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+"Videos" = ""
+"Developer" = ""
+".local/share" = ""
+
+[character]
+success_symbol = "[❯](fg:#339933)"
+error_symbol = "[❯](fg:#ff0000)"
+vicmd_symbol = "[❮](fg:#d97706)"
 
 [time]
 disabled = false
-time_format = "%H:%M"
-style = "bold fg:#e6d4d8"
-format = "at ($time)($style) "
+format = "at $time($style)"
+time_format = "%R"
+style = "fg:#888888"
 
 [git_branch]
-style = "bold fg:#ac3232"
 format = "[$symbol$branch]($style) "
+symbol = ""
+style = "fg:#888888"
 
 [git_status]
-style = "bold fg:#e6d4d8"
-format = "[$all_status$ahead_behind]($style) "
-
-[c]
-symbol = "C"
-style = "bold fg:#A8B9CC"
-format = "[$symbol$version]($style) "
-
-[cpp]
-symbol = "C++"
-style = "bold fg:#00599C"
-format = "[$symbol$version]($style) "
-
-[dart]
-symbol = "Dt"
-style = "bold fg:#0175C2"
-format = "[$symbol$version]($style) "
-
-[deno]
-symbol = "Dn"
-style = "bold fg:#010101"
-format = "[$symbol$version]($style) "
-
-[elixir]
-symbol = "Ex"
-style = "bold fg:#6E4A7E"
-format = "[$symbol$version]($style) "
-
-[golang]
-symbol = "Go"
-style = "bold fg:#00ADD8"
-format = "[$symbol$version]($style) "
-
-[haskell]
-symbol = "Hs"
-style = "bold fg:#5e5086"
-format = "[$symbol$version]($style) "
-
-[java]
-symbol = "Jv"
-style = "bold fg:#ED8B00"
-format = "[$symbol$version]($style) "
-
-[julia]
-symbol = "Jl"
-style = "bold fg:#9558B2"
-format = "[$symbol$version]($style) "
-
-[kotlin]
-symbol = "Kt"
-style = "bold fg:#7F52FF"
-format = "[$symbol$version]($style) "
-
-[lua]
-symbol = "Lu"
-style = "bold fg:#000080"
-format = "[$symbol$version]($style) "
+format = "(\\[$all_status$ahead_behind\\] )"
+style = "fg:#ff6b6b"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+conflicted = "="
+untracked = "?"
+stashed = "*"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
 
 [nodejs]
+format = "[$symbol($version)]($style) "
 symbol = "Js"
-style = "bold fg:#339933"
-format = "[$symbol$version]($style) "
-
-[perl]
-symbol = "Pl"
-style = "bold fg:#39457E"
-format = "[$symbol$version]($style) "
-
-[php]
-symbol = "Ph"
-style = "bold fg:#777BB4"
-format = "[$symbol$version]($style) "
+version_format = "v$raw"
+style = "fg:#339933"
 
 [python]
+format = "[$symbol($version)]($style) "
 symbol = "Py"
-style = "bold fg:#FFD43B"
-format = "[$symbol$version]($style) "
+version_format = "v$raw"
+style = "fg:#FFD43B"
 
-[rlang]
-symbol = "R"
-style = "bold fg:#276DC3"
-format = "[$symbol$version]($style) "
+[c]
+format = "[$symbol($version)]($style) "
+symbol = "C"
+version_format = "v$raw"
+style = "fg:#555555"
 
-[ruby]
-symbol = "Rb"
-style = "bold fg:#CC342D"
-format = "[$symbol$version]($style) "
+[cpp]
+format = "[$symbol($version)]($style) "
+symbol = "C++"
+version_format = "v$raw"
+style = "fg:#00599C"
+
+[golang]
+format = "[$symbol($version)]($style) "
+symbol = "Go"
+version_format = "v$raw"
+style = "fg:#00ADD8"
 
 [rust]
+format = "[$symbol($version)]($style) "
 symbol = "Rs"
-style = "bold fg:#D34516"
-format = "[$symbol$version]($style) "
+version_format = "v$raw"
+style = "fg:#DEA584"
+
+[dart]
+format = "[$symbol($version)]($style) "
+symbol = "Dt"
+version_format = "v$raw"
+style = "fg:#00B4AB"
+
+[deno]
+format = "[$symbol($version)]($style) "
+symbol = "Dn"
+version_format = "v$raw"
+style = "fg:#70FFAF"
+
+[elixir]
+format = "[$symbol($version)]($style) "
+symbol = "Ex"
+version_format = "v$raw"
+style = "fg:#6E4A7E"
+
+[haskell]
+format = "[$symbol($version)]($style) "
+symbol = "Hs"
+version_format = "v$raw"
+style = "fg:#5D4F85"
+
+[java]
+format = "[$symbol($version)]($style) "
+symbol = "Jv"
+version_format = "v$raw"
+style = "fg:#ED8B00"
+
+[julia]
+format = "[$symbol($version)]($style) "
+symbol = "Jl"
+version_format = "v$raw"
+style = "fg:#9558B2"
+
+[kotlin]
+format = "[$symbol($version)]($style) "
+symbol = "Kt"
+version_format = "v$raw"
+style = "fg:#7F52FF"
+
+[lua]
+format = "[$symbol($version)]($style) "
+symbol = "Lua"
+version_format = "v$raw"
+style = "fg:#000080"
+
+[perl]
+format = "[$symbol($version)]($style) "
+symbol = "Pl"
+version_format = "v$raw"
+style = "fg:#39457E"
+
+[php]
+format = "[$symbol($version)]($style) "
+symbol = "Php"
+version_format = "v$raw"
+style = "fg:#8892BF"
+
+[rlang]
+format = "[$symbol($version)]($style) "
+symbol = "R"
+version_format = "v$raw"
+style = "fg:#276DC3"
+
+[ruby]
+format = "[$symbol($version)]($style) "
+symbol = "Rb"
+version_format = "v$raw"
+style = "fg:#CC342D"
 
 [scala]
+format = "[$symbol($version)]($style) "
 symbol = "Sc"
-style = "bold fg:#DC322F"
-format = "[$symbol$version]($style) "
+version_format = "v$raw"
+style = "fg:#DC322F"
 
 [swift]
+format = "[$symbol($version)]($style) "
 symbol = "Sw"
-style = "bold fg:#FA7343"
-format = "[$symbol$version]($style) "
+version_format = "v$raw"
+style = "fg:#F05138"
 
 [zig]
+format = "[$symbol($version)]($style) "
 symbol = "Zg"
-style = "bold fg:#F7A41D"
-format = "[$symbol$version]($style) "
-
-
-[character]
-success_symbol = "[❯](bold fg:#339933)"
-error_symbol = "[❯](bold fg:#ff0000)"
-vimcmd_symbol = "[❮](bold fg:#d97706)"
-format = "$symbol "
+version_format = "v$raw"
+style = "fg:#EC915C"
