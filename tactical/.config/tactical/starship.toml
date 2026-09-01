@@ -1,9 +1,9 @@
 # tactical/starship.toml
 # Unified config for all terminals - Kali Linux style
 
-format = """
-┌──(\\[$username\\]@\\[$hostname\\])─\\[$directory\\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
-└─$character"""
+format = '''
+┌──(\[$username\]@\[$hostname\])─\[$directory\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+└─$character'''
 
 add_newline = true
 
@@ -48,11 +48,11 @@ style = "fg:#888888"
 
 [git_branch]
 format = "[$symbol$branch]($style) "
-symbol = ""
+symbol = ""
 style = "fg:#888888"
 
 [git_status]
-format = "(\\[$all_status$ahead_behind\\] )"
+format = '(\[$all_status$ahead_behind\] )'
 style = "fg:#ff6b6b"
 ahead = "⇡${count}"
 behind = "⇣${count}"
@@ -67,126 +67,126 @@ deleted = "✘"
 
 [nodejs]
 format = "[$symbol($version)]($style) "
-symbol = "Js"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#339933"
 
 [python]
 format = "[$symbol($version)]($style) "
-symbol = "Py"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#FFD43B"
 
 [c]
 format = "[$symbol($version)]($style) "
-symbol = "C"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#555555"
 
 [cpp]
 format = "[$symbol($version)]($style) "
-symbol = "C++"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#00599C"
 
 [golang]
 format = "[$symbol($version)]($style) "
-symbol = "Go"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#00ADD8"
 
 [rust]
 format = "[$symbol($version)]($style) "
-symbol = "Rs"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#DEA584"
 
 [dart]
 format = "[$symbol($version)]($style) "
-symbol = "Dt"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#00B4AB"
 
 [deno]
 format = "[$symbol($version)]($style) "
-symbol = "Dn"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#70FFAF"
 
 [elixir]
 format = "[$symbol($version)]($style) "
-symbol = "Ex"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#6E4A7E"
 
 [haskell]
 format = "[$symbol($version)]($style) "
-symbol = "Hs"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#5D4F85"
 
 [java]
 format = "[$symbol($version)]($style) "
-symbol = "Jv"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#ED8B00"
 
 [julia]
 format = "[$symbol($version)]($style) "
-symbol = "Jl"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#9558B2"
 
 [kotlin]
 format = "[$symbol($version)]($style) "
-symbol = "Kt"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#7F52FF"
 
 [lua]
 format = "[$symbol($version)]($style) "
-symbol = "Lua"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#000080"
 
 [perl]
 format = "[$symbol($version)]($style) "
-symbol = "Pl"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#39457E"
 
 [php]
 format = "[$symbol($version)]($style) "
-symbol = "Php"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#8892BF"
 
 [rlang]
 format = "[$symbol($version)]($style) "
-symbol = "R"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#276DC3"
 
 [ruby]
 format = "[$symbol($version)]($style) "
-symbol = "Rb"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#CC342D"
 
 [scala]
 format = "[$symbol($version)]($style) "
-symbol = "Sc"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#DC322F"
 
 [swift]
 format = "[$symbol($version)]($style) "
-symbol = "Sw"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#F05138"
 
 [zig]
 format = "[$symbol($version)]($style) "
-symbol = "Zg"
+symbol = ""
 version_format = "v$raw"
 style = "fg:#EC915C"

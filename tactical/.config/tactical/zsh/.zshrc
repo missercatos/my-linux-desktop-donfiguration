@@ -1,5 +1,5 @@
-# tactical/zsh/.zshrc - 独立TUI配置（荧光绿色系）
-# 仅用于foot/tmux，不依赖DMS
+# tactical/zsh/.zshrc - Unified shell config
+export STARSHIP_CONFIG="$HOME/.config/tactical/starship.toml"
 
 # ── Vi模式 ──
 bindkey -v
@@ -19,8 +19,8 @@ bindkey -M viins 'kj' vi-cmd-mode
 # ── Starship提示符 ──
 eval "$(starship init zsh)"
 
-# ── 旋转动画钩子 ──
-[[ -f ~/.local/bin/spinner-hook.sh ]] && source ~/.local/bin/spinner-hook.sh
+# ── Spinner hook disabled (causes background job issues) ──
+# [[ -f ~/.local/bin/spinner-hook.sh ]] && source ~/.local/bin/spinner-hook.sh
 
 # ── 历史记录 ──
 HISTFILE=~/.zsh_history
