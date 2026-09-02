@@ -37,7 +37,6 @@ binds {
     Mod+Shift+F10 hotkey-overlay-title="随机下载壁纸 Random wallpaper" { spawn "~/.local/bin/random-anime-wallpaper-dms";}
 
     Mod+O hotkey-overlay-title="切换总览界面 toggle overview" repeat=false { toggle-overview; }
-    Mod+G hotkey-overlay-title="切换总览界面 toggle overview" repeat=false { toggle-overview; }
     // 关闭聚焦窗口
     Mod+Q hotkey-overlay-title="关闭聚焦窗口 Close focus window" repeat=false { close-window; }
     Alt+F4  hotkey-overlay-title="强制杀死窗口 Force kill -9 window" repeat=false { spawn "~/.config/niri/scripts/niri-force-kill-window"; }
@@ -310,6 +309,6 @@ binds {
     // 关闭显示器备用
 
     // 屏幕画图 Screen annotation
-    Mod+X hotkey-overlay-title="屏幕画图 Screen annotate" { spawn "wayscriber" "--daemon-toggle"; }
+    Mod+G hotkey-overlay-title="屏幕画图 Screen annotate" { spawn "wayscriber" "--daemon-toggle"; }
     Mod+Shift+P { power-off-monitors; }
 }
