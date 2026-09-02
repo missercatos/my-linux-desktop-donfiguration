@@ -1,5 +1,6 @@
 # tactical/starship.toml
 # Unified config for all terminals - Kali Linux style
+# Symbols from starship nerd-font-symbols preset
 
 format = '''
 ┌──(\[$username\]@\[$hostname\])─\[$directory\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
@@ -48,7 +49,7 @@ style = "fg:#888888"
 
 [git_branch]
 format = "[$symbol$branch]($style) "
-symbol = ""
+symbol = ""
 style = "fg:#888888"
 
 [git_status]
@@ -73,7 +74,7 @@ style = "fg:#339933"
 
 [python]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#FFD43B"
 
@@ -85,7 +86,7 @@ style = "fg:#555555"
 
 [cpp]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#00599C"
 
@@ -97,19 +98,19 @@ style = "fg:#00ADD8"
 
 [rust]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = "7"
 version_format = "v$raw"
 style = "fg:#DEA584"
 
 [dart]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#00B4AB"
 
 [deno]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#70FFAF"
 
@@ -121,7 +122,7 @@ style = "fg:#6E4A7E"
 
 [haskell]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#5D4F85"
 
@@ -151,7 +152,7 @@ style = "fg:#000080"
 
 [perl]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#39457E"
 
@@ -163,25 +164,25 @@ style = "fg:#8892BF"
 
 [rlang]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = "4"
 version_format = "v$raw"
 style = "fg:#276DC3"
 
 [ruby]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#CC342D"
 
 [scala]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#DC322F"
 
 [swift]
 format = "[$symbol($version)]($style) "
-symbol = ""
+symbol = ""
 version_format = "v$raw"
 style = "fg:#F05138"
 
