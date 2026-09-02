@@ -1,9 +1,0 @@
-mkdir  -  创建目录
-常用参数:
-  -p          递归创建多级目录
-  -v          显示创建过程
-  -m 权限     指定权限, 如 -m 755
-常用指令集:
-  mkdir newdir                     # 创建
-  mkdir -p a/b/c/d                 # 多级
-  mkdir -p proj/{src,docs,tests}   # 一次多个(花括号展开)

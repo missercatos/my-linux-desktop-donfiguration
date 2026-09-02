@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Muse Dash
-Comment=Play this game on Steam
-Exec=steam steam://rungameid/774171
-Icon=steam_icon_774171
-Terminal=false
-Type=Application
-Categories=Game;

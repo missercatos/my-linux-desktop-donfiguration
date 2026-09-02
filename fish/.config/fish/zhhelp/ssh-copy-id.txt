@@ -1,9 +1,0 @@
-ssh-copy-id  -  复制公钥到远程主机(免密登录)
-用法: ssh-copy-id [选项] 用户@主机
-常用参数:
-  -i 公钥文件   指定公钥(默认 ~/.ssh/id_*.pub)
-  -p 端口      指定端口
-常用指令集:
-  ssh-copy-id user@host            # 免密登录设置
-  ssh-copy-id -i ~/.ssh/mykey.pub user@host
-  ssh-copy-id -p 2222 user@host

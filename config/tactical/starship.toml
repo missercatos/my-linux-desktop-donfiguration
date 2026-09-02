@@ -1,0 +1,205 @@
+# tactical/starship.toml
+# Auto-generated from DMS theme: milkTheme
+# DO NOT EDIT - Regenerate with: generate-starship-dms
+# Language logos use official brand colors
+
+format = '''
+┌──(\[$username\]@\[$hostname\])─\[$directory\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
+└─$character'''
+
+add_newline = true
+
+palette = 'dms'
+
+[palettes.dms]
+primary = '#ac3232'
+secondary = '#ac3232'
+tertiary = '#ac3232'
+error = '#ac3232'
+warning = '#d97706'
+info = '#3b82f6'
+surface = '#e6d4d8'
+
+[username]
+show_always = true
+format = "[$user]($style)"
+style_user = "bold fg:tertiary"
+style_root = "bold fg:error"
+
+[hostname]
+format = "[$hostname]($style)"
+style = "bold fg:surface"
+ssh_only = false
+trim_at = ""
+
+[directory]
+format = "[$path]($style)[$read_only]($style)"
+style = "bold fg:secondary"
+truncation_length = 3
+truncation_symbol = ""
+read_only = ""
+
+[directory.substitutions]
+"Documents" = ""
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+"Videos" = ""
+"Developer" = ""
+".local/share" = ""
+
+[character]
+success_symbol = "[❯](bold fg:primary)"
+error_symbol = "[❯](bold fg:error)"
+vicmd_symbol = "[❮](bold fg:warning)"
+
+[time]
+disabled = false
+format = "at $time($style)"
+time_format = "%R"
+style = "bold fg:surface"
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = "\uf418"
+style = "bold fg:primary"
+
+[git_status]
+format = '(\[$all_status$ahead_behind\] )'
+style = "bold fg:error"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+conflicted = "="
+untracked = "?"
+stashed = "*"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+[nodejs]
+format = "[$symbol($version)]($style) "
+symbol = "\ue718"
+version_format = "v$raw"
+style = "bold #339933"
+
+[python]
+format = "[$symbol($version)]($style) "
+symbol = "\ue235"
+version_format = "v$raw"
+style = "bold #FFD43B"
+
+[c]
+format = "[$symbol($version)]($style) "
+symbol = "\ue61e"
+version_format = "v$raw"
+style = "bold #555555"
+
+[cpp]
+format = "[$symbol($version)]($style) "
+symbol = "\ue61d"
+version_format = "v$raw"
+style = "bold #00599C"
+
+[golang]
+format = "[$symbol($version)]($style) "
+symbol = "\ue627"
+version_format = "v$raw"
+style = "bold #00ADD8"
+
+[rust]
+format = "[$symbol($version)]($style) "
+symbol = "\uf1617"
+version_format = "v$raw"
+style = "bold #DEA584"
+
+[dart]
+format = "[$symbol($version)]($style) "
+symbol = "\ue64c"
+version_format = "v$raw"
+style = "bold #00B4AB"
+
+[deno]
+format = "[$symbol($version)]($style) "
+symbol = "\ue7c0"
+version_format = "v$raw"
+style = "bold #70FFAF"
+
+[elixir]
+format = "[$symbol($version)]($style) "
+symbol = "\ue62d"
+version_format = "v$raw"
+style = "bold #6E4A7E"
+
+[haskell]
+format = "[$symbol($version)]($style) "
+symbol = "\ue777"
+version_format = "v$raw"
+style = "bold #5D4F85"
+
+[java]
+format = "[$symbol($version)]($style) "
+symbol = "\ue738"
+version_format = "v$raw"
+style = "bold #ED8B00"
+
+[julia]
+format = "[$symbol($version)]($style) "
+symbol = "\ue624"
+version_format = "v$raw"
+style = "bold #9558B2"
+
+[kotlin]
+format = "[$symbol($version)]($style) "
+symbol = "\ue634"
+version_format = "v$raw"
+style = "bold #7F52FF"
+
+[lua]
+format = "[$symbol($version)]($style) "
+symbol = "\ue620"
+version_format = "v$raw"
+style = "bold #000080"
+
+[perl]
+format = "[$symbol($version)]($style) "
+symbol = "\ue67e"
+version_format = "v$raw"
+style = "bold #39457E"
+
+[php]
+format = "[$symbol($version)]($style) "
+symbol = "\ue608"
+version_format = "v$raw"
+style = "bold #8892BF"
+
+[rlang]
+format = "[$symbol($version)]($style) "
+symbol = "\uf07d4"
+version_format = "v$raw"
+style = "bold #276DC3"
+
+[ruby]
+format = "[$symbol($version)]($style) "
+symbol = "\ue791"
+version_format = "v$raw"
+style = "bold #CC342D"
+
+[scala]
+format = "[$symbol($version)]($style) "
+symbol = "\ue737"
+version_format = "v$raw"
+style = "bold #DC322F"
+
+[swift]
+format = "[$symbol($version)]($style) "
+symbol = "\ue755"
+version_format = "v$raw"
+style = "bold #F05138"
+
+[zig]
+format = "[$symbol($version)]($style) "
+symbol = "\ue6a9"
+version_format = "v$raw"
+style = "bold #EC915C"

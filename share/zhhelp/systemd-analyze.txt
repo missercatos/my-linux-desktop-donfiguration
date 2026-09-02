@@ -1,9 +1,0 @@
-systemd-analyze  -  系统启动分析
-═══ 常用用法 ═══
-常用指令集:
-  systemd-analyze                  # 总启动时间
-  systemd-analyze blame            # 各单元耗时排行
-  systemd-analyze critical-chain   # 启动关键路径
-  systemd-analyze plot > b.svg     # 生成时序图
-  systemd-analyze verify 服务文件  # 校验unit文件
-  systemd-analyze security 服务    # 安全风险分析
