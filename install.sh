@@ -217,6 +217,7 @@ AUR_PKGS=(
     shorin-contrib-git
     shorin-screenrec-menu-git
     github-desktop-bin
+    wayscriber-bin
 )
 
 if command -v yay &>/dev/null; then
