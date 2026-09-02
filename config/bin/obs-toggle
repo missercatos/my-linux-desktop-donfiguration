@@ -1,5 +1,5 @@
 #!/bin/bash
-# OBS 录屏开关：使用 obs-cmd 控制 OBS WebSocket
+# OBS 录屏开关：后台启动 OBS，切换录制状态
 
 OBS_WEBSOCKET="${OBS_WEBSOCKET_URL:-obsws://localhost:4455/secret}"
 
@@ -9,11 +9,10 @@ if ! command -v obs-cmd &>/dev/null; then
     exit 1
 fi
 
-# 检查 OBS 是否在运行
+# 后台启动 OBS（如果未运行）
 if ! pgrep -x obs > /dev/null; then
-    notify-send "启动 OBS" "正在启动 OBS Studio..."
-    obs &
-    sleep 3
+    obs --minimize-to-tray &
+    sleep 4
 fi
 
 # 切换录制状态
