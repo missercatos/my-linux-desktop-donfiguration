@@ -309,6 +309,6 @@ binds {
     // 关闭显示器备用
 
     // 屏幕画图 Screen annotation
-    Mod+G hotkey-overlay-title="屏幕画图 Screen annotate" { spawn "wayscriber" "--daemon-toggle"; }
+    Mod+G hotkey-overlay-title="屏幕画图 Screen annotate" { spawn "wayscriber" "--active"; }
     Mod+Shift+P { power-off-monitors; }
 }
