@@ -154,6 +154,8 @@ OFFICIAL_PKGS=(
     imagemagick ffmpeg jq sqlite openssl gdb tldr
     coreutils findutils sed grep procps-ng util-linux iproute2
     nodejs yt-dlp docker docker-compose mpv wl-clipboard wireplumber networkmanager
+    # Screen Recording
+    wf-recorder slurp libnotify
     # Kitty Terminal
     kitty-shell-integration kitty-terminfo
     # Git Extensions
@@ -321,11 +323,11 @@ fi
 # -------------------------------------------------------------
 # 10. Install all bin scripts
 # -------------------------------------------------------------
-if [[ -d "$REPO_DIR/bin" ]]; then
+if [[ -d "$REPO_DIR/config/bin" ]]; then
     info "安装bin目录脚本 ..."
     mkdir -p "$HOME/.local/bin"
-    for script in "$REPO_DIR/bin/"*; do
-        if [[ -f "$script" ]] && [[ "$(basename "$script")" != ".local" ]]; then
+    for script in "$REPO_DIR/config/bin/"*; do
+        if [[ -f "$script" ]]; then
             cp "$script" "$HOME/.local/bin/"
             chmod +x "$HOME/.local/bin/$(basename "$script")"
         fi
@@ -345,37 +347,18 @@ done
 # -------------------------------------------------------------
 # 11. Install Chinese Help
 # -------------------------------------------------------------
-if [[ -d "$REPO_DIR/share/zhhelp" ]]; then
-    info "安装中文帮助文件到 ~/.local/share/zhhelp ..."
-    mkdir -p "$HOME/.local/share/zhhelp"
-    cp "$REPO_DIR/share/zhhelp"/*.txt "$HOME/.local/share/zhhelp/"
-fi
-if [[ -f "$REPO_DIR/share/zhhelp-wrapper.sh" ]]; then
+if [[ -f "$REPO_DIR/config/share/zhhelp-wrapper.sh" ]]; then
     info "安装中文帮助包装脚本 ..."
-    cp "$REPO_DIR/share/zhhelp-wrapper.sh" "$HOME/.local/share/zhhelp-wrapper.sh"
+    mkdir -p "$HOME/.local/share"
+    cp "$REPO_DIR/config/share/zhhelp-wrapper.sh" "$HOME/.local/share/zhhelp-wrapper.sh"
 fi
 
 # -------------------------------------------------------------
-# 12. Configure Chinese man pages
+# 12. Install fastfetch green config
 # -------------------------------------------------------------
-MAN_ZH_DIR="$REPO_DIR/share/man-zh"
-if [[ -d "$MAN_ZH_DIR" ]]; then
-    info "配置中文帮助文件路径 ..."
-    mkdir -p "$HOME/.local/share/man-zh"
-    cp -r "$MAN_ZH_DIR"/* "$HOME/.local/share/man-zh/"
-fi
-
-# -------------------------------------------------------------
-# 13. Install fastfetch green config
-# -------------------------------------------------------------
-if [[ -f "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" ]]; then
-    info "安装fastfetch绿色版配置 ..."
-    mkdir -p "$HOME/.config/fastfetch"
-    cp "$REPO_DIR/fastfetch/.config/fastfetch/config-green.jsonc" "$HOME/.config/fastfetch/config-green.jsonc"
-fi
-if [[ -f "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" ]]; then
+if [[ -f "$REPO_DIR/config/fastfetch-switch.sh" ]]; then
     mkdir -p "$HOME/.local/bin"
-    cp "$REPO_DIR/fastfetch/.local/bin/fastfetch-switch.sh" "$HOME/.local/bin/fastfetch-switch.sh"
+    cp "$REPO_DIR/config/fastfetch-switch.sh" "$HOME/.local/bin/fastfetch-switch.sh"
     chmod +x "$HOME/.local/bin/fastfetch-switch.sh"
 fi
 
