@@ -1,5 +1,5 @@
 # tactical/starship.toml
-# Auto-generated from DMS theme: milkTheme
+# Auto-generated from DMS theme: tokyoNight
 # DO NOT EDIT - Regenerate with: generate-starship-dms
 # Language logos use official brand colors
 
@@ -12,13 +12,13 @@ add_newline = true
 palette = 'dms'
 
 [palettes.dms]
-primary = '#ac3232'
-secondary = '#ac3232'
-tertiary = '#ac3232'
-error = '#ac3232'
-warning = '#d97706'
-info = '#3b82f6'
-surface = '#e6d4d8'
+primary = '#7aa2f7'
+secondary = '#bb9af7'
+tertiary = '#7aa2f7'
+error = '#f7768e'
+warning = '#ff9e64'
+info = '#7dcfff'
+surface = '#73daca'
 
 [username]
 show_always = true
@@ -40,13 +40,13 @@ truncation_symbol = ""
 read_only = ""
 
 [directory.substitutions]
-"Documents" = ""
-"Downloads" = ""
-"Music" = ""
-"Pictures" = ""
-"Videos" = ""
-"Developer" = ""
-".local/share" = ""
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = "󰈖 "
+"Videos" = "󰈸 "
+"Developer" = " "
+".local/share" = " "
 
 [character]
 success_symbol = "[❯](bold fg:primary)"
