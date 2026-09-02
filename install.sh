@@ -218,6 +218,7 @@ AUR_PKGS=(
     shorin-screenrec-menu-git
     github-desktop-bin
     wayscriber-bin
+    obs-cmd-bin
 )
 
 if command -v yay &>/dev/null; then

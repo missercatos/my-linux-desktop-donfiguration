@@ -1,0 +1,18 @@
+#!/bin/bash
+# 快速录屏：30fps，CRF 23，系统音频，小文件
+REC_DIR="$HOME/Videos"
+mkdir -p "$REC_DIR"
+
+if pgrep -x wf-recorder > /dev/null; then
+    killall -SIGINT wf-recorder
+    notify-send "录制已保存" "$REC_DIR/"
+else
+    FILE="$REC_DIR/quick_$(date +%s).mp4"
+    wf-recorder -a -c libx264 -r 30 -p crf=23 -f "$FILE" &
+    sleep 1
+    if pgrep -x wf-recorder > /dev/null; then
+        notify-send "快速录制中" "$FILE"
+    else
+        notify-send "录制失败" "请检查音频设备"
+    fi
+fi
