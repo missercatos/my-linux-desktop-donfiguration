@@ -2,6 +2,7 @@
 """
 generate-starship-dms.py
 Dynamically generate starship.toml based on current DMS theme
+Language logos use official brand colors
 """
 
 import json
@@ -12,6 +13,31 @@ STARSHIP_CONFIG = os.path.expanduser("~/.config/tactical/starship.toml")
 DMS_THEMES_DIR = os.path.expanduser("~/.config/DankMaterialShell/themes")
 DMS_SETTINGS = os.path.expanduser("~/.config/DankMaterialShell/settings.json")
 
+# Official language brand colors
+LANG_COLORS = {
+    'nodejs': '#339933',
+    'python': '#FFD43B',
+    'c': '#555555',
+    'cpp': '#00599C',
+    'golang': '#00ADD8',
+    'rust': '#DEA584',
+    'dart': '#00B4AB',
+    'deno': '#70FFAF',
+    'elixir': '#6E4A7E',
+    'haskell': '#5D4F85',
+    'java': '#ED8B00',
+    'julia': '#9558B2',
+    'kotlin': '#7F52FF',
+    'lua': '#000080',
+    'perl': '#39457E',
+    'php': '#8892BF',
+    'rlang': '#276DC3',
+    'ruby': '#CC342D',
+    'scala': '#DC322F',
+    'swift': '#F05138',
+    'zig': '#EC915C',
+}
+
 def get_current_theme():
     """Get current DMS theme name from settings.json"""
     try:
@@ -20,7 +46,6 @@ def get_current_theme():
         
         custom_file = settings.get('customThemeFile', '')
         if custom_file:
-            # Extract theme name from path: .../themes/milkTheme/theme.json
             parts = custom_file.split('/')
             if 'themes' in parts:
                 idx = parts.index('themes')
@@ -56,6 +81,7 @@ def generate_starship_config(theme_name, colors):
     return f'''# tactical/starship.toml
 # Auto-generated from DMS theme: {theme_name}
 # DO NOT EDIT - Regenerate with: generate-starship-dms
+# Language logos use official brand colors
 
 format = \'\'\'
 ┌──(\\[$username\\]@\\[$hostname\\])─\\[$directory\\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
@@ -136,127 +162,127 @@ deleted = "✘"
 format = "[$symbol($version)]($style) "
 symbol = "\\ue718"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold {LANG_COLORS['nodejs']}"
 
 [python]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue235"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold {LANG_COLORS['python']}"
 
 [c]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue61e"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold {LANG_COLORS['c']}"
 
 [cpp]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue61d"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold {LANG_COLORS['cpp']}"
 
 [golang]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue627"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['golang']}"
 
 [rust]
 format = "[$symbol($version)]($style) "
 symbol = "\\uf1617"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold {LANG_COLORS['rust']}"
 
 [dart]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue64c"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['dart']}"
 
 [deno]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue7c0"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['deno']}"
 
 [elixir]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue62d"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['elixir']}"
 
 [haskell]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue777"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold {LANG_COLORS['haskell']}"
 
 [java]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue738"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold {LANG_COLORS['java']}"
 
 [julia]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue624"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold {LANG_COLORS['julia']}"
 
 [kotlin]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue634"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold {LANG_COLORS['kotlin']}"
 
 [lua]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue620"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['lua']}"
 
 [perl]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue67e"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['perl']}"
 
 [php]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue608"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold {LANG_COLORS['php']}"
 
 [rlang]
 format = "[$symbol($version)]($style) "
 symbol = "\\uf07d4"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold {LANG_COLORS['rlang']}"
 
 [ruby]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue791"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold {LANG_COLORS['ruby']}"
 
 [scala]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue737"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold {LANG_COLORS['scala']}"
 
 [swift]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue755"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold {LANG_COLORS['swift']}"
 
 [zig]
 format = "[$symbol($version)]($style) "
 symbol = "\\ue6a9"
 version_format = "v$raw"
-style = "bold fg:warning"
+style = "bold {LANG_COLORS['zig']}"
 '''
 
 def main():

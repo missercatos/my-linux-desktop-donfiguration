@@ -1,6 +1,7 @@
 # tactical/starship.toml
 # Auto-generated from DMS theme: milkTheme
 # DO NOT EDIT - Regenerate with: generate-starship-dms
+# Language logos use official brand colors
 
 format = '''
 ┌──(\[$username\]@\[$hostname\])─\[$directory\]─$time $git_branch$git_status $c$cpp$dart$deno$elixir$golang$haskell$java$julia$kotlin$lua$nodejs$perl$php$python$rlang$ruby$rust$scala$swift$zig
@@ -81,124 +82,124 @@ deleted = "✘"
 format = "[$symbol($version)]($style) "
 symbol = "\ue718"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold #339933"
 
 [python]
 format = "[$symbol($version)]($style) "
 symbol = "\ue235"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold #FFD43B"
 
 [c]
 format = "[$symbol($version)]($style) "
 symbol = "\ue61e"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold #555555"
 
 [cpp]
 format = "[$symbol($version)]($style) "
 symbol = "\ue61d"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold #00599C"
 
 [golang]
 format = "[$symbol($version)]($style) "
 symbol = "\ue627"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #00ADD8"
 
 [rust]
 format = "[$symbol($version)]($style) "
 symbol = "\uf1617"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold #DEA584"
 
 [dart]
 format = "[$symbol($version)]($style) "
 symbol = "\ue64c"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #00B4AB"
 
 [deno]
 format = "[$symbol($version)]($style) "
 symbol = "\ue7c0"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #70FFAF"
 
 [elixir]
 format = "[$symbol($version)]($style) "
 symbol = "\ue62d"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #6E4A7E"
 
 [haskell]
 format = "[$symbol($version)]($style) "
 symbol = "\ue777"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold #5D4F85"
 
 [java]
 format = "[$symbol($version)]($style) "
 symbol = "\ue738"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold #ED8B00"
 
 [julia]
 format = "[$symbol($version)]($style) "
 symbol = "\ue624"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold #9558B2"
 
 [kotlin]
 format = "[$symbol($version)]($style) "
 symbol = "\ue634"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold #7F52FF"
 
 [lua]
 format = "[$symbol($version)]($style) "
 symbol = "\ue620"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #000080"
 
 [perl]
 format = "[$symbol($version)]($style) "
 symbol = "\ue67e"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #39457E"
 
 [php]
 format = "[$symbol($version)]($style) "
 symbol = "\ue608"
 version_format = "v$raw"
-style = "bold fg:tertiary"
+style = "bold #8892BF"
 
 [rlang]
 format = "[$symbol($version)]($style) "
 symbol = "\uf07d4"
 version_format = "v$raw"
-style = "bold fg:secondary"
+style = "bold #276DC3"
 
 [ruby]
 format = "[$symbol($version)]($style) "
 symbol = "\ue791"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold #CC342D"
 
 [scala]
 format = "[$symbol($version)]($style) "
 symbol = "\ue737"
 version_format = "v$raw"
-style = "bold fg:error"
+style = "bold #DC322F"
 
 [swift]
 format = "[$symbol($version)]($style) "
 symbol = "\ue755"
 version_format = "v$raw"
-style = "bold fg:primary"
+style = "bold #F05138"
 
 [zig]
 format = "[$symbol($version)]($style) "
 symbol = "\ue6a9"
 version_format = "v$raw"
-style = "bold fg:warning"
+style = "bold #EC915C"
