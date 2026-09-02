@@ -8,6 +8,8 @@ set -gx MANPATH /usr/share/man/zh_CN:
 set -gx LANGUAGE zh_CN.UTF-8
 set -p PATH ~/hackingtools/bin ~/.local/bin
 set -gx STARSHIP_CONFIG ~/.config/tactical/starship.toml
+# Generate starship config from DMS theme
+~/.local/bin/generate-starship-dms >/dev/null 2>&1
 starship init fish | source
 zoxide init fish --cmd cd | source
 # 111

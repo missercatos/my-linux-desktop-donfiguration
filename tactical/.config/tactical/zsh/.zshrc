@@ -17,6 +17,8 @@ bindkey -M viins 'jk' vi-cmd-mode
 bindkey -M viins 'kj' vi-cmd-mode
 
 # ── Starship提示符 ──
+# Generate starship config from DMS theme
+~/.local/bin/generate-starship-dms >/dev/null 2>&1
 eval "$(starship init zsh)"
 
 # ── Spinner hook disabled (causes background job issues) ──
