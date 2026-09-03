@@ -1,0 +1,37 @@
+#!/bin/bash
+# Clash 浏览器加速模式
+# 只启动clash端口，不设置终端代理
+# 用户需要在浏览器中手动设置代理: 127.0.0.1:7890
+
+CLASH_PORT="${CLASH_PORT:-7890}"
+CLASH_SOCKS="${CLASH_SOCKS:-7890}"
+
+# 停止已有clash进程
+pkill -x clash 2>/dev/null
+sleep 1
+
+# 启动clash
+if command -v clash &>/dev/null; then
+    clash -d "$HOME/.config/mihomo" &
+elif [[ -f "$HOME/.local/bin/clash" ]]; then
+    "$HOME/.local/bin/clash" &
+elif [[ -f "$HOME/clash/clash" ]]; then
+    "$HOME/clash/clash" -d "$HOME/clash" &
+else
+    echo "错误: 未找到clash"
+    exit 1
+fi
+
+sleep 2
+
+echo "✓ Clash 浏览器加速已启动"
+echo "  HTTP代理: http://127.0.0.1:$CLASH_PORT"
+echo "  SOCKS5:   socks5://127.0.0.1:$CLASH_SOCKS"
+echo ""
+echo "  请在浏览器中手动设置代理:"
+echo "  - HTTP代理:  127.0.0.1:$CLASH_PORT"
+echo "  - SOCKS5代理: 127.0.0.1:$CLASH_SOCKS"
+echo ""
+echo "  Firefox: 设置 → 网络设置 → 手动代理配置"
+echo "  Chrome: 设置 → 系统 → 代理设置"
+echo "  终端代理: source ~/.config/environment.d/clash-browser.conf"
