@@ -170,12 +170,21 @@ OFFICIAL_PKGS=(
     zsh zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete zsh-completions
     # Chinese man pages
     man-pages-zh_cn
-    # Display Manager
-    sddm ly
+    # Display Manager (Wayland + X11)
+    sddm sddm-kcm ly
     # Input Method
     fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt
     # Virtualization
     qemu-full virt-manager libvirt dnsmasq edk2-ovmf
+    # Media Player (Wayland + X11)
+    mpv mpv-vapoursynth
+    # Audio (PipeWire + PulseAudio compat)
+    pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber
+    # Plasma (Wayland + X11)
+    plasma-desktop plasma-workspace plasma-wayland-session
+    sddm-kcm systemsettings
+    # Browser
+    firefox firefox-i18n-zh-cn
 )
 info "安装官方仓库软件 ..."
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}" || {
@@ -216,6 +225,7 @@ fi
 # 4.1 Install AUR Packages
 # -------------------------------------------------------------
 AUR_PKGS=(
+    # Desktop
     niri-sidebar-git
     shorin-dms-niri-git
     shorin-contrib-git
@@ -223,8 +233,17 @@ AUR_PKGS=(
     github-desktop-bin
     wayscriber-bin
     obs-cmd-bin
+    # VPN/Proxy
     flclash-bin
     mihomo
+    # Chinese Apps
+    wechat-universal-bwrap
+    dingtalk-bin
+    linuxqq
+    # Browser
+    google-chrome-stable
+    # Wallpaper
+    swww
 )
 
 if command -v yay &>/dev/null; then
@@ -576,6 +595,27 @@ mkdir -p ~/.config/DankMaterialShell
 
 info "DMS 配置目录: ~/.config/DankMaterialShell/"
 
+# -------------------------------------------------------------
+# 20. Configure Wallpapers
+# -------------------------------------------------------------
+info "配置壁纸 ..."
+
+# Copy wallpapers to user directory
+mkdir -p ~/Pictures/Wallpapers
+if [[ -d "$REPO_DIR/wallpapers" ]]; then
+    cp -r "$REPO_DIR/wallpapers"/* ~/Pictures/Wallpapers/ 2>/dev/null || true
+    info "已复制壁纸到 ~/Pictures/Wallpapers/"
+fi
+
+# Set first wallpaper as default (if swww is installed)
+if command -v swww &>/dev/null; then
+    FIRST_WALLPAPER=$(ls ~/Pictures/Wallpapers/*.jpg ~/Pictures/Wallpapers/*.png ~/Pictures/Wallpapers/*.jpeg 2>/dev/null | head -1)
+    if [[ -n "$FIRST_WALLPAPER" ]]; then
+        swww img "$FIRST_WALLPAPER" 2>/dev/null || true
+        info "已设置默认壁纸: $(basename "$FIRST_WALLPAPER")"
+    fi
+fi
+
 info ""
 info "=========================================="
 info "安装完成！"
@@ -584,6 +624,8 @@ info ""
 info "默认 shell: fish"
 info "输入法: fcitx5 (Ctrl+Space 切换)"
 info "虚拟化: QEMU/KVM (需要重新登录使 libvirt 组生效)"
+info "浏览器: Firefox (默认) + Google Chrome"
+info "中国应用: 微信、钉钉、QQ"
 info ""
 info "快捷键参考:"
 info "  Mod+G    - 屏幕画图 (wayscriber)"
