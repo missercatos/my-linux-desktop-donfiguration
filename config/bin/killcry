@@ -1,0 +1,3 @@
+#!/bin/bash
+PID=$(pgrep -f"crystal-dock")
+stop"$PID"

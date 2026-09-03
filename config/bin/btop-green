@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# btop-green - TTY自动检测，使用绿色主题
+# 非TTY环境直接启动btop
+
+# 检测是否在TTY（无桌面环境）
+is_tty() {
+    [[ -z "${DISPLAY:-}" ]] && [[ -z "${WAYLAND_DISPLAY:-}" ]]
+}
+
+# 启动btop
+if is_tty; then
+    exec btop --tty --themes-dir "$HOME/.config/btop/themes" --config "$HOME/.config/btop/btop-tty.conf"
+else
+    exec btop "$@"
+fi

@@ -1,0 +1,5 @@
+#!/bin/sh
+# PRTS — 桌面 GUI（官方 dsh web 内核 + Electron 窗口）
+export PRTS_DSH_PROFILE=web
+export PRTS_DSH_URL=http://127.0.0.1:3081
+exec node "/home/a/.local/share/prts/app/bin/dsh-prts-ui.js" "$@"

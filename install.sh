@@ -351,7 +351,7 @@ fi
 # 10. Install all bin scripts
 # -------------------------------------------------------------
 if [[ -d "$REPO_DIR/config/bin" ]]; then
-    info "安装bin目录脚本 ..."
+    info "安装bin目录脚本和工具 ..."
     mkdir -p "$HOME/.local/bin"
     for script in "$REPO_DIR/config/bin/"*; do
         if [[ -f "$script" ]]; then
@@ -359,6 +359,14 @@ if [[ -d "$REPO_DIR/config/bin" ]]; then
             chmod +x "$HOME/.local/bin/$(basename "$script")"
         fi
     done
+    info "已安装 $(ls "$REPO_DIR/config/bin/" | wc -l) 个脚本/工具到 ~/.local/bin/"
+fi
+
+# Install system-level scripts to /usr/local/bin/
+if [[ -f "$REPO_DIR/config/bin/steama" ]]; then
+    info "安装 steama 到 /usr/local/bin/ ..."
+    sudo cp "$REPO_DIR/config/bin/steama" /usr/local/bin/steama
+    sudo chmod +x /usr/local/bin/steama
 fi
 
 # Install root-level scripts (ff, etc)
@@ -411,10 +419,12 @@ fi
 # -------------------------------------------------------------
 info "配置环境变量 ..."
 mkdir -p ~/.config/environment.d
-cat > ~/.config/environment.d/desktop.conf << 'EOF'
-# Desktop Environment Config
-COLORTERM=truecolor
-EOF
+
+# Copy environment.d config files from project
+if [[ -d "$REPO_DIR/config/environment.d" ]]; then
+    cp "$REPO_DIR/config/environment.d/"* ~/.config/environment.d/ 2>/dev/null || true
+    info "已复制环境变量配置文件"
+fi
 
 # Add to shell config
 for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do

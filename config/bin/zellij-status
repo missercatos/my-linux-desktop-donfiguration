@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# zellij-status - 显示时钟和电量
+# 用于zellij状态栏
+
+while true; do
+    # 获取时间
+    CLOCK=$(date '+%H:%M:%S')
+    
+    # 获取电量
+    BATTERY=$(acpi -b 2>/dev/null | grep -oP '\d+%' || echo "N/A")
+    
+    # 输出状态
+    echo -ne "\033[32m${CLOCK}\033[0m | \033[32m🔋 ${BATTERY}\033[0m"
+    
+    sleep 1
+done
