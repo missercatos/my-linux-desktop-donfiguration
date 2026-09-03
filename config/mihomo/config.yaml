@@ -1,0 +1,39 @@
+# Mihomo (Clash.Meta) 配置
+# 请在导入订阅后手动修改此文件
+
+# 代理端口
+mixed-port: 7890
+
+# 允许局域网连接
+allow-lan: false
+
+# 规则模式: rule / direct / global
+mode: rule
+
+# 日志级别: silent / error / warning / info / debug
+log-level: info
+
+# 外部控制 API
+external-controller: 127.0.0.1:9090
+
+# DNS 配置
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  fallback:
+    - tls://8.8.8.8:853
+    - tls://1.1.1.1:853
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+
+# 代理规则
+rules:
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Proxy

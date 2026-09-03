@@ -224,6 +224,7 @@ AUR_PKGS=(
     wayscriber-bin
     obs-cmd-bin
     flclash-bin
+    mihomo
 )
 
 if command -v yay &>/dev/null; then
@@ -532,15 +533,18 @@ info "QEMU/KVM 配置完成，需要重新登录使 libvirt 组生效"
 # -------------------------------------------------------------
 info "配置 VPN/代理工具 ..."
 
-# Install flclash (Clash client)
-if ! command -v flclash &>/dev/null; then
-    if command -v yay &>/dev/null; then
-        yay -S --needed --noconfirm flclash-bin 2>/dev/null || true
-    fi
-fi
-
-# Create clash config directory
+# Create clash/mihomo config directory
 mkdir -p ~/.config/clash
+mkdir -p ~/.config/mihomo
+
+# Create mihomo basic config
+cat > ~/.config/mihomo/config.yaml << 'EOF'
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+EOF
 
 # Install steamcommunity302
 if [[ ! -d "/opt/steamcommunity302" ]]; then
