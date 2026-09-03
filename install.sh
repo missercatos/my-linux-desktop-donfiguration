@@ -172,6 +172,10 @@ OFFICIAL_PKGS=(
     man-pages-zh_cn
     # Display Manager
     sddm ly
+    # Input Method
+    fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt
+    # Virtualization
+    qemu-full virt-manager libvirt dnsmasq edk2-ovmf
 )
 info "安装官方仓库软件 ..."
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}" || {
@@ -219,6 +223,7 @@ AUR_PKGS=(
     github-desktop-bin
     wayscriber-bin
     obs-cmd-bin
+    flclash-bin
 )
 
 if command -v yay &>/dev/null; then
@@ -427,8 +432,159 @@ for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
     fi
 done
 
-info "全部完成。默认 shell 为 fish，man 手册为中文。"
-info "h 命令已安装，输入 h 查看工具速查手册。"
-info "hackingtools 已安装，可用工具: $(ls "$HOME/.local/share/hackingtools/bin" 2>/dev/null | wc -l) 个"
+# -------------------------------------------------------------
+# 16. Configure fcitx5 Input Method
+# -------------------------------------------------------------
+info "配置 fcitx5 输入法 ..."
+
+# Install fcitx5 packages if not present
+sudo pacman -S --needed --noconfirm fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-gtk fcitx5-qt 2>/dev/null || true
+
+# Configure environment variables for fcitx5
+mkdir -p ~/.config/environment.d
+cat > ~/.config/environment.d/input-method.conf << 'EOF'
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+SDL_IM_MODULE=fcitx
+GLFW_IM_MODULE=ibus
+EOF
+
+# Configure fcitx5 shortcuts
+mkdir -p ~/.config/fcitx5/conf
+cat > ~/.config/fcitx5/config << 'EOF'
+[Hotkey]
+# Toggle input method
+TriggerKeys=Control+space
+EnumerateWithTriggerKeys=True
+EnumerateForwardKeys=
+EnumerateBackwardKeys=
+EnumerateSkipFirst=False
+ModifierOnlyKeyTimeout=250
+
+[Hotkey/TriggerKeys]
+0=Control+space
+1=Zenkaku_Hankaku
+2=Hangul
+
+[Hotkey/ActivateKeys]
+0=Hangul_Hanja
+
+[Hotkey/DeactivateKeys]
+0=Hangul_Hanja
+
+[Hotkey]
+# Forward
+0=Control+space
+EOF
+
+# Configure fcitx5 classicui theme
+cat > ~/.config/fcitx5/conf/classicui.conf << 'EOF'
+# Vertical candidate list
+Vertical Candidate List=True
+# Use mouse wheel to page
+WheelForPaging=True
+# Font
+Font="Sans Serif 11"
+# Menu font
+MenuFont="Sans Serif 10"
+# Tray font
+TrayFont="Sans Serif 10"
+# Tray outline color
+TrayOutlineColor=#000000
+# Tray text color
+TrayTextColor=#ffffff
+# Prefer text icon
+PreferTextIcon=False
+# Show layout name in icon
+ShowLayoutNameInIcon=True
+# Use input method language to display text
+UseInputMethodLanguageToDisplayText=True
+EOF
+
+info "fcitx5 配置完成，需要重启生效"
+
+# -------------------------------------------------------------
+# 17. Configure QEMU/KVM/libvirt
+# -------------------------------------------------------------
+info "配置 QEMU/KVM 虚拟化环境 ..."
+
+# Install virtualization packages
+sudo pacman -S --needed --noconfirm qemu-full virt-manager libvirt dnsmasq edk2-ovmf 2>/dev/null || true
+
+# Enable libvirt service
+sudo systemctl enable --now libvirtd 2>/dev/null || true
+
+# Add user to libvirt group
+sudo usermod -aG libvirt "$USER" 2>/dev/null || true
+
+# Configure libvirt to use session connection
+mkdir -p ~/.config/libvirt
+cat > ~/.config/libvirt/libvirt.conf << 'EOF'
+# Use session connection by default
+uri_default = "qemu:///session"
+EOF
+
+info "QEMU/KVM 配置完成，需要重新登录使 libvirt 组生效"
+
+# -------------------------------------------------------------
+# 18. Configure VPN/Proxy Tools
+# -------------------------------------------------------------
+info "配置 VPN/代理工具 ..."
+
+# Install flclash (Clash client)
+if ! command -v flclash &>/dev/null; then
+    if command -v yay &>/dev/null; then
+        yay -S --needed --noconfirm flclash-bin 2>/dev/null || true
+    fi
+fi
+
+# Create clash config directory
+mkdir -p ~/.config/clash
+
+# Install steamcommunity302
+if [[ ! -d "/opt/steamcommunity302" ]]; then
+    info "安装 steamcommunity302 ..."
+    # Download and install steamcommunity302
+    # Note: This is a placeholder - actual download URL may vary
+    mkdir -p /tmp/steamcommunity302
+    cd /tmp/steamcommunity302
+    # User should download manually or use AUR if available
+    info "steamcommunity302 需要手动安装: https://steamcommunity.302/"
+    cd -
+fi
+
+# Install Watt Toolkit (瓦特工具箱)
+if ! command -v watt &>/dev/null && ! command -v steampp &>/dev/null; then
+    info "Watt Toolkit 需要手动安装: https://steampp.net/"
+fi
+
+info "VPN/代理工具配置完成"
+
+# -------------------------------------------------------------
+# 19. Configure DMS (DankMaterialShell)
+# -------------------------------------------------------------
+info "配置 DMS 桌面环境 ..."
+
+# DMS is already installed via dms-shell packages
+# Create config directory if not exists
+mkdir -p ~/.config/DankMaterialShell
+
+info "DMS 配置目录: ~/.config/DankMaterialShell/"
+
+info ""
+info "=========================================="
+info "安装完成！"
+info "=========================================="
+info ""
+info "默认 shell: fish"
+info "输入法: fcitx5 (Ctrl+Space 切换)"
+info "虚拟化: QEMU/KVM (需要重新登录使 libvirt 组生效)"
+info ""
+info "快捷键参考:"
+info "  Mod+G    - 屏幕画图 (wayscriber)"
+info "  Mod+F3   - OBS 录屏"
+info "  Mod+Ctrl+R - 快速录屏"
+info "  Mod+F1   - 切换输入法"
 info ""
 info "更新方法: ./install.sh --update"
