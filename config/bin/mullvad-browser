@@ -1,0 +1,29 @@
+#!/bin/bash
+# Mullvad Browser 启动脚本
+# 自动启动clash并配置代理
+
+# Clash 代理端口
+CLASH_PORT="${MULLVAD_PROXY_PORT:-7890}"
+
+# 启动clash（如果未运行）
+if ! pgrep -x clash > /dev/null; then
+    # 尝试启动clash
+    if command -v clash &>/dev/null; then
+        clash &
+        sleep 2
+    elif [[ -f "$HOME/.local/bin/clash" ]]; then
+        "$HOME/.local/bin/clash" &
+        sleep 2
+    fi
+fi
+
+# 设置代理环境变量
+export http_proxy="http://127.0.0.1:$CLASH_PORT"
+export https_proxy="http://127.0.0.1:$CLASH_PORT"
+export all_proxy="socks5://127.0.0.1:$CLASH_PORT"
+export HTTP_PROXY="$http_proxy"
+export HTTPS_PROXY="$https_proxy"
+export ALL_PROXY="$all_proxy"
+
+# 启动mullvad-browser
+exec ~/.local/share/mullvad-browser/Browser/mullvadbrowser "$@"

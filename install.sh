@@ -626,6 +626,100 @@ if command -v swww &>/dev/null; then
     fi
 fi
 
+# -------------------------------------------------------------
+# 21. Install Privacy Browsers (Tor & Mullvad)
+# -------------------------------------------------------------
+info "安装隐私浏览器 ..."
+
+# Create directories
+mkdir -p ~/.local/share
+mkdir -p ~/.local/bin
+
+# Install Tor Browser
+if [[ ! -d "$HOME/.local/share/tor-browser" ]]; then
+    info "下载 Tor Browser ..."
+    TOR_URL="https://www.torproject.org/dist/torbrowser/14.5.4/tor-browser-linux-x86_64-14.5.4.tar.xz"
+    TOR_FILE="/tmp/tor-browser.tar.xz"
+    
+    if command -v curl &>/dev/null; then
+        curl -L -o "$TOR_FILE" "$TOR_URL" 2>/dev/null || true
+        if [[ -f "$TOR_FILE" ]]; then
+            tar -xf "$TOR_FILE" -C ~/.local/share/ 2>/dev/null || true
+            rm -f "$TOR_FILE"
+            info "Tor Browser 已安装"
+        fi
+    fi
+else
+    info "Tor Browser 已存在，跳过"
+fi
+
+# Install Mullvad Browser
+if [[ ! -d "$HOME/.local/share/mullvad-browser" ]]; then
+    info "下载 Mullvad Browser ..."
+    MULLVAD_URL="https://github.com/mullvad/mullvad-browser/releases/download/14.5.4/mullvad-browser-linux-x86_64-14.5.4.tar.xz"
+    MULLVAD_FILE="/tmp/mullvad-browser.tar.xz"
+    
+    if command -v curl &>/dev/null; then
+        curl -L -o "$MULLVAD_FILE" "$MULLVAD_URL" 2>/dev/null || true
+        if [[ -f "$MULLVAD_FILE" ]]; then
+            tar -xf "$MULLVAD_FILE" -C ~/.local/share/ 2>/dev/null || true
+            rm -f "$MULLVAD_FILE"
+            info "Mullvad Browser 已安装"
+        fi
+    fi
+else
+    info "Mullvad Browser 已存在，跳过"
+fi
+
+# Create browser launcher scripts
+cat > ~/.local/bin/tor-browser << 'TOR_EOF'
+#!/bin/bash
+# Tor Browser 启动脚本
+# 使用Tor网络，不走clash代理
+
+# 清除代理环境变量（Tor Browser使用自己的Tor网络）
+unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
+
+# 启动Tor Browser
+exec ~/.local/share/tor-browser/Browser/start-tor-browser "$@"
+TOR_EOF
+chmod +x ~/.local/bin/tor-browser
+
+cat > ~/.local/bin/mullvad-browser << 'MULLVAD_EOF'
+#!/bin/bash
+# Mullvad Browser 启动脚本
+# 自动启动clash并配置代理
+
+# Clash 代理端口
+CLASH_PORT="${MULLVAD_PROXY_PORT:-7890}"
+
+# 启动clash（如果未运行）
+if ! pgrep -x clash > /dev/null; then
+    # 尝试启动clash
+    if command -v clash &>/dev/null; then
+        clash &
+        sleep 2
+    elif [[ -f "$HOME/.local/bin/clash" ]]; then
+        "$HOME/.local/bin/clash" &
+        sleep 2
+    fi
+fi
+
+# 设置代理环境变量
+export http_proxy="http://127.0.0.1:$CLASH_PORT"
+export https_proxy="http://127.0.0.1:$CLASH_PORT"
+export all_proxy="socks5://127.0.0.1:$CLASH_PORT"
+export HTTP_PROXY="$http_proxy"
+export HTTPS_PROXY="$https_proxy"
+export ALL_PROXY="$all_proxy"
+
+# 启动mullvad-browser
+exec ~/.local/share/mullvad-browser/Browser/mullvadbrowser "$@"
+MULLVAD_EOF
+chmod +x ~/.local/bin/mullvad-browser
+
+info "浏览器启动脚本已创建"
+
 info ""
 info "=========================================="
 info "安装完成！"
@@ -634,7 +728,7 @@ info ""
 info "默认 shell: fish"
 info "输入法: fcitx5 (Ctrl+Space 切换)"
 info "虚拟化: QEMU/KVM (需要重新登录使 libvirt 组生效)"
-info "浏览器: Firefox (默认) + Google Chrome"
+info "浏览器: Firefox (默认) + Google Chrome + Tor + Mullvad"
 info "中国应用: 微信、钉钉、QQ"
 info ""
 info "快捷键参考:"
