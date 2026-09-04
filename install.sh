@@ -610,6 +610,43 @@ info "配置 DMS 桌面环境 ..."
 # Create config directory if not exists
 mkdir -p ~/.config/DankMaterialShell
 
+# DMS v1.6+: niri 总览(Mod+O)背景壁纸依赖新的模糊壁纸层
+# 1) settings.json 需开启 blurredWallpaperLayer（v1.6 默认关闭 → 总览背景纯黑）
+# 2) niri config.kdl 需 include DMS 自动生成的 dms/wpblur.kdl
+if command -v dms >/dev/null 2>&1 && dms ipc call settings set blurredWallpaperLayer true >/dev/null 2>&1; then
+    dms ipc call settings set blurWallpaperOnOverview true >/dev/null 2>&1 || true
+    info "已启用 DMS 总览壁纸模糊层 (blurredWallpaperLayer)"
+elif command -v python3 >/dev/null 2>&1; then
+    # 兜底：直接改 settings.json（dms 未运行 / IPC 不可用时）
+    # 全新安装时 DMS 尚未生成 settings.json，则写入最小骨架，
+    # DMS 启动时 Store.parse 会自动用 SPEC 默认值补全其余键。
+    python3 - << 'PYEOF'
+import json, os
+p = os.path.expanduser('~/.config/DankMaterialShell/settings.json')
+os.makedirs(os.path.dirname(p), exist_ok=True)
+try:
+    with open(p) as f:
+        d = json.load(f)
+except Exception:
+    d = {}
+if not d.get('blurredWallpaperLayer'):
+    d['blurredWallpaperLayer'] = True
+if not d.get('blurWallpaperOnOverview'):
+    d['blurWallpaperOnOverview'] = True
+with open(p, 'w') as f:
+    json.dump(d, f, ensure_ascii=False, indent=2)
+print('已启用 DMS 总览壁纸模糊层 (blurredWallpaperLayer)')
+PYEOF
+fi
+
+# niri: 确保 include DMS wpblur 规则（缺失则附加）
+NIRI_CFG="$HOME/.config/niri/config.kdl"
+if [[ -f "$NIRI_CFG" ]] && ! grep -q 'wpblur.kdl' "$NIRI_CFG" 2>/dev/null; then
+    # 在末尾 include 区追加 wpblur include（niri 支持 optional include）
+    printf '\n// DMS: blurred wallpaper backdrop for niri overview (auto-added)\ninclude optional=true "dms/wpblur.kdl"\n' >> "$NIRI_CFG"
+    info "已向 niri config.kdl 添加 dms/wpblur.kdl include"
+fi
+
 info "DMS 配置目录: ~/.config/DankMaterialShell/"
 
 # -------------------------------------------------------------
