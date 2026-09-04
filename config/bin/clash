@@ -1,3 +1,110 @@
 #!/bin/bash
-# Clash 启动脚本
-cd ~/clash && ./clash -d .
+# Clash 管理脚本
+# 始终加载完整配置 ~/clash/config.yaml (真实节点/规则/API)
+# 用法:
+#   clash             启动(未运行则后台启动)
+#   clash start       同 clash
+#   clash stop        停止
+#   clash restart     重启
+#   clash status      查看状态
+
+CLASH_DIR="$HOME/clash"
+BIN="$CLASH_DIR/clash"
+CFG="$CLASH_DIR/config.yaml"
+LOG="$CLASH_DIR/clash.log"
+PIDFILE="$CLASH_DIR/clash.pid"
+API_PORT=9090
+PROXY_PORT=7890
+
+# API 健康检查: 完整配置才开启 external-controller(9090)
+api_ok() {
+    curl -s -m 1 "http://127.0.0.1:${API_PORT}/version" >/dev/null 2>&1
+}
+
+# 正在运行的 daemon (cmdline 含 "clash -d", 不会匹配本脚本自身)
+daemon_pids() {
+    pgrep -f "clash -d" 2>/dev/null | while read -r p; do
+        # 排除当前脚本进程及子 shell
+        [ "$p" = "$$" ] && continue
+        echo "$p"
+    done
+}
+
+# 占用 7890/9090 的进程 PID
+listener_pids() {
+    ss -tlnp 2>/dev/null | grep -E ":${PROXY_PORT} |:${API_PORT} " | grep -oP 'pid=\K[0-9]+' | sort -u
+}
+
+is_running() {
+    api_ok && echo "yes" || echo "no"
+}
+
+start() {
+    if [ "$(is_running)" = "yes" ]; then
+        echo "clash 已在运行 (API 健康)"
+        status
+        return 0
+    fi
+    # 清理残留进程(例如无 -d 的残缺实例占着端口)
+    local p
+    for p in $(daemon_pids) $(listener_pids); do
+        [ "$p" = "$$" ] && continue
+        kill "$p" 2>/dev/null
+    done
+    sleep 1
+
+    [ -f "$CFG" ] || { echo "错误: 未找到配置 $CFG"; exit 1; }
+    cd "$CLASH_DIR" || { echo "错误: 无法进入 $CLASH_DIR"; exit 1; }
+
+    nohup "$BIN" -d "$CLASH_DIR" > "$LOG" 2>&1 &
+    echo $! > "$PIDFILE"
+
+    # 等待 API 就绪(最多 8 秒)
+    local i
+    for i in $(seq 1 16); do
+        if api_ok; then
+            echo "clash 已启动 (后台运行)"
+            status
+            return 0
+        fi
+        sleep 0.5
+    done
+    echo "clash 启动失败, 查看日志: $LOG"
+    tail -n 20 "$LOG" 2>/dev/null
+    return 1
+}
+
+stop() {
+    if [ "$(is_running)" = "no" ] && [ -z "$(listener_pids)" ]; then
+        echo "clash 未在运行"
+        rm -f "$PIDFILE"
+        return 0
+    fi
+    local p
+    for p in $(daemon_pids) $(listener_pids); do
+        [ "$p" = "$$" ] && continue
+        kill "$p" 2>/dev/null
+    done
+    sleep 1
+    rm -f "$PIDFILE"
+    echo "clash 已停止"
+}
+
+status() {
+    local pid
+    pid=$(daemon_pids | head -1)
+    if [ "$(is_running)" = "yes" ]; then
+        echo "clash: 运行中 (PID ${pid:-?})"
+        ss -tlnp 2>/dev/null | grep -E ":${PROXY_PORT} |:${API_PORT} " | awk '{print "  监听: " $4}'
+    else
+        echo "clash: 未运行"
+    fi
+}
+
+case "${1:-start}" in
+    start)   start ;;
+    stop)    stop ;;
+    restart) stop; start ;;
+    status)  status ;;
+    *) echo "用法: clash [start|stop|status|restart]"; exit 1 ;;
+esac

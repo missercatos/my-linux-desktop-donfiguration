@@ -426,6 +426,13 @@ if [[ -d "$REPO_DIR/config/environment.d" ]]; then
     info "已复制环境变量配置文件"
 fi
 
+# Deploy fish config (含 Clash 终端自动代理)
+if [[ -f "$REPO_DIR/config/fish/config.fish" ]]; then
+    mkdir -p ~/.config/fish
+    cp "$REPO_DIR/config/fish/config.fish" ~/.config/fish/config.fish
+    info "已部署 fish 配置(含终端自动代理)"
+fi
+
 # Add to shell config
 for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
     if [[ -f "$rc" ]]; then
@@ -682,7 +689,45 @@ chmod +x ~/.local/bin/tor-browser
 cat > ~/.local/bin/mullvad-browser << 'MULLVAD_EOF'
 #!/bin/bash
 # Mullvad Browser 启动脚本
-exec ~/.local/share/mullvad-browser/Browser/mullvadbrowser "$@"
+# 绑定 clash (127.0.0.1:7890 mixed-port). 需先启动 clash:  clash
+# 自动写入 profile 代理设置, 使浏览器始终走 clash.
+
+MULLVAD_DIR="$HOME/.local/share/mullvad-browser"
+DATA_DIR="$MULLVAD_DIR/Data"
+PROFILE=""
+PROXY_HOST="127.0.0.1"
+PROXY_PORT="${MULLVAD_PROXY_PORT:-7890}"
+
+# 从 profiles.ini 解析默认 profile 目录
+if [[ -f "$DATA_DIR/profiles.ini" ]]; then
+    PROFILE=$(sed -n 's/^Path=//p' "$DATA_DIR/profiles.ini" | head -1)
+fi
+if [[ -z "$PROFILE" || ! -d "$DATA_DIR/$PROFILE" ]]; then
+    PROFILE=$(basename "$(find "$DATA_DIR" -maxdepth 1 -type d -name '*.default-release' 2>/dev/null | head -1)")
+fi
+PROFILE_DIR="$DATA_DIR/$PROFILE"
+
+if [[ -z "$PROFILE" || ! -d "$PROFILE_DIR" ]]; then
+    echo "警告: 未找到 Mullvad profile, 直接启动(可能不走代理)"
+else
+    USER_JS="$PROFILE_DIR/user.js"
+    # 幂等写入代理 prefs (SOCKS5@mixed-port)
+    if ! grep -q "network.proxy.socks_port" "$USER_JS" 2>/dev/null; then
+        cat >> "$USER_JS" << EOF
+
+// clash proxy binding (auto-generated)
+user_pref("network.proxy.type", 1);
+user_pref("network.proxy.socks", "$PROXY_HOST");
+user_pref("network.proxy.socks_port", $PROXY_PORT);
+user_pref("network.proxy.socks_version", 5);
+user_pref("network.proxy.socks_remote_dns", true);
+user_pref("network.proxy.share_proxy_settings", true);
+user_pref("network.proxy.no_proxies_on", "localhost,127.0.0.1,::1");
+EOF
+    fi
+fi
+
+exec "$MULLVAD_DIR/Browser/mullvadbrowser" "$@"
 MULLVAD_EOF
 chmod +x ~/.local/bin/mullvad-browser
 
@@ -696,7 +741,10 @@ info ""
 info "默认 shell: fish"
 info "输入法: fcitx5 (Ctrl+Space 切换)"
 info "虚拟化: QEMU/KVM (需要重新登录使 libvirt 组生效)"
-info "浏览器: Firefox (默认) + Google Chrome + Tor + Mullvad"
+info "浏览器: Firefox (默认) + Google Chrome (默认直连)"
+info "        Tor (自走Tor) + Mullvad (自动绑定 clash 127.0.0.1:7890)"
+info "代理模式: clash 运行 -> 终端/git/AUR 自动加速; clash 关闭 -> 默认网络"
+info "  手动: proxyon [端口] / proxyoff / proxycheck ; clash status"
 info "中国应用: 微信、钉钉、QQ"
 info ""
 info "快捷键参考:"

@@ -1,3 +1,41 @@
 #!/bin/bash
 # Mullvad Browser 启动脚本
-exec ~/.local/share/mullvad-browser/Browser/mullvadbrowser "$@"
+# 绑定 clash (127.0.0.1:7890 mixed-port). 需先启动 clash:  clash
+# 自动写入 profile 代理设置, 使浏览器始终走 clash.
+
+MULLVAD_DIR="$HOME/.local/share/mullvad-browser"
+DATA_DIR="$MULLVAD_DIR/Data"
+PROFILE=""
+PROXY_HOST="127.0.0.1"
+PROXY_PORT="${MULLVAD_PROXY_PORT:-7890}"
+
+# 从 profiles.ini 解析默认 profile 目录
+if [[ -f "$DATA_DIR/profiles.ini" ]]; then
+    PROFILE=$(sed -n 's/^Path=//p' "$DATA_DIR/profiles.ini" | head -1)
+fi
+if [[ -z "$PROFILE" || ! -d "$DATA_DIR/$PROFILE" ]]; then
+    PROFILE=$(basename "$(find "$DATA_DIR" -maxdepth 1 -type d -name '*.default-release' 2>/dev/null | head -1)")
+fi
+PROFILE_DIR="$DATA_DIR/$PROFILE"
+
+if [[ -z "$PROFILE" || ! -d "$PROFILE_DIR" ]]; then
+    echo "警告: 未找到 Mullvad profile, 直接启动(可能不走代理)"
+else
+    USER_JS="$PROFILE_DIR/user.js"
+    # 幂等写入代理 prefs (SOCKS5@mixed-port)
+    if ! grep -q "network.proxy.socks_port" "$USER_JS" 2>/dev/null; then
+        cat >> "$USER_JS" << EOF
+
+// clash proxy binding (auto-generated)
+user_pref("network.proxy.type", 1);
+user_pref("network.proxy.socks", "$PROXY_HOST");
+user_pref("network.proxy.socks_port", $PROXY_PORT);
+user_pref("network.proxy.socks_version", 5);
+user_pref("network.proxy.socks_remote_dns", true);
+user_pref("network.proxy.share_proxy_settings", true);
+user_pref("network.proxy.no_proxies_on", "localhost,127.0.0.1,::1");
+EOF
+    fi
+fi
+
+exec "$MULLVAD_DIR/Browser/mullvadbrowser" "$@"
