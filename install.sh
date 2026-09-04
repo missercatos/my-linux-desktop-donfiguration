@@ -675,12 +675,6 @@ fi
 cat > ~/.local/bin/tor-browser << 'TOR_EOF'
 #!/bin/bash
 # Tor Browser 启动脚本
-# 使用Tor网络，不走clash代理
-
-# 清除代理环境变量（Tor Browser使用自己的Tor网络）
-unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
-
-# 启动Tor Browser
 exec ~/.local/share/tor-browser/Browser/start-tor-browser "$@"
 TOR_EOF
 chmod +x ~/.local/bin/tor-browser
@@ -688,32 +682,6 @@ chmod +x ~/.local/bin/tor-browser
 cat > ~/.local/bin/mullvad-browser << 'MULLVAD_EOF'
 #!/bin/bash
 # Mullvad Browser 启动脚本
-# 自动启动clash并配置代理
-
-# Clash 代理端口
-CLASH_PORT="${MULLVAD_PROXY_PORT:-7890}"
-
-# 启动clash（如果未运行）
-if ! pgrep -x clash > /dev/null; then
-    # 尝试启动clash
-    if command -v clash &>/dev/null; then
-        clash &
-        sleep 2
-    elif [[ -f "$HOME/.local/bin/clash" ]]; then
-        "$HOME/.local/bin/clash" &
-        sleep 2
-    fi
-fi
-
-# 设置代理环境变量
-export http_proxy="http://127.0.0.1:$CLASH_PORT"
-export https_proxy="http://127.0.0.1:$CLASH_PORT"
-export all_proxy="socks5://127.0.0.1:$CLASH_PORT"
-export HTTP_PROXY="$http_proxy"
-export HTTPS_PROXY="$https_proxy"
-export ALL_PROXY="$all_proxy"
-
-# 启动mullvad-browser
 exec ~/.local/share/mullvad-browser/Browser/mullvadbrowser "$@"
 MULLVAD_EOF
 chmod +x ~/.local/bin/mullvad-browser
