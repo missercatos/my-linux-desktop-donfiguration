@@ -1,88 +1,76 @@
-# zellij config - fluorescent green theme
-# TTY independent config
+// zellij config - fluorescent green theme
+// TTY independent config (zellij 0.45 schema)
 
-# Theme
+// Theme
 theme "green-tty"
 
-# Default layout
+// Default layout
 default_layout "compact"
 
-# Mouse support
+// Mouse support
 mouse_mode true
 
-# Pane frames
-pane_frames {
-    hide_session_name false
-}
+// Pane frames
+pane_frames true
 
-# Status bar config
-status_bar {
-    left {
-        pane {
-            command "bash"
-            args "-c" "while true; do echo -ne \"\033[32m$(date '+%H:%M:%S')\033[0m\"; sleep 1; done"
-        }
-    }
-    right {
-        pane {
-            command "bash"
-            args "-c" "while true; do BATTERY=$(acpi -b 2>/dev/null | grep -oP '\\d+%' || echo 'N/A'); echo -ne \"\033[32mBATT: ${BATTERY}\033[0m\"; sleep 1; done"
-        }
-    }
-}
+// Shell / options (0.45 uses top-level keys, not an `options {}` block)
+default_shell "zsh"
+scroll_buffer_size 10000
+copy_on_select true
+live_alt_stack true
+scrollback_lines_to_skip 50
 
-# Keybindings
+// Keybindings (mode-scoped; user scheme: no Ctrl-b prefix)
 keybinds {
-    unbind "Ctrl b"
-    
-    # Window management
-    bind "Ctrl a" { SwitchToMode "Session"; }
-    bind "Ctrl n" { NewTab; }
-    bind "Ctrl h" { GoToPreviousTab; }
-    bind "Ctrl l" { GoToNextTab; }
-    bind "Ctrl x" { CloseTab; }
-    
-    # Pane management
-    bind "Ctrl d" { Detach; }
-    bind "Ctrl z" { ToggleFloatingPanes; }
-    
-    # Split
-    bind "Alt d" { NewPane "Down"; }
-    bind "Alt r" { NewPane "Right"; }
-    
-    # Session mode
-    unbind "Ctrl o"
-    bind "Ctrl s" { SwitchToMode "Scroll"; }
-    
-    # Quick actions
-    bind "Alt n" { NewTab; }
-    bind "Alt h" { GoToPreviousTab; }
-    bind "Alt l" { GoToNextTab; }
-    bind "Alt x" { CloseTab; }
-    
-    # Session management
-    bind "Ctrl q" { Quit; }
-}
-
-# Plugins
-plugins {
-    compact-bar location="zellij:compact-bar"
-    status-bar location="zellij:status-bar"
-}
-
-# Layout
-layout {
-    pane borderless=true
-    pane split_direction="vertical" {
-        pane borderless=true
+    // Enter sub-modes from normal
+    normal {
+        bind "Ctrl a" { SwitchToMode "Session"; }
+        bind "Ctrl s" { SwitchToMode "Scroll"; }
+    }
+    session {
+        bind "Ctrl o" { SwitchToMode "Normal"; }
+        bind "Ctrl s" { SwitchToMode "Scroll"; }
+        bind "Ctrl d" { Detach; }
+        bind "Ctrl q" { Quit; }
+    }
+    scroll {
+        bind "Ctrl s" { SwitchToMode "Normal"; }
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
+        bind "j" "Down" { ScrollDown; }
+        bind "k" "Up" { ScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+    }
+    // Tab / window management (usable from normal and pane)
+    shared_except "locked" {
+        bind "Ctrl n" { NewTab; }
+        bind "Alt n" { NewTab; }
+        bind "Ctrl h" "Alt h" { GoToPreviousTab; }
+        bind "Ctrl l" "Alt l" { GoToNextTab; }
+        bind "Ctrl x" "Alt x" { CloseTab; }
+    }
+    // Pane management & splits
+    pane {
+        bind "Ctrl p" { SwitchToMode "Normal"; }
+        bind "Alt d" { NewPane "Down"; SwitchToMode "Normal"; }
+        bind "Alt r" { NewPane "Right"; SwitchToMode "Normal"; }
+        bind "Ctrl z" { ToggleFloatingPanes; SwitchToMode "Normal"; }
+        bind "Ctrl x" { CloseFocus; SwitchToMode "Normal"; }
+    }
+    // Keep a useful normal-mode fallback for the above too
+    normal {
+        bind "Alt d" { NewPane "Down"; }
+        bind "Alt r" { NewPane "Right"; }
+        bind "Ctrl z" { ToggleFloatingPanes; }
+        bind "Ctrl q" { Quit; }
+        bind "Ctrl d" { Detach; }
     }
 }
 
-# Options
-options {
-    default_shell "zsh"
-    scroll_buffer_size 10000
-    copy_on_select true
-    live_alt_stack true
-    scrollback_lines_to_skip 50
+// Plugins: keep the default set
+plugins {
+    tab-bar location="zellij:tab-bar"
+    status-bar location="zellij:status-bar"
+    compact-bar location="zellij:compact-bar"
+    session-manager location="zellij:session-manager"
 }

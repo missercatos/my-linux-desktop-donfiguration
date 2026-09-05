@@ -433,6 +433,13 @@ if [[ -f "$REPO_DIR/config/fish/config.fish" ]]; then
     info "已部署 fish 配置(含终端自动代理)"
 fi
 
+# Deploy opencode 全局配置(默认模型走 deepseek 直连, 无需 clash)
+if [[ -f "$REPO_DIR/config/opencode/opencode.jsonc" ]]; then
+    mkdir -p ~/.config/opencode
+    cp "$REPO_DIR/config/opencode/opencode.jsonc" ~/.config/opencode/opencode.jsonc
+    info "已部署 opencode 配置(默认 deepseek 直连)"
+fi
+
 # Add to shell config
 for rc in ~/.bashrc ~/.zshrc ~/.config/fish/config.fish; do
     if [[ -f "$rc" ]]; then

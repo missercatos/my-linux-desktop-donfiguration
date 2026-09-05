@@ -1,0 +1,17 @@
+// zellij green-tty theme (zellij 0.45 numeric format)
+themes {
+    green-tty {
+        bg 0 17 0
+        fg 51 255 51
+        black 0 17 0
+        red 255 85 85
+        green 51 255 51
+        yellow 102 255 102
+        blue 51 255 51
+        magenta 153 255 153
+        cyan 51 255 51
+        white 51 255 51
+        orange 102 255 51
+        purple 153 255 153
+    }
+}
