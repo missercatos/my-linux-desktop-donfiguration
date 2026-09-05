@@ -1,0 +1,49 @@
+#!/bin/bash
+
+audio_mode=0
+pass=0
+
+while getopts "ap" opt;do
+	case $opt in
+		a)
+			audio_mode=1
+			;;
+		p)
+			pass=1	
+			;;
+		\?)
+			;;
+	esac
+done
+
+shift $((OPTIND-1))
+
+if [ $pass -eq 1 ]; then
+rm bilibili_cookies.txt
+curl -c bilibili_cookies.txt \
+     -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+     -H "Referer: https://www.bilibili.com/" \
+     https://www.bilibili.com/
+fi
+
+if [ -z "$1" ]; then
+	exit
+fi
+
+
+NAME="$*"
+
+if [ $audio_mode -eq 1 ]; then 
+yt-dlp --cookies bilibili_cookies.txt \
+       --add-header "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+       --add-header "Referer:https://www.bilibili.com/" \
+       -x -f bestaudio \
+       "bilisearch:$NAME"
+else
+yt-dlp --cookies bilibili_cookies.txt \
+       --add-header "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+       --add-header "Referer:https://www.bilibili.com/" \
+       "bilisearch:$NAME"
+fi
+
+
