@@ -1,0 +1,18 @@
+#!/bin/bash
+# 返回“当前默认输出设备”的 monitor 名称(用于录制系统声音)。
+# 用法: $(wf-record-system-mic-source)
+# 优先用默认 sink 的 monitor；若没有则回退到任意 RUNNING 的 monitor，再回退默认 source。
+SINK="$(pactl get-default-sink 2>/dev/null)"
+MON="${SINK}.monitor"
+if [[ -n "$SINK" ]] && pactl list short sources 2>/dev/null | grep -qF "$MON"; then
+    echo "$MON"
+    exit 0
+fi
+# 回退：取任一正在运行(RUNNING)的 monitor
+RUNNING="$(pactl list short sources 2>/dev/null | grep -F ".monitor" | grep RUNNING | awk '{print $2}' | head -1)"
+if [[ -n "$RUNNING" ]]; then
+    echo "$RUNNING"
+    exit 0
+fi
+# 最终回退：默认 source
+pactl get-default-source 2>/dev/null || echo ""

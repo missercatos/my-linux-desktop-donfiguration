@@ -1,17 +1,41 @@
 #!/bin/bash
-# 快速录屏：60fps，无损 ffv1（高质量视频格式 .mkv），系统音频
+# 快速录屏：低质量小文件（1080p 采集 -> 720p/30fps 编码, h264 CRF30）
+# 系统音频：自动跟随当前默认输出设备的 monitor（避免录到蓝牙麦克风/16kHz 的糊声）
 REC_DIR="$HOME/Videos"
 mkdir -p "$REC_DIR"
 
+SRC="$HOME/.local/bin/wf-record-audio-source"
+AUDIO_DEVICE=""
+[[ -x "$SRC" ]] && AUDIO_DEVICE="$("$SRC")"
+
+stop_rec() {
+    # 等待 wf-recorder 优雅收尾(写 moov/容器)，最多 ~20s
+    local i
+    for i in $(seq 1 40); do
+        pgrep -x wf-recorder >/dev/null || break
+        sleep 0.5
+    done
+    notify-send "录制已保存" "$REC_DIR/"
+}
+
 if pgrep -x wf-recorder > /dev/null; then
     killall -SIGINT wf-recorder
-    notify-send "录制已保存" "$REC_DIR/"
+    stop_rec
 else
-    FILE="$REC_DIR/quick_$(date +%s).mkv"
-    wf-recorder -a -c ffv1 -r 60 -f "$FILE" &
+    FILE="$REC_DIR/quick_$(date +%s).mp4"
+    if [[ -n "$AUDIO_DEVICE" ]]; then
+        wf-recorder --audio="$AUDIO_DEVICE" \
+            -c libx264 -r 30 -p crf=30 -p preset=veryfast \
+            -F "scale=1280:720,format=yuv420p" \
+            -f "$FILE" &
+    else
+        wf-recorder -a -c libx264 -r 30 -p crf=30 -p preset=veryfast \
+            -F "scale=1280:720,format=yuv420p" \
+            -f "$FILE" &
+    fi
     sleep 1
     if pgrep -x wf-recorder > /dev/null; then
-        notify-send "快速录制中 (无损 60fps)" "$FILE"
+        notify-send "快速录制中 (720p/30fps)" "$FILE"
     else
         notify-send "录制失败" "请检查音频设备"
     fi
