@@ -1,42 +1,56 @@
 #!/bin/bash
 # 快速录屏：低质量小文件（1080p 采集 -> 720p/30fps 编码, h264 CRF30）
-# 系统音频：自动跟随当前默认输出设备的 monitor（避免录到蓝牙麦克风/16kHz 的糊声）
+# 系统音频：自动跟随当前默认输出设备的 monitor
+# 与 wf-recorder-lossless 互不干扰：各自用独立 pidfile，只控制自己的录制
 REC_DIR="$HOME/Videos"
 mkdir -p "$REC_DIR"
+
+RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$UID}"
+MY_PID="$RUNTIME/wfrec-quick.pid"
+OTHER_PID="$RUNTIME/wfrec-lossless.pid"
 
 SRC="$HOME/.local/bin/wf-record-audio-source"
 AUDIO_DEVICE=""
 [[ -x "$SRC" ]] && AUDIO_DEVICE="$("$SRC")"
 
-stop_rec() {
-    # 等待 wf-recorder 优雅收尾(写 moov/容器)，最多 ~20s
-    local i
-    for i in $(seq 1 40); do
-        pgrep -x wf-recorder >/dev/null || break
-        sleep 0.5
-    done
-    notify-send "录制已保存" "$REC_DIR/"
-}
+is_my_rec() { [[ -f "$MY_PID" ]] && kill -0 "$(cat "$MY_PID" 2>/dev/null)" 2>/dev/null; }
+other_rec() { [[ -f "$OTHER_PID" ]] && kill -0 "$(cat "$OTHER_PID" 2>/dev/null)" 2>/dev/null; }
+clean_my_pid() { rm -f "$MY_PID"; }
 
-if pgrep -x wf-recorder > /dev/null; then
-    killall -SIGINT wf-recorder
-    stop_rec
+if is_my_rec; then
+    kill -INT "$(cat "$MY_PID")" 2>/dev/null
+    local i
+    for i in $(seq 1 40); do is_my_rec || break; sleep 0.5; done
+    clean_my_pid
+    notify-send "录制已保存" "$REC_DIR/"
+    exit 0
+fi
+
+# 另一档(高质量)正在录制时，不顶掉它
+if other_rec; then
+    notify-send "录屏冲突" "高质量录屏正在进行，请先停止 (Mod+F3)"
+    exit 0
+fi
+
+# 清理陈旧 pidfile
+clean_my_pid
+
+FILE="$REC_DIR/quick_$(date +%s).mp4"
+if [[ -n "$AUDIO_DEVICE" ]]; then
+    wf-recorder --audio="$AUDIO_DEVICE" \
+        -c libx264 -r 30 -p crf=30 -p preset=veryfast \
+        -F "scale=1280:720,format=yuv420p" \
+        -f "$FILE" &
 else
-    FILE="$REC_DIR/quick_$(date +%s).mp4"
-    if [[ -n "$AUDIO_DEVICE" ]]; then
-        wf-recorder --audio="$AUDIO_DEVICE" \
-            -c libx264 -r 30 -p crf=30 -p preset=veryfast \
-            -F "scale=1280:720,format=yuv420p" \
-            -f "$FILE" &
-    else
-        wf-recorder -a -c libx264 -r 30 -p crf=30 -p preset=veryfast \
-            -F "scale=1280:720,format=yuv420p" \
-            -f "$FILE" &
-    fi
-    sleep 1
-    if pgrep -x wf-recorder > /dev/null; then
-        notify-send "快速录制中 (720p/30fps)" "$FILE"
-    else
-        notify-send "录制失败" "请检查音频设备"
-    fi
+    wf-recorder -a -c libx264 -r 30 -p crf=30 -p preset=veryfast \
+        -F "scale=1280:720,format=yuv420p" \
+        -f "$FILE" &
+fi
+echo $! > "$MY_PID"
+sleep 1
+if is_my_rec; then
+    notify-send "快速录制中 (720p/30fps)" "$FILE"
+else
+    clean_my_pid
+    notify-send "录制失败" "请检查音频设备"
 fi
