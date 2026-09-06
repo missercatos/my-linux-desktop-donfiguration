@@ -7,7 +7,7 @@ mkdir -p "$REC_DIR"
 
 RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$UID}"
 MY_PID="$RUNTIME/wfrec-quick.pid"
-OTHER_PID="$RUNTIME/wfrec-lossless.pid"
+OTHER_PID="$RUNTIME/wfrec-high.pid"
 
 SRC="$HOME/.local/bin/wf-record-audio-source"
 AUDIO_DEVICE=""
@@ -31,7 +31,6 @@ if other_rec; then
     notify-send "录屏冲突" "高质量录屏正在进行，请先停止 (Mod+F3)"
     exit 0
 fi
-
 # 清理陈旧 pidfile
 clean_my_pid
 

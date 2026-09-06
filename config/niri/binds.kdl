@@ -10,7 +10,7 @@ binds {
 
     Mod+F1 hotkey-overlay-title="开关输入法 Toggle fcitx" {spawn-sh "pkill fcitx5 || fcitx5 ";}
     Mod+F2 hotkey-overlay-title="设置 Settings" { spawn-sh "dms ipc call settings focusOrToggle";}
-    Mod+F3 hotkey-overlay-title="高质量录屏 Lossless record" { spawn "~/.local/bin/wf-recorder-lossless";}
+    Mod+F3 hotkey-overlay-title="高质量录屏 High-quality record" { spawn "~/.local/bin/wf-recorder-high";}
     Mod+F5 hotkey-overlay-title="快速存档 Quick save" {spawn "quicksave";}
     Mod+F8 hotkey-overlay-title="快速读档 Quick load" {spawn "quickload";}
 
@@ -183,7 +183,7 @@ binds {
     Mod+Shift+R  { switch-preset-window-height; }
     // 重置窗口高度
     Mod+Ctrl+Alt+R hotkey-overlay-title="重置窗口高度 Reset window height" { reset-window-height; }
-    // 快速低质录屏 (wf-recorder, 与 F3 无损档共用 wf-recorder 进程检测)
+    // 快速低质录屏 (wf-recorder, 与 F3 高质量档共用 wf-recorder 进程检测)
     Mod+Ctrl+R hotkey-overlay-title="快速低质录屏 Quick low-quality record" { spawn "~/.local/bin/wf-recorder-quick"; }
 
     Mod+F  hotkey-overlay-title="最大化 maximize" { maximize-column; }
