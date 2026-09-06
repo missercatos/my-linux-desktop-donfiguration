@@ -40,12 +40,12 @@ if [[ -n "$AUDIO_DEVICE" ]]; then
     wf-recorder --audio="$AUDIO_DEVICE" \
         -c libx264 -r 30 -p crf=30 -p preset=veryfast \
         "${COLOR_ARGS[@]}" \
-        -F "scale=1280:720,format=yuv420p" \
+        -F "scale=1280:720:in_range=full:out_range=full,format=yuv420p" \
         -f "$FILE" &
 else
     wf-recorder -a -c libx264 -r 30 -p crf=30 -p preset=veryfast \
         "${COLOR_ARGS[@]}" \
-        -F "scale=1280:720,format=yuv420p" \
+        -F "scale=1280:720:in_range=full:out_range=full,format=yuv420p" \
         -f "$FILE" &
 fi
 echo $! > "$MY_PID"
