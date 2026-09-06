@@ -1,5 +1,5 @@
 #!/bin/bash
-# 快速录屏：低质量小文件（1080p 采集 -> 720p/30fps 编码, h264 CRF30）
+# 快速录屏：低质量小文件（720p/30fps, h264 CRF30, BT.709 full-range）
 # 系统音频：自动跟随当前默认输出设备的 monitor
 # 与 wf-recorder-lossless 互不干扰：各自用独立 pidfile，只控制自己的录制
 REC_DIR="$HOME/Videos"
@@ -35,13 +35,16 @@ fi
 clean_my_pid
 
 FILE="$REC_DIR/quick_$(date +%s).mp4"
+COLOR_ARGS=( -p "colorspace=bt709" -p "color_primaries=bt709" -p "color_trc=bt709" -p "color_range=pc" )
 if [[ -n "$AUDIO_DEVICE" ]]; then
     wf-recorder --audio="$AUDIO_DEVICE" \
         -c libx264 -r 30 -p crf=30 -p preset=veryfast \
+        "${COLOR_ARGS[@]}" \
         -F "scale=1280:720,format=yuv420p" \
         -f "$FILE" &
 else
     wf-recorder -a -c libx264 -r 30 -p crf=30 -p preset=veryfast \
+        "${COLOR_ARGS[@]}" \
         -F "scale=1280:720,format=yuv420p" \
         -f "$FILE" &
 fi
