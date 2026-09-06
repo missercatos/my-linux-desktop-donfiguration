@@ -1,5 +1,5 @@
 #!/bin/bash
-# 高质量录屏：60fps，H.264 CRF14 高质量 (BT.709 full-range 色彩准确)
+# 高质量录屏：60fps，H.264 4:4:4 CRF14 (yuv444p 全色度, 文字锐利鲜艳)
 # 系统音频：自动跟随当前默认输出设备的 monitor
 # 与 wf-recorder-quick 互不干扰：各自用独立 pidfile，只控制自己的录制
 REC_DIR="$HOME/Videos"
@@ -36,17 +36,18 @@ fi
 clean_my_pid
 
 FILE="$REC_DIR/high_$(date +%s).mp4"
-COLOR_ARGS=( -p "colorspace=bt709" -p "color_primaries=bt709" -p "color_trc=bt709" -p "color_range=pc" )
+# 4:4:4 全色度编码(yuv444p): 文字边缘不因色度子采样而发暗/发虚
+COLOR_ARGS=( -p "colorspace=bt709" -p "color_primaries=bt709" -p "color_trc=bt709" )
 if [[ -n "$AUDIO_DEVICE" ]]; then
     wf-recorder --audio="$AUDIO_DEVICE" \
         -c libx264 -r 60 -p crf=14 -p preset=fast \
         "${COLOR_ARGS[@]}" \
-        -F "scale=in_range=full:out_range=full,format=yuv420p" \
+        -x yuv444p \
         -f "$FILE" &
 else
     wf-recorder -a -c libx264 -r 60 -p crf=14 -p preset=fast \
         "${COLOR_ARGS[@]}" \
-        -F "scale=in_range=full:out_range=full,format=yuv420p" \
+        -x yuv444p \
         -f "$FILE" &
 fi
 echo $! > "$MY_PID"
