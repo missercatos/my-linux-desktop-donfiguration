@@ -1,0 +1,3 @@
+#!/bin/bash
+# foot-btop: foot/tty 下的绿色 btop
+exec /usr/bin/btop -c "$HOME/.config/btop/foot-btop.conf" "$@"

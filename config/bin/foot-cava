@@ -1,0 +1,3 @@
+#!/bin/bash
+# foot-cava: 在 foot/tty 下运行绿色 cava
+exec /usr/bin/cava -p "$HOME/.config/cava/green.conf" "$@"
